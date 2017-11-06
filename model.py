@@ -29,42 +29,44 @@ class User(db.Model):
     state = db.Column(db.String(2), nullable=True)
     phone = db.Column(db.String(15), nullable=True)
     #QUESTION could this be a float, or should it be int
-    default_amount = db.Column(db.Integer,
+    default_amount = db.Column(db.Float,
                                nullable=False,
-                               default=1)
+                               default=1.00)
 
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.datetime.utcnow)
-    #do I want this?
-    last_log_in = db.Column(db.Datetime, nullable=True)
+
+    last_login = db.Column(db.DateTime, nullable=False,
+                           default=datetime.datetime.utcnow)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
+        repr_string = "<User user_id={id} fname={first}} lname={last}>"
+        return repr_string.format(id=self.user_id,
+                                  first=self.fname,
+                                  last=self.lname)
 
-        return "<User user_id=%s fname=%s lname=%s>" % (self.user_id,
-                                           self.fname, self.lname)
 
 
-###COPIED AND PASTED FROM RATINGS
-class Org(db.Model): #Should I call it org or Organization? It's a long word to type?
+class Organization(db.Model):
     """Org receiving donations"""
 
-    __tablename__ = "orgs"
+    __tablename__ = "organizations"
     #the seed data has id on it already; will incriment fuck up
     org_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+    payee_email = db.Column(db.String(100), nullable=False)
     logo_url = db.Column(db.String(200), nullable=True)
-    mission_statement = db.Column(db.String(500), nullable=True)
+    mission_statement = db.Column(db.Text, nullable=True)
     website_url = db.Column(db.String(200), nullable=True)
-    payee_email = db.Column(db.String(50), nullable=False)
-    has_chapters = db.Column(db.Boolean, nullable=False)
+    has_chapters = db.Column(db.Boolean, nullable=True)
 
-    released_at = db.Column(db.DateTime, nullable=True)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Org name=%s>" % (self.name)
+        repr_string = "<Org name={name} org_id={id}>"
+        return repr_string.format(self.name, self.org_id)
 
 
 class Transaction(db.Model):
@@ -72,36 +74,53 @@ class Transaction(db.Model):
 
     __tablename__ = "transactions"
 
-    transaction_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-   #define user_id and org_id as foreign keys from the Primary keys of
-   #Org and User
+    transaction_id = db.Column(db.Integer,
+                               autoincrement=True,
+                               primary_key=True)
+    #define user_id and org_id as foreign keys from the Primary keys of
+    #Org and User - may turn into origin and destination
     org_id = db.Column(db.Integer,
-                         db.ForeignKey('orgs.org_id'))
+                       db.ForeignKey('organizations.org_id'),
+                       nullable=False)
     user_id = db.Column(db.Integer,
-                        db.ForeignKey('users.user_id'))
+                        db.ForeignKey('users.user_id'),
+                        nullable=False)
+
+    #payment_id generated from paypal payment
+    payment_id = db.Column(db.String(40), nullable=False)
+
+    amount = db.Column(db.Float, nullable=False)
+
+    timestamp = db.Column(db.DateTime,
+                          nullable=False,
+                          default=datetime.datetime.utcnow)
+
+    #TODO figure out how to work this
+    # status = db.Column(db.String(25), nullable=True)
+    status = db.Column(db.Enum('pending_delivery',
+                               'delivered_to_org',
+                               name='statuses'),
+                       nullable=False)
+
+    ##DEFINING RELATIONSHIPS
 
     # Define relationship to user (self.user = User object)
     user = db.relationship("User",
                            backref=db.backref("transactions",
-                                              order_by=transaction_id))
+                                              order_by=timestamp))
 
     # Define relationship to Org (self.org = Org object)
-    org = db.relationship("Org",
-                            backref=db.backref("transactions",
-
-                                               order_by=transaction_id))
-    amount = db.Column(db.Integer, nullable=False) ##Do I want this to be a float?
-
-    time = db.Column(db.DateTime, nullable=True)
-
-    # status  = #figure out how to work this
-
+    org = db.relationship("Organization",
+                          backref=db.backref("transactions",
+                                             order_by=timestamp))
 
 
     def __repr__(self):
         """Provide helpful representation when printed."""
-
-        return "<Transaction user=%s  org=%org>" % (self.user, self.org)
+        repr_string ="<Transaction id={trans_id} user_id={user} org_id={org}>"
+        return repr_string.format(self.transaction_id,
+                                  self.user.user_id,
+                                  self.org.org_id)
 
 
 ##############################################################################
