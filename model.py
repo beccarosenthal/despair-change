@@ -66,7 +66,8 @@ class Organization(db.Model):
         """Provide helpful representation when printed."""
 
         repr_string = "<Org name={name} org_id={id}>"
-        return repr_string.format(self.name, self.org_id)
+        return repr_string.format(name=self.name,
+                                  id=self.org_id)
 
 
 class Transaction(db.Model):
@@ -118,9 +119,9 @@ class Transaction(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
         repr_string ="<Transaction id={trans_id} user_id={user} org_id={org}>"
-        return repr_string.format(self.transaction_id,
-                                  self.user.user_id,
-                                  self.org.org_id)
+        return repr_string.format(trans_id=self.transaction_id,
+                                  user=self.user.user_id,
+                                  org=self.org.org_id)
 
 
 ##############################################################################
