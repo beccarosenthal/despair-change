@@ -2,9 +2,10 @@
 <html>
 <head>
   <title>{% block title %}THIS IS MY TITLE {% endblock %}</title>
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
 </head>
 
 
@@ -20,8 +21,10 @@
         <a href=/users/{{session['current_user']}}>My Ratings | </a>
     {% endif %}
 
+    <a href='/buttons'>Push Buttons | </a>
     <a href='/dashboard'>Profile | </a>
     <a href='/donate'>Donate | </a>
+    <a href='/about'>About Despair Change |</a>
   <hr>
     {% for message in get_flashed_messages() %}
         {{ message }}
@@ -30,5 +33,4 @@
 
     {% block content %} put your content here {% endblock %}
 
-</body>
-</html>
+
