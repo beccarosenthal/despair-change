@@ -71,7 +71,7 @@ def generate_payment_object(user_id, org_id):
     import pdb; pdb.set_trace()
     return payment
 
-def create_payment(payment_object):
+def create_payment(payment):
 
      # Create payment
     if payment.create():

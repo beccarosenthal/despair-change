@@ -169,12 +169,14 @@ def donation_page():
 
     #TODO - when project develops into multiple orgs, target_org-->list
     org = Organization.query.filter(Organization.org_id == 1).one()
+
     return render_template('donate.html', org=org)
 
 
 @app.route('/donated', methods=['POST'])
 def process_donation():
     """FIGURE THIS OUT"""
+
     user_id = session['current_user']
     org_id = request.form.get('org')
 
@@ -183,9 +185,33 @@ def process_donation():
     print "user_id=", user_id
     print "org_id=", org_id
 
+    #generate the payment object using information from the database
     payment_object = generate_payment_object(user_id, org_id)
 
+    ##Intanciate the payment object as a PAYPAL payment object
+    payment_object.create()
+
+    payment_id = payment_object.id
+
+    #FYI, payment_object.create() will now return true
+
+    print "#################"
+    print "#################"
+    print "#################"
+    print "#################"
+    print
+    print "back in /donated route. "
+    print "here comes the payment object from the paypal_functions file"
     print payment_object
+
+    session['payment_object'] = payment_object
+
+    flash(payment_object)
+
+    import pdb; pdb.set_trace()
+
+
+
 
     ##Generate payment obj using payer info from session, org info from form
 
