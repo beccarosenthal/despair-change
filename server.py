@@ -178,7 +178,7 @@ def process_donation():
     user_id = session['current_user']
     org_id = request.form.get('org')
 
-    ##create transaction object - with transaction attempt
+    ##TODO maybe create transaction object - with transaction attempt
 
     print "user_id=", user_id
     print "org_id=", org_id
