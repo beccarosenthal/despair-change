@@ -42,7 +42,7 @@ def login_user():
     user_email = request.form.get('email')
     user_password = request.form.get('password')
 
-
+    # do something to update the last time logged in into the User.last_login
     #while we don't have db up and running, let's just assume user logged in
     session['current_user'] = 'logged_in'
 

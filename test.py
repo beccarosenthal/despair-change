@@ -240,3 +240,4 @@ class TestUser(unittest.TestCase):
  'year',
  'zipcode',
  'zipcode_plus4']
+

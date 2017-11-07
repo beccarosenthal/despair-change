@@ -2,6 +2,15 @@
 
 from flask_sqlalchemy import SQLAlchemy
 import datetime
+import os
+
+SAMPLE_PASSWORD = os.environ.get("SAMPLE_PASSWORD")
+BUYER_EMAIL = os.environ.get("BUYER_EMAIL")
+BUYER_EMAIL1 = os.environ.get("BUYER_EMAIL1")
+FACILITATOR_EMAIL = os.environ.get("FACILITATOR_EMAIL")
+FACILITATOR_EMAIL1 = os.environ.get("FACILITATOR_EMAIL1")
+SAMPLE_PHONE = os.environ.get("SAMPLE_PHONE")
+
 
 
 # This is the connection to the PostgreSQL database; we're getting this through
@@ -41,7 +50,8 @@ class User(db.Model):
 
     def __repr__(self):
         """Provide helpful representation when printed."""
-        repr_string = "<User user_id={id} fname={first}} lname={last}>"
+        repr_string = "<User user_id={id} fname={first} lname={last}>"
+
         return repr_string.format(id=self.user_id,
                                   first=self.fname,
                                   last=self.lname)
@@ -120,18 +130,130 @@ class Transaction(db.Model):
         """Provide helpful representation when printed."""
         repr_string ="<Transaction id={trans_id} user_id={user} org_id={org}>"
         return repr_string.format(trans_id=self.transaction_id,
-                                  user=self.user.user_id,
-                                  org=self.org.org_id)
+                                  user=self.user_id,
+                                  org=self.org_id)
 
 
 ##############################################################################
-# Helper functions
+# Making Fake Data functions
 
-def connect_to_db(app):
+def create_example_data():
+    """generates objects for example data"""
+
+    #Clear out DB before running this to make sure no duplicates
+    User.query.delete()
+    Organization.query.delete()
+    Transaction.query.delete()
+
+    users = example_users()
+    pink = users[0]
+    glen = users[1]
+
+    org = example_orgs()
+
+    transaction = example_transaction()
+
+    #add users and org to DB
+    db.session.add_all([pink, glen, org])
+    db.session.commit()
+
+    #add transaction after users/org has been created for referential integrity
+    db.session.add(transaction)
+    db.session.commit()
+
+    print pink, glen, org, transaction
+
+def example_users():
+    """create fake user data"""
+
+    pink = User(user_email="fuckingperfect@iampink.com",
+                password=SAMPLE_PASSWORD,
+                fname="Alicia",
+                lname="Moore",
+                age=27,
+                zipcode="94611",
+                state="CA",
+                phone="3108008135")
+
+    glen = User(user_email=BUYER_EMAIL,
+                password=SAMPLE_PASSWORD,
+                fname="Glen",
+                lname="Coco",
+                age=27,
+                zipcode="94611",
+                state="CA",
+                phone=SAMPLE_PHONE)
+
+    return [pink, glen]
+
+
+def example_orgs():
+    """Create org data"""
+
+    org = Organization(name="Institute of Finishing Projects",
+                       payee_email="FACILITATOR_EMAIL",
+                       logo_url="https://media.makeameme.org/created/how-about-getting.jpg",
+                       mission_statement="At the Institute of Finishing Projects, we finish projects.",
+                       website_url="http://www.incredibox.com/",
+                       has_chapters=False)
+
+    return org
+
+def example_transaction():
+
+    transaction = Transaction(org_id=1,
+                          user_id=1,
+                          payment_id='insert valid payment_id here',
+                          amount=1.00,
+                          status='pending_delivery')
+
+    return transaction
+
+
+
+
+
+def set_val_user_id():
+    """Set value for the next user_id after seeding database"""
+
+    # Get the Max user_id in the database
+    result = db.session.query(func.max(User.user_id)).one()
+    max_id = int(result[0])
+
+    # Set the value for the next user_id to be max_id + 1
+    query = "SELECT setval('users_user_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+
+    #Get max org_id in database
+    result = db.session.query(func.max(Organization.org_id)).one()
+    max_id = int(result[0])
+
+    # Set the value for the next org_id to be max_id + 1
+    query = "SELECT setval('organizations_org_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+
+
+    #Get max transaction_id in database
+    result = db.session.query(func.max(Transaction.
+                                       transaction_id)).one()
+    max_id = int(result[0])
+
+    # Set the value for the next org_id to be max_id + 1
+    query = "SELECT setval('transactions.transaction_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+
+
+    db.session.commit()
+
+
+
+
+
+def connect_to_db(app, db_uri='postgresql:///despair_change'):
     """Connect the database to our Flask app."""
 
     # Configure to use our PstgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///ratings'
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
