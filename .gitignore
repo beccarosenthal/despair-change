@@ -2,3 +2,5 @@ secrets.sh
 *.pyc
 env
 .DS_*
+open_env.txt
+open_project*

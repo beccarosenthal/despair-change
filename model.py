@@ -133,6 +133,26 @@ class Transaction(db.Model):
                                   user=self.user_id,
                                   org=self.org_id)
 
+#Won't be used til phase two...
+class User_Orgs(db.Model):
+    """Favorite orgs identified by a user."""
+
+    __tablename__ = 'user_orgs'
+
+    user_org_id = db.Column(db.Integer,
+                            primary_key=True,
+                            autoincrement=True)
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey('users.user_id'),
+                        nullable=False)
+    org_id = db.Column(db.Integer,
+                        db.ForeignKey('organizations.org_id'),
+                        nullable=False)
+
+    rank = db.Column(db.Integer, nullable=True)
+
+    org = db.relationship("org", backref="User_Orgs")
+    user = db.relationship("User", backref="User_Orgs")
 
 ##############################################################################
 # Making Fake Data functions
@@ -153,12 +173,14 @@ def create_example_data():
 
     transaction = example_transaction()
 
+    user_org = example_user_org()
+
     #add users and org to DB
     db.session.add_all([pink, glen, org])
     db.session.commit()
 
     #add transaction after users/org has been created for referential integrity
-    db.session.add(transaction)
+    db.session.add_all([transaction, user_org])
     db.session.commit()
 
     print pink, glen, org, transaction
@@ -200,7 +222,7 @@ def example_orgs():
     return org
 
 def example_transaction():
-
+    """Create transaction by user 1 for org 1"""
     transaction = Transaction(org_id=1,
                           user_id=1,
                           payment_id='insert valid payment_id here',
@@ -210,11 +232,17 @@ def example_transaction():
     return transaction
 
 
+def example_user_org():
+    """create sample user_org"""
 
+    user_org = User_Orgs(user_id=2,
+                         org_id=1,
+                         rank=1)
 
+    return user_org
 
-def set_val_user_id():
-    """Set value for the next user_id after seeding database"""
+def set_val_table_id():
+    """Set value for the incrementing table ids after seeding database"""
 
     # Get the Max user_id in the database
     result = db.session.query(func.max(User.user_id)).one()
@@ -265,4 +293,7 @@ if __name__ == "__main__":
 
     from server import app
     connect_to_db(app)
+    db.create_all()
+    set_val_table_id()
+
     print "Connected to DB."
