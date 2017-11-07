@@ -1,6 +1,7 @@
 """Models and database functions for Ratings project."""
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 import datetime
 import os
 
@@ -133,7 +134,11 @@ class Transaction(db.Model):
                                   user=self.user_id,
                                   org=self.org_id)
 
-#Won't be used til phase two...
+#calling it user_org instead of favorite to make it clear that this
+#table defines the relationship between a user and the orgs to which
+#they donate. It won't be used until phase 2, if I add more organizations as
+#options to which users can donate. This table will allow them to choose
+#their favorites.
 class User_Orgs(db.Model):
     """Favorite orgs identified by a user."""
 
@@ -151,9 +156,16 @@ class User_Orgs(db.Model):
 
     rank = db.Column(db.Integer, nullable=True)
 
-    org = db.relationship("org", backref="User_Orgs")
-    user = db.relationship("User", backref="User_Orgs")
+    org = db.relationship("Organization", backref="user_org")
+    user = db.relationship("User", backref="user_org")
 
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+        repr_string ="<User_Orgs id={id} user_id={user} org_id={org}>"
+        return repr_string.format(id=self.user_org_id,
+                                  user=self.user_id,
+                                  org=self.org_id)
 ##############################################################################
 # Making Fake Data functions
 
@@ -161,9 +173,12 @@ def create_example_data():
     """generates objects for example data"""
 
     #Clear out DB before running this to make sure no duplicates
+    User_Orgs.query.delete()
+    Transaction.query.delete()
     User.query.delete()
     Organization.query.delete()
-    Transaction.query.delete()
+
+    print 'Deleted tables'
 
     users = example_users()
     pink = users[0]
@@ -184,6 +199,7 @@ def create_example_data():
     db.session.commit()
 
     print pink, glen, org, transaction
+
 
 def example_users():
     """create fake user data"""
@@ -275,8 +291,6 @@ def set_val_table_id():
 
 
 
-
-
 def connect_to_db(app, db_uri='postgresql:///despair_change'):
     """Connect the database to our Flask app."""
 
@@ -294,6 +308,9 @@ if __name__ == "__main__":
     from server import app
     connect_to_db(app)
     db.create_all()
-    set_val_table_id()
+    create_example_data()
+
+    #When you're ready to start auto-incrementing for real, uncomment this
+    # set_val_table_id()
 
     print "Connected to DB."
