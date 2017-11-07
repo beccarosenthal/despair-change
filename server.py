@@ -10,6 +10,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 from paypalrestsdk import Payment, configure
 import os
+import datetime
 
 app = Flask(__name__)
 app.secret_key = 'werewolf-bar-mitzvah'
@@ -38,34 +39,44 @@ def show_login_form():
 @app.route('/login', methods=['POST'])
 def login_user():
     """process login form, redirect to donor page when it works"""
+
     #get form data
     user_email = request.form.get('email')
     user_password = request.form.get('password')
 
-    # do something to update the last time logged in into the User.last_login
-    #while we don't have db up and running, let's just assume user logged in
-    session['current_user'] = 'logged_in'
+    #get the user object from the email
+    user_object = User.query.filter(User.email == user_email).first()
+    #
+    if user_object:
 
-    # user_object = User.query.filter(User.email == user_email).first()
-    # if user_object:
+    #check password against email address
+        if user_object.password == user_password:
 
-    #     if user_object.password == user_password:
-    #         flash("You're logged in. Welcome to deSpare Change!!")
-    #         specific_user_id = user_object.user_id
-    #         session['current_user'] = specific_user_id
+            #update user.last_login in database
+            user_object.last_login = datetime.datetime.utcnow
+            db.session.commit()
 
-    #         #What is the specific user ID
-    #         url = '/users/' + str(specific_user_id)
-    #         return redirect(url)
+            flash("You're logged in. Welcome to Despair Change!!")
+            specific_user_id = user_object.user_id
+            session['current_user'] = specific_user_id
 
-    #     else:
-    #         flash("That is an incorrect password")
-    #         return redirect('/login')
-    # else:
-    #     flash('You need to register first!')
+            #What is the specific user ID
+            url = '/users/' + str(specific_user_id)
+            return redirect(url)
+
+        else:
+            flash("That is an incorrect password")
+            return redirect('/login')
+
+    else:
+        flash('You need to register first!')
+        return redirect('/register.html')
+
     flash('for now, we\'ll assume you\'re actually logged in')
     return redirect('/donate')
 
+    # #while we don't have db up and running, let's just assume user logged in
+    # session['current_user'] = 'logged_in'
 
 @app.route('/register')
 def show_registration_form():
@@ -85,27 +96,25 @@ def process_registration():
     lname = request.form.get('lname')
     age = request.form.get('age')
     zipcode = request.form.get('zipcode')
-    gender = request.form.get('gender')
+    state = request.form.get('state')
     phone = request.form.get('phone')
 
     user_object = User.query.filter(User.email == user_email).first()
 
-    session['current_user'] = user_email
-    if user_object:
-        return redirect('/login')
     #If user object with email address provided doens't exist, add to db...
-    else:
+    if not user_object::
         new_user = User(email=user_email,
                         password=user_password,
                         fname=fname,
                         lname=lname,
                         age=age,
                         zipcode=zipcode,
-                        gender=gender,
+                        state_code=state,
                         phone=phone)
         db.session.add(new_user)
         db.session.commit()
 
+    session['current_user'] = user_object.user_id
     return redirect('/login')
 
 
@@ -114,7 +123,6 @@ def show_about_page():
     """renders about page"""
 
     return render_template('about.html')
-
 
 
 @app.route('/dashboard')
@@ -137,6 +145,7 @@ def process_donation():
 
     flash('I got redirected here from the paypal button!')
     return redirect('/dashboard')
+
 
 @app.route('/logout')
 def logout_user():
