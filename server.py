@@ -1,4 +1,4 @@
-"""deSPARE CHANGE"""
+"""DESPAIR CHANGE"""
 
 
 from jinja2 import StrictUndefined

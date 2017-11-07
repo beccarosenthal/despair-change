@@ -36,18 +36,24 @@ class User(db.Model):
     lname = db.Column(db.String(30), nullable=False)
     age = db.Column(db.Integer, nullable=True)
     zipcode = db.Column(db.String(5), nullable=True)
-    state = db.Column(db.String(2), nullable=True)
-    phone = db.Column(db.String(15), nullable=True)
-    #QUESTION could this be a float, or should it be int
+    state_code = db.Column(db.String(4),
+                           db.ForeignKey('states.code'),
+                                         nullable=True)
+
     default_amount = db.Column(db.Float,
                                nullable=False,
                                default=1.00)
+
+    phone = db.Column(db.String(15), nullable=True)
 
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.datetime.utcnow)
 
     last_login = db.Column(db.DateTime, nullable=False,
                            default=datetime.datetime.utcnow)
+
+    #in case I want to reference state data through the User
+    state = db.relationship("State", backref="users")
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -139,7 +145,7 @@ class Transaction(db.Model):
 #they donate. It won't be used until phase 2, if I add more organizations as
 #options to which users can donate. This table will allow them to choose
 #their favorites.
-class User_Orgs(db.Model):
+class User_Org(db.Model):
     """Favorite orgs identified by a user."""
 
     __tablename__ = 'user_orgs'
@@ -162,18 +168,45 @@ class User_Orgs(db.Model):
 
     def __repr__(self):
         """Provide helpful representation when printed."""
-        repr_string ="<User_Orgs id={id} user_id={user} org_id={org}>"
+        repr_string ="<User_Org id={id} user_id={user} org_id={org}>"
         return repr_string.format(id=self.user_org_id,
                                   user=self.user_id,
                                   org=self.org_id)
+
+
+class State(db.Model):
+    """States/territories with state codes for use in registration"""
+
+    __tablename__ = "states"
+
+    code = db.Column(db.String(4), primary_key=True, nullable=False)
+    name = db.Column(db.String(40), nullable=False)
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        repr_string ="<State name={name}>"
+        return repr_string.format(name=self.name)
+
+
+# class Chapters(db.Model):
+#     """Information about local chapters of national organizations"""
+
+#     # chapter_id = primary_key
+#     # org_id = foreign keys
+#     # chapter payee user_email
+    # state
+    # zip code
+    # pass
+
 ##############################################################################
-# Making Fake Data functions
+# Making Fake Data
 
 def create_example_data():
     """generates objects for example data"""
 
     #Clear out DB before running this to make sure no duplicates
-    User_Orgs.query.delete()
+    User_Org.query.delete()
     Transaction.query.delete()
     User.query.delete()
     Organization.query.delete()
@@ -198,7 +231,7 @@ def create_example_data():
     db.session.add_all([transaction, user_org])
     db.session.commit()
 
-    print pink, glen, org, transaction
+    print pink, glen, org, transaction, user_org
 
 
 def example_users():
@@ -210,7 +243,7 @@ def example_users():
                 lname="Moore",
                 age=27,
                 zipcode="94611",
-                state="CA",
+                state_code="CA",
                 phone="3108008135")
 
     glen = User(user_email=BUYER_EMAIL,
@@ -219,7 +252,7 @@ def example_users():
                 lname="Coco",
                 age=27,
                 zipcode="94611",
-                state="CA",
+                state_code="'CA'",
                 phone=SAMPLE_PHONE)
 
     return [pink, glen]
@@ -251,7 +284,7 @@ def example_transaction():
 def example_user_org():
     """create sample user_org"""
 
-    user_org = User_Orgs(user_id=2,
+    user_org = User_Org(user_id=2,
                          org_id=1,
                          rank=1)
 
