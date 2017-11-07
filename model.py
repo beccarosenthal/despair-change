@@ -188,7 +188,7 @@ class State(db.Model):
         repr_string ="<State name={name}>"
         return repr_string.format(name=self.name)
 
-
+##Class for regional chapters if/when I decide to do that in stage 2
 # class Chapters(db.Model):
 #     """Information about local chapters of national organizations"""
 
@@ -252,7 +252,7 @@ def example_users():
                 lname="Coco",
                 age=27,
                 zipcode="94611",
-                state_code="'CA'",
+                state_code="CA",
                 phone=SAMPLE_PHONE)
 
     return [pink, glen]
