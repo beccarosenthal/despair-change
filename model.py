@@ -113,12 +113,10 @@ class Transaction(db.Model):
                           nullable=False,
                           default=datetime.datetime.utcnow)
 
-    #TODO figure out how to work this
-    # status = db.Column(db.String(25), nullable=True)
     status = db.Column(db.Enum('pending_delivery',
                                'delivered_to_org',
                                name='statuses'),
-                       nullable=False)
+                               nullable=False)
 
     ##DEFINING RELATIONSHIPS
 
