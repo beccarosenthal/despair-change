@@ -5,6 +5,9 @@ from sqlalchemy import func
 import datetime
 import os
 
+#TODO for when I want to encrypt passwords
+from bcrypt import hashpw, gensalt
+
 SAMPLE_PASSWORD = os.environ.get("SAMPLE_PASSWORD")
 BUYER_EMAIL = os.environ.get("BUYER_EMAIL")
 BUYER_EMAIL1 = os.environ.get("BUYER_EMAIL1")
@@ -31,7 +34,7 @@ class User(db.Model):
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_email = db.Column(db.String(64), nullable=False)
-    password = db.Column(db.String(64), nullable=False)
+    password = db.Column(db.String(150), nullable=False)
     fname = db.Column(db.String(15), nullable=False)
     lname = db.Column(db.String(30), nullable=False)
     age = db.Column(db.Integer, nullable=True)
@@ -270,8 +273,17 @@ def example_orgs():
 
 def example_transaction():
     """Create transaction by user 1 for org 1"""
-    transaction = Transaction(org_id=1,
-                          user_id=1,
+
+    user_id = User.query(User.user_id).filter(User.email ==
+                                      'beccarosenthal-buyer @gmail.com').first()
+
+    org_id = Organization.query(Organization.
+                                org_id).filter(
+                                               Organization.payee_email ==
+                                               FACILITATOR_EMAIL).first()
+
+    transaction = Transaction(org_id=org_id,
+                          user_id=user_id,
                           payment_id='insert valid payment_id here',
                           amount=1.00,
                           status='pending_delivery')
