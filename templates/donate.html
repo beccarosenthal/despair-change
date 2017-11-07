@@ -12,133 +12,20 @@
 
 <h3>Here's a small button that goes to a real place!</h3>
 
-<div id="paypal-button"></div>
-
-<script>
-    paypal.Button.render({
-
-        env: 'sandbox', // Or 'sandbox'
-
-        client: {
-            sandbox: "AZTfJ9tiYPtvaKPgdW8CRw-2z0nRfTQDbUsaYkIVdQJLX5MkOp6ld7J7XeQc8_V-UrEZSBM0hw_8An7M",
-            production: 'xxxxxxxxx'
-        },
-
-        commit: true, // Show a 'Pay Now' button
-
-        payment: function(data, actions) {
-            return actions.payment.create({
-                payment: {
-                    transactions: [
-                        {
-                            amount: { total: '1.00', currency: 'USD' }
-                        }
-                    ]
-                }
-            });
-        },
-
-        onAuthorize: function(data, actions) {
-            return actions.payment.execute().then(function(payment) {
-
-                // The payment is complete!
-                // You can now show a confirmation message to the customer
-            });
-        }
-
-    }, '#paypal-button');
-</script>
 
 
-
-<style>
-
-    /* Media query for mobile viewport */
-    @media screen and (max-width: 400px) {
-        #paypal-button-container {
-            width: 100%;
-        }
-    }
-
-    /* Media query for desktop viewport */
-    @media screen and (min-width: 400px) {
-        #paypal-button-container {
-            width: 250px;
-            display: inline-block;
-        }
-    }
-
-</style>
-<p>The big button</p>
-<div id="paypal-button-container"></div>
-
-<script>
-
-    paypal.Button.render({
-
-        // Set your environment
-
-        env: 'sandbox', // sandbox | production
-
-        console.log('rendering button')
-
-        // Specify the style of the button
-
-        style: {
-            label: 'credit',  // checkout | credit | pay | buynow | generic
-            size:  'responsive', // small | medium | large | responsive
-            shape: 'pill',   // pill | rect
-            color: 'gold'   // gold | blue | silver | black
-        },
-
-        // PayPal Client IDs - replace with your own
-        // Create a PayPal app: https://developer.paypal.com/developer/applications/create
-
-        client: {
-            sandbox:    'AZDxjDScFpQtjWTOUtWKbyN_bDt4OgqaF4eYXlewfBP4-8aqX3PiV8e1GWU6liB2CUXlkA59kJXE7M6R',
-            production: '<insert production client id>'
-        },
-
-        // Wait for the PayPal button to be clicked
-
-        payment: function(data, actions) {
-            return actions.payment.create({
-                payment: {
-                    transactions: [
-                        {
-                            amount: { total: '1.00', currency: 'USD' }
-                        }
-                    ]
-                }
-            });
-        },
-
-        // Wait for the payment to be authorized by the customer
-
-        onAuthorize: function(data, actions) {
-            return actions.payment.execute().then(function() {
-                window.alert('Payment Complete!');
-            });
-        }
-
-    }, '#paypal-button-container');
-
-</script>
-
-<h4>Link to donate to donations@kcparkfriends.org from 2006</h4>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<h4>Donate to the {{org.name}}</h4>
+<form action="/donated" method="post">
 
     <!-- Identify your business so that you can collect the payments. -->
-    <input type="hidden" name="business"
-        value="donations@kcparkfriends.org">
+    <input type="hidden" name="org"
+        value="{{org.org_id}}">
 
     <!-- Specify a Donate button. -->
     <input type="hidden" name="cmd" value="_donations">
 
     <!-- Specify details about the contribution -->
-    <input type="hidden" name="item_name" value="Friends of the Park">
-    <input type="hidden" name="item_number" value="Fall Cleanup Campaign">
-    <input type="hidden" name="currency_code" value="USD">
+
 
     <!-- Display the payment button. -->
     <input type="image" name="submit"
@@ -149,103 +36,6 @@
 
 </form>
 
-<h2>The button that confirms out a shipping address</h2>
-<p>not sure where the button would go</p>
-
-
-<script src="https://www.paypalobjects.com/api/checkout.js"></script>
-
-<div id="paypal-button-container"></div>
-
-<div id="confirm" class="hidden">
-    <div>Ship to:</div>
-    <div><span id="recipient"></span>, <span id="line1"></span>, <span id="city"></span></div>
-    <div><span id="state"></span>, <span id="zip"></span>, <span id="country"></span></div>
-
-<!-- Note for future self needing project to do while trying to not
-get rusty on all of her skills post hackbright callback function to make it say "Push here" and have it change to please try again
-after click (yay practicing Jquery) -->
-
-    <button id="confirmButton">Please Try Again</button>
-</div>
-
-
-
-<div id="thanks" class="hidden">
-    Thanks, <span id="thanksname"></span>!
-</div>
-
-<script>
-    paypal.Button.render({
-
-        env: 'sandbox', // sandbox | production
-
-        client: {
-            sandbox:    'AZDxjDScFpQtjWTOUtWKbyN_bDt4OgqaF4eYXlewfBP4-8aqX3PiV8e1GWU6liB2CUXlkA59kJXE7M6R',
-            production: '<insert production client id>'
-        },
-
-        payment: function(data, actions) {
-            return actions.payment.create({
-                payment: {
-                    transactions: [
-                        {
-                            amount: { total: '1.00', currency: 'USD' }
-                        }
-                    ]
-                }
-            });
-        },
-
-        // Wait for the payment to be authorized by the customer
-
-        onAuthorize: function(data, actions) {
-
-            // Get the payment details
-
-            return actions.payment.get().then(function(data) {
-
-                // Display the payment details and a confirmation button
-
-                var shipping = data.payer.payer_info.shipping_address;
-
-                document.querySelector('#recipient').innerText = shipping.recipient_name;
-                document.querySelector('#line1').innerText     = shipping.line1;
-                document.querySelector('#city').innerText      = shipping.city;
-                document.querySelector('#state').innerText     = shipping.state;
-                document.querySelector('#zip').innerText       = shipping.postal_code;
-                document.querySelector('#country').innerText   = shipping.country_code;
-
-                document.querySelector('#paypal-button-container').style.display = 'none';
-                document.querySelector('#confirm').style.display = 'block';
-
-                // Listen for click on confirm button
-
-                document.querySelector('#confirmButton').addEventListener('click', function() {
-
-                    // Disable the button and show a loading message
-
-                    document.querySelector('#confirm').innerText = 'Loading...';
-                    document.querySelector('#confirm').disabled = true;
-
-                    // Execute the payment
-
-                    return actions.payment.execute().then(function() {
-
-                        // Show a thank-you note
-
-                        document.querySelector('#thanksname').innerText = shipping.recipient_name;
-
-                        document.querySelector('#confirm').style.display = 'none';
-                        document.querySelector('#thanks').style.display = 'block';
-                    });
-                });
-            });
-        }
-
-    }, '#paypal-button-container');
-
-</script>
 
 
 
