@@ -3,7 +3,7 @@ import os
 from paypalrestsdk import Payment, configure
 
 from model import (User, Organization, Transaction,
-                   User_Org, State,
+                   UserOrg, State,
                    connect_to_db, db)
 
 
@@ -25,8 +25,6 @@ def generate_payment_object(user_id, org_id):
 
     user_obj = User.query.filter(User.user_id == user_id).one()
     org_obj = Organization.query.filter(Organization.org_id == org_id).one()
-
-    import pdb; pdb.set_trace()
 
     #Generate Payment Object
     payment = Payment({
@@ -56,7 +54,7 @@ def generate_payment_object(user_id, org_id):
                 "total": user_obj.default_amount,
                 "currency": "USD"
                 },
-            "description": "test donation",
+            "description": "Donation",
 
             #TODO make payee info come from db
             "payee": {
@@ -69,8 +67,13 @@ def generate_payment_object(user_id, org_id):
           ]
         })
     print payment
+
     import pdb; pdb.set_trace()
-      # Create payment
+    return payment
+
+def create_payment(payment_object):
+
+     # Create payment
     if payment.create():
         # Extract redirect url
         for link in payment.links:

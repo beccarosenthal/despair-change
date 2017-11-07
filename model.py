@@ -10,8 +10,8 @@ from bcrypt import hashpw, gensalt
 
 SAMPLE_PASSWORD = os.environ.get("SAMPLE_PASSWORD")
 BUYER_EMAIL = os.environ.get("BUYER_EMAIL")
-BUYER_EMAIL1 = os.environ.get("BUYER_EMAIL1")
 FACILITATOR_EMAIL = os.environ.get("FACILITATOR_EMAIL")
+BUYER_EMAIL1 = os.environ.get("BUYER_EMAIL1")
 FACILITATOR_EMAIL1 = os.environ.get("FACILITATOR_EMAIL1")
 SAMPLE_PHONE = os.environ.get("SAMPLE_PHONE")
 
@@ -81,7 +81,6 @@ class Organization(db.Model):
     website_url = db.Column(db.String(200), nullable=True)
     has_chapters = db.Column(db.Boolean, nullable=True)
 
-
     def __repr__(self):
         """Provide helpful representation when printed."""
 
@@ -116,6 +115,8 @@ class Transaction(db.Model):
                           nullable=False,
                           default=datetime.datetime.utcnow)
 
+    #TODO Think through what other statuses may be necessary, including various
+    #stages of the payment process through paypal (Flow chart)
     status = db.Column(db.Enum('pending_delivery',
                                'delivered_to_org',
                                name='statuses'),
@@ -146,7 +147,7 @@ class Transaction(db.Model):
 #they donate. It won't be used until phase 2, if I add more organizations as
 #options to which users can donate. This table will allow them to choose
 #their favorites.
-class User_Org(db.Model):
+class UserOrg(db.Model):
     """Favorite orgs identified by a user."""
 
     __tablename__ = 'user_orgs'
@@ -169,7 +170,7 @@ class User_Org(db.Model):
 
     def __repr__(self):
         """Provide helpful representation when printed."""
-        repr_string ="<User_Org id={id} user_id={user} org_id={org}>"
+        repr_string ="<UserOrg id={id} user_id={user} org_id={org}>"
         return repr_string.format(id=self.user_org_id,
                                   user=self.user_id,
                                   org=self.org_id)
@@ -207,7 +208,7 @@ def create_example_data():
     """generates objects for example data"""
 
     #Clear out DB before running this to make sure no duplicates
-    User_Org.query.delete()
+    UserOrg.query.delete()
     Transaction.query.delete()
     User.query.delete()
     Organization.query.delete()
@@ -218,15 +219,21 @@ def create_example_data():
     pink = users[0]
     glen = users[1]
 
+    print "Added Users"
     org = example_orgs()
-
-    transaction = example_transaction()
-
-    user_org = example_user_org()
 
     #add users and org to DB
     db.session.add_all([pink, glen, org])
     db.session.commit()
+
+    import pdb; pdb.set_trace()
+
+    transaction = example_transaction()
+
+    import pdb; pdb.set_trace()
+
+    user_org = example_user_org()
+
 
     #add transaction after users/org has been created for referential integrity
     db.session.add_all([transaction, user_org])
@@ -261,29 +268,31 @@ def example_users():
 
 def example_orgs():
     """Create org data"""
+    logo_url = "https://media.makeameme.org/created/how-about-getting.jpg"
+    mission = "At the Institute of Finishing Projects, we finish projects."
 
-    org = Organization(name="Institute of Finishing Projects",
-                       payee_email="FACILITATOR_EMAIL",
-                       logo_url="https://media.makeameme.org/created/how-about-getting.jpg",
-                       mission_statement="At the Institute of Finishing Projects, we finish projects.",
-                       website_url="http://www.incredibox.com/",
-                       has_chapters=False)
+    org = Organization(
+        name="Institute of Finishing Projects",
+        payee_email=FACILITATOR_EMAIL,
+        logo_url=logo_url,
+        mission_statement=mission,
+        website_url="http://www.incredibox.com/",
+        has_chapters=False)
 
     return org
+
 
 def example_transaction():
     """Create transaction by user 1 for org 1"""
 
-    user_id = User.query(User.user_id).filter(User.email ==
-                                      'beccarosenthal-buyer @gmail.com').first()
 
-    org_id = Organization.query(Organization.
-                                org_id).filter(
-                                               Organization.payee_email ==
-                                               FACILITATOR_EMAIL).first()
+    user = User.query.filter(User.user_email == BUYER_EMAIL).first()
 
-    transaction = Transaction(org_id=org_id,
-                          user_id=user_id,
+    org = Organization.query.filter(Organization.payee_email == FACILITATOR_EMAIL)\
+                            .first()
+
+    transaction = Transaction(org_id=org.org_id,
+                          user_id=user.user_id,
                           payment_id='insert valid payment_id here',
                           amount=1.00,
                           status='pending_delivery')
@@ -294,8 +303,13 @@ def example_transaction():
 def example_user_org():
     """create sample user_org"""
 
-    user_org = User_Org(user_id=2,
-                         org_id=1,
+    user = User.query.filter(User.user_email == BUYER_EMAIL).first()
+
+    org = Organization.query.filter(Organization.payee_email == FACILITATOR_EMAIL)\
+                            .first()
+
+    user_org = UserOrg(user_id=user.user_id,
+                         org_id=org.org_id,
                          rank=1)
 
     return user_org
@@ -325,10 +339,11 @@ def set_val_table_id():
                                        transaction_id)).one()
     max_id = int(result[0])
 
-    # Set the value for the next org_id to be max_id + 1
+    # Set the value for the next transaction_id to be max_id + 1
     query = "SELECT setval('transactions.transaction_id_seq', :new_id)"
     db.session.execute(query, {'new_id': max_id + 1})
 
+    ##TODO do the same thing for UserOrgs
 
     db.session.commit()
 

@@ -13,9 +13,9 @@ from paypalrestsdk import Payment, configure
 
 #import from my files
 from model import (User, Organization, Transaction,
-                   User_Org, State,
+                   UserOrg, State,
                    connect_to_db, db)
-from paypal_functions import generate_payment_object, api, client_id, client_secret
+from paypal_functions import generate_payment_object, api
 
 
 app = Flask(__name__)
@@ -34,8 +34,6 @@ def index():
     """renders homepage"""
 
     return render_template('homepage.html')
-
-
 
 
 @app.route('/about')
@@ -176,14 +174,18 @@ def donation_page():
 
 @app.route('/donated', methods=['POST'])
 def process_donation():
-
+    """FIGURE THIS OUT"""
     user_id = session['current_user']
     org_id = request.form.get('org')
+
+    ##create transaction object - with transaction attempt
 
     print "user_id=", user_id
     print "org_id=", org_id
 
     payment_object = generate_payment_object(user_id, org_id)
+
+    print payment_object
 
     ##Generate payment obj using payer info from session, org info from form
 
@@ -191,8 +193,6 @@ def process_donation():
 
     flash('I got redirected here from the paypal button!')
     return redirect('/dashboard', payment_object)
-
-
 
 
 @app.route('/buttons')

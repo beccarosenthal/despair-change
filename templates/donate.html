@@ -1,18 +1,10 @@
 {% extends 'base.html' %}
-{% block title %} Donations {% endblock %}
+{% block title %} Donate {% endblock %}
 {% block content %}
 
 <h1>IT'S A DONATION PAGE!!!</h1>
 
 <iframe src="https://giphy.com/embed/VTxmwaCEwSlZm" width="480" height="198" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p>
-
-
-
-
-
-<h3>Here's a small button that goes to a real place!</h3>
-
-
 
 <h4>Donate to the {{org.name}}</h4>
 <form action="/donated" method="post">
@@ -20,11 +12,6 @@
     <!-- Identify your business so that you can collect the payments. -->
     <input type="hidden" name="org"
         value="{{org.org_id}}">
-
-    <!-- Specify a Donate button. -->
-    <input type="hidden" name="cmd" value="_donations">
-
-    <!-- Specify details about the contribution -->
 
 
     <!-- Display the payment button. -->
@@ -36,10 +23,5 @@
 
 </form>
 
-
-
-
-</body>
-</html>
 
 {% endblock %}

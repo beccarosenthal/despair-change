@@ -1,5 +1,5 @@
 from model import (db, connect_to_db, State, User,
-                   Organization, Transaction, User_Org)
+                   Organization, Transaction, UserOrg)
 
 
 from server import app
