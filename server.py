@@ -15,7 +15,7 @@ from paypalrestsdk import Payment, configure
 from model import (User, Organization, Transaction,
                    User_Org, State,
                    connect_to_db, db)
-from paypal_test import generate_payment_object, api
+from paypal_functions import generate_payment_object, api, client_id, client_secret
 
 
 app = Flask(__name__)

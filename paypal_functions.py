@@ -1,13 +1,14 @@
+import os
+
+from paypalrestsdk import Payment, configure
+
 from model import (User, Organization, Transaction,
                    User_Org, State,
                    connect_to_db, db)
 
-from paypalrestsdk import Payment, configure
-import os
 
 client_id = os.environ.get("PAYPAL_CLIENT_ID")
 client_secret = os.environ.get("PAYPAL_CLIENT_SECRET")
-
 
 api = configure({"mode": "sandbox",
                          "client_id": client_id,
@@ -25,7 +26,7 @@ def generate_payment_object(user_id, org_id):
     user_obj = User.query.filter(User.user_id == user_id).one()
     org_obj = Organization.query.filter(Organization.org_id == org_id).one()
 
-
+    import pdb; pdb.set_trace()
 
     #Generate Payment Object
     payment = Payment({
@@ -59,14 +60,15 @@ def generate_payment_object(user_id, org_id):
 
             #TODO make payee info come from db
             "payee": {
-                      'email': FACILITATOR_EMAIL,
+                      'email': org_obj.payee_email,
                       'payee_display_metadata':
-                        {'brand_name': "This is an ORG"},
+                        {'brand_name': org_obj.name},
                       },
 
           }
           ]
         })
+    print payment
     import pdb; pdb.set_trace()
       # Create payment
     if payment.create():
