@@ -186,17 +186,12 @@ def process_donation():
     print "org_id=", org_id
 
     #generate the payment object using information from the database
-    payment_object = generate_payment_object(user_id, org_id)
+    redirect_url, payment_object = generate_payment_object(user_id, org_id)
 
-    ##Intanciate the payment object as a PAYPAL payment object
-    payment_object.create()
-
-    payment_id = payment_object.id
-
-    #FYI, payment_object.create() will now return true
-
+    print redirect_url
+    print "###############"
     print "#################"
-    print "#################"
+
     print "#################"
     print "#################"
     print
@@ -204,21 +199,22 @@ def process_donation():
     print "here comes the payment object from the paypal_functions file"
     print payment_object
 
-    session['payment_object'] = payment_object
-
-    flash(payment_object)
+    # extract paypal id from paypal object
+    paypal_id = payment_object.id
 
     import pdb; pdb.set_trace()
+    return redirect(redirect_url)
+
+    ##At this point, it generates payment, redirects to paypal, invites me to log in.
+    ##once i log in, it lets me donate a dollar, and completes the transfer from
+    ##the buyer account to the facilitator account with paypal.
+    ##it keeps me on the paypal test page instead of kicking me back to the /process
+    ##route
 
 
 
-
-    ##Generate payment obj using payer info from session, org info from form
-
-    ##generate Transaction object to go into db
-
-    flash('I got redirected here from the paypal button!')
-    return redirect('/dashboard', payment_object)
+    # eventually...
+    # return redirect('/dashboard')
 
 
 @app.route('/buttons')

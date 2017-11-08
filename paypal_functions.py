@@ -33,7 +33,7 @@ def generate_payment_object(user_id, org_id):
       # Set payment method
         "payer": {
 
-        #TODO make payer_info come from db
+        #TODO #add intent donate
             "payer_info": {"email": user_obj.user_email,
                          "first_name": user_obj.fname,
                          "last_name": user_obj.lname,
@@ -66,28 +66,37 @@ def generate_payment_object(user_id, org_id):
           }
           ]
         })
+
+    print "###############"
+    print "#################"
+    print "here is the payment before it's gotten sent to paypal to become real"
     print payment
-
-    import pdb; pdb.set_trace()
-    return payment
-
-def create_payment(payment):
+    print "#################"
+    print "#################"
 
      # Create payment
     if payment.create():
+
+        print "###############"
+        print "#################"
+        print "here is the payment after it's gotten sent to paypal to become real"
+        print payment
+        print "#################"
+        print "#################"
         # Extract redirect url
         for link in payment.links:
           if link.method == "REDIRECT":
             # Capture redirect url
             redirect_url = str(link.href)
+            import pdb; pdb.set_trace()
+
+        return redirect_url, payment
 
             # REDIRECT USER to redirect_url
     else:
         print("Error while creating payment:")
         print(payment.error)
-
-##WHEN YOU GO TO THAT LINK< IT ACTUALLY WORKS
-
+        return("this didn't work", payment)
 
 
 if __name__ == "__main__":

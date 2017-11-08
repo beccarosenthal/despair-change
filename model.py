@@ -249,8 +249,8 @@ def example_users():
                 password=SAMPLE_PASSWORD,
                 fname="Alicia",
                 lname="Moore",
-                age=27,
-                zipcode="94611",
+                age=38,
+                zipcode="90210",
                 state_code="CA",
                 phone="3108008135")
 
@@ -258,7 +258,7 @@ def example_users():
                 password=SAMPLE_PASSWORD,
                 fname="Glen",
                 lname="Coco",
-                age=27,
+                age=17,
                 zipcode="94611",
                 state_code="CA",
                 phone=SAMPLE_PHONE)
