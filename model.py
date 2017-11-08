@@ -146,7 +146,8 @@ class Transaction(db.Model):
         repr_string ="<Transaction id={trans_id} user_id={user} org_id={org}>"
         return repr_string.format(trans_id=self.transaction_id,
                                   user=self.user_id,
-                                  org=self.org_id)
+                                  org=self.org_id,
+                                  timestamp=self.timestamp)
 
 #calling it user_org instead of favorite to make it clear that this
 #table defines the relationship between a user and the orgs to which
@@ -224,19 +225,20 @@ def create_example_data():
     users = example_users()
     pink = users[0]
     glen = users[1]
+    chinandler = users[2]
 
     print "Added Users"
     org = example_orgs()
 
     #add users and org to DB
-    db.session.add_all([pink, glen, org])
+    db.session.add_all([pink, glen, chinandler, org])
     db.session.commit()
 
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
     transaction = example_transaction()
 
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
     user_org = example_user_org()
 
@@ -245,7 +247,7 @@ def create_example_data():
     db.session.add_all([transaction, user_org])
     db.session.commit()
 
-    print pink, glen, org, transaction, user_org
+    print pink, glen, chinandler, org, transaction, user_org
 
 
 def example_users():
@@ -269,7 +271,18 @@ def example_users():
                 state_code="CA",
                 phone=SAMPLE_PHONE)
 
-    return [pink, glen]
+
+    chinandler = User(user_email=BUYER_EMAIL1,
+                      password=SAMPLE_PASSWORD,
+                      fname="Chinandler",
+                      lname="Bong",
+                      age=40,
+                      zipcode="10012",
+                      state_code="NY",
+                      phone=SAMPLE_PHONE)
+
+
+    return [pink, glen, chinandler]
 
 
 def example_orgs():

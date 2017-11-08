@@ -22,9 +22,14 @@ def generate_payment_object(user_id, org_id):
 
     #TODO Write queries that will get info about the payer, payee, and transaction
     #from/for the database
-
+    print "****in generate_payment_object function***"
+    print
     user_obj = User.query.filter(User.user_id == user_id).one()
     org_obj = Organization.query.filter(Organization.org_id == org_id).one()
+
+    current_transaction = Transaction.query.all()[-1]
+
+
 
     #Generate Payment Object
         #TODO #Figure out how to make intent donate
@@ -51,7 +56,8 @@ def generate_payment_object(user_id, org_id):
       # Set transaction object
         "transactions": [{
             "amount": {
-                "total": user_obj.default_amount,
+                #amount must be a string to be processed by paypal
+                "total": str(user_obj.default_amount) + "0",
                 "currency": "USD"
                 },
             "description": "Donation",
@@ -74,9 +80,11 @@ def generate_payment_object(user_id, org_id):
     print "#################"
     print "#################"
 
+    # update transaction status in db
+    current_transaction.status = "payment object built"
+    db.session.commit()
 
-    #TODO transaction status to "payment object built"
-
+    import pdb; pdb.set_trace()
     # Create payment
     if payment.create():
 

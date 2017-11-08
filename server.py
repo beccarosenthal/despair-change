@@ -168,7 +168,8 @@ def donation_page():
     """render page to donate"""
 
     #TODO - when project develops into multiple orgs, target_org-->list
-    org = Organization.query.filter(Organization.org_id == 3).one()
+
+    org = Organization.query.filter(Organization.name.like('Institute%')).first()
 
     return render_template('donate.html', org=org)
 
@@ -192,7 +193,7 @@ def process_donation():
                               amount=amount,
                               status="donation attempted"
                               )
-    print transaction
+    print "****transaction object built, prepared to be added to db"
 
     # import pdb; pdb.set_trace()
 
@@ -201,6 +202,7 @@ def process_donation():
 
     #generate the payment object using information from the database
     redirect_url, payment_object = generate_payment_object(user_id, org_id)
+    import pdb; pdb.set_trace
 
     print redirect_url
     print "###############"
