@@ -190,16 +190,14 @@ def process_donation():
                               user_id=user_id,
                               payment_id="Unrequested",
                               amount=amount,
-                              status="pending_delivery"
+                              status="donation attempted"
                               )
     print transaction
 
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
     db.session.add(transaction)
     db.session.commit()
-    ##TODO maybe create transaction object - with transaction attempt
-
 
     #generate the payment object using information from the database
     redirect_url, payment_object = generate_payment_object(user_id, org_id)
@@ -216,15 +214,11 @@ def process_donation():
     print payment_object
 
     # extract paypal id from paypal object
+
     paypal_id = payment_object.id
-
-    import pdb; pdb.set_trace()
-
     transaction.payment_id = paypal_id
-
+    transaction.status = "PayPal payment instantiated"
     db.session.commit()
-
-
 
 
     #TODO figure out why this doesn't go to process
@@ -254,6 +248,7 @@ def process_payment():
 
     paymentID = request.form.get('paymentID')
 
+    #TODO If we get here, figure out how to update transaction status
 
     flash('I think I just processed a payment')
     return redirect('/')

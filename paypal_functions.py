@@ -74,7 +74,9 @@ def generate_payment_object(user_id, org_id):
     print "#################"
     print "#################"
 
-    #todo maybe update transaction status
+
+    #TODO transaction status to "payment object built"
+
     # Create payment
     if payment.create():
 
@@ -85,7 +87,8 @@ def generate_payment_object(user_id, org_id):
         print "#################"
         print "#################"
 
-        #TODO update transaction status
+        #TODO update transaction status (Potentially take from part in server.py
+                                    #directly under #extract paypal id from object)
 
         # Extract redirect url
         for link in payment.links:

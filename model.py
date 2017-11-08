@@ -116,12 +116,17 @@ class Transaction(db.Model):
                           nullable=False,
                           default=datetime.datetime.utcnow)
 
-    #TODO Think through what other statuses may be necessary, including various
-    #stages of the payment process through paypal (Flow chart)
-    status = db.Column(db.Enum('pending_delivery',
-                               'delivered_to_org',
-                               name='statuses'),
+    status = db.Column(db.Enum("donation attempted",
+                               "payment object built",
+                               "paypal payment instantiated",
+                               "Invalid request", #this one comes from paypal
+                               "payment failed",
+                               "payment succeeded",
+                               "pending delivery to org",
+                               "delivered to org",
+                               name="statuses"),
                                nullable=False)
+
 
     ##DEFINING RELATIONSHIPS
 
