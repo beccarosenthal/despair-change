@@ -162,7 +162,7 @@ def logout_user():
     """logs out user by deleting the current user from the session"""
 
     del session['current_user']
-    flash('successfully logged out...50-50 odds')
+    flash('Successfully Logged Out')
     return redirect ('/')
 
 

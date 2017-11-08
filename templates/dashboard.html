@@ -5,11 +5,11 @@
 <h1>Welcome, {{ user.fname }}</h1>
 <h2>{{ user.fname }}, check out your impact</h2>
     {% for transaction in user.transactions %}
+    <p>Time: {{ transaction.timestamp }}</p>
     <ul>
-    <p>Time: {{transaction.timestamp}}</p>
-    <li>Org: {{transaction.org.name}}</li>
-    <li>Amount: ${{transaction.amount}}
-    <li>Your user ID: {{transaction.user_id}}</li>
+        <li>Org: {{transaction.org.name}}</li>
+        <li>Amount: ${{transaction.amount}}
+        <li>Your user ID: {{transaction.user_id}}</li>
     </ul>
     {% endfor %}
 
