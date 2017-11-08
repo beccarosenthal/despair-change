@@ -25,7 +25,34 @@ class FlaskTestsBasic(TestCase):
         result = self.client.get("/")
         self.assertIn("Welcome to Despair Change", result.data)
 
-    #TODO Write Tests for other pages too
+
+    def test_about(self): ##NOTE: TEST WILL BREAK IF DOUCHEBAG JAR VID REMOVED
+        """Test about page."""
+
+        result = self.client.get("/about")
+        self.assertIn("/www.youtube.com/embed/fWSKU3-52pk", result.data)
+
+    #TODO Write Tests for:
+        # /about
+
+        # /login
+        #     user exists
+        #         correct password
+        #         incorrect password
+        #     user does not exist
+
+        # /register
+        #     user input added correct
+        #     user input added incorrectly
+        #     user email already in there
+        #         *****TODO fix server.py logic so that user registering with
+        #         wrong password redirects them to login page
+        #     user
+        # /dashboard
+        #     logged in
+        #     logged out
+        # register
+
 
 
 

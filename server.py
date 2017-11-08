@@ -73,6 +73,8 @@ def process_registration():
     """extract data from reg form, add user to database, redirect
     to donate page with login added to session"""
 
+    # *****TODO fix server.py logic so that user registering with
+    # wrong password redirects them to login page
     if 'current_user' in session:
         print "***current user in session"
         import pdb; pdb.set_trace()
