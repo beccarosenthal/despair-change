@@ -30,7 +30,6 @@ def generate_payment_object(user_id, org_id):
     current_transaction = Transaction.query.all()[-1]
 
 
-
     #Generate Payment Object
         #TODO #Figure out how to make intent donate
     payment = Payment({

@@ -47,7 +47,10 @@ def show_about_page():
 def show_user_dashboard():
     """show user dashboard"""
 
-    return render_template('dashboard.html')
+    current_user_id = session['current_user']
+    user_object = User.query.filter(User.user_id == current_user_id).first()
+
+    return render_template('dashboard.html', user=user_object)
 
 
 # Registration and login logic functions
@@ -58,6 +61,10 @@ def show_user_dashboard():
 def show_registration_form():
     """render registration form"""
 
+    #make sure that logged in user cannot see reg page
+    if 'current_user' in session:
+        return redirect('/')
+
     return render_template('register.html')
 
 
@@ -65,6 +72,11 @@ def show_registration_form():
 def process_registration():
     """extract data from reg form, add user to database, redirect
     to donate page with login added to session"""
+
+    if 'current_user' in session:
+        print "***current user in session"
+        import pdb; pdb.set_trace()
+        return redirect('/login')
 
     #TODO add logic about making sure they type a password that matches -
     # it may be on the html template, not here
@@ -77,7 +89,8 @@ def process_registration():
     state = request.form.get('state')
     phone = request.form.get('phone')
 
-    user_object = User.query.filter(User.email == user_email).first()
+    user_object = User.query.filter(User.user_email == user_email).first()
+    password = user_object.password
 
     #If user object with email address provided doens't exist, add to db...
     if not user_object :
@@ -93,6 +106,7 @@ def process_registration():
         db.session.commit()
 
     session['current_user'] = user_object.user_id
+    print session['current_user']
     return redirect('/login')
 
 
@@ -260,7 +274,10 @@ def process_payment():
 @app.route('/buttons')
 def show_button_options():
     """shows all the buttons I've copied and pasted from paypal"""
-    return render_template('buttons.html')
+
+    org = Organization.query.filter(Organization.name.like('Institute%')).first()
+
+    return render_template('buttons.html', org=org)
 
 
 if __name__ == "__main__":
