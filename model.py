@@ -300,10 +300,10 @@ def example_transaction():
                             .first()
 
     transaction = Transaction(org_id=org.org_id,
-                          user_id=user.user_id,
-                          payment_id='insert valid payment_id here',
-                          amount=1.00,
-                          status='pending delivery to org')
+                              user_id=user.user_id,
+                              payment_id='insert valid payment_id here',
+                              amount=1.00,
+                              status='pending delivery to org')
 
     return transaction
 
@@ -317,8 +317,8 @@ def example_user_org():
                             .first()
 
     user_org = UserOrg(user_id=user.user_id,
-                         org_id=org.org_id,
-                         rank=1)
+                       org_id=org.org_id,
+                       rank=1)
 
     return user_org
 

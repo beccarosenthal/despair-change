@@ -168,7 +168,7 @@ def donation_page():
     """render page to donate"""
 
     #TODO - when project develops into multiple orgs, target_org-->list
-    org = Organization.query.filter(Organization.org_id == 1).one()
+    org = Organization.query.filter(Organization.org_id == 3).one()
 
     return render_template('donate.html', org=org)
 
@@ -217,13 +217,12 @@ def process_donation():
 
     paypal_id = payment_object.id
     transaction.payment_id = paypal_id
-    transaction.status = "PayPal payment instantiated"
+    transaction.status = "paypal payment instantiated"
     db.session.commit()
-
+    import pdb; pdb.set_trace()
 
     #TODO figure out why this doesn't go to process
     return redirect(redirect_url)
-
     ##At this point, it generates payment, redirects to paypal, invites me to log in.
     ##once i log in, it lets me donate a dollar, and completes the transfer from
     ##the buyer account to the facilitator account with paypal.
@@ -241,12 +240,14 @@ def show_button_options():
     return render_template('donation-buttons.html')
 
 
-
-@app.route('/process', methods=['POST'])
+#   Figure this part out
+@app.route('/process', methods=['GET'])
 def process_payment():
     """processes payment"""
 
-    paymentID = request.form.get('paymentID')
+    print "I'm here!"
+
+    # paymentID = request.form.get('paymentID')
 
     #TODO If we get here, figure out how to update transaction status
 
