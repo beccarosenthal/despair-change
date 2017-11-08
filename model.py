@@ -293,7 +293,6 @@ def example_orgs():
 def example_transaction():
     """Create transaction by user 1 for org 1"""
 
-
     user = User.query.filter(User.user_email == BUYER_EMAIL).first()
 
     org = Organization.query.filter(Organization.payee_email == FACILITATOR_EMAIL)\

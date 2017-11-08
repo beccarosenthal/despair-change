@@ -237,7 +237,7 @@ def process_donation():
 @app.route('/buttons')
 def show_button_options():
     """shows all the buttons I've copied and pasted from paypal"""
-    return render_template('donation-buttons.html')
+    return render_template('buttons.html')
 
 
 #   Figure this part out
