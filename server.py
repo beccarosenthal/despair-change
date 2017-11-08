@@ -214,14 +214,15 @@ def process_donation():
     print payment_object
 
     # extract paypal id from paypal object
-
     paypal_id = payment_object.id
+
+    #update transaction object in the database
     transaction.payment_id = paypal_id
     transaction.status = "paypal payment instantiated"
     db.session.commit()
     import pdb; pdb.set_trace()
 
-    #TODO figure out why this doesn't go to process
+
     return redirect(redirect_url)
     ##At this point, it generates payment, redirects to paypal, invites me to log in.
     ##once i log in, it lets me donate a dollar, and completes the transfer from
@@ -230,20 +231,19 @@ def process_donation():
     ##route
 
 
-    # eventually...
-    # return redirect('/dashboard')
-
-
-@app.route('/buttons')
-def show_button_options():
-    """shows all the buttons I've copied and pasted from paypal"""
-    return render_template('buttons.html')
-
-
 #   Figure this part out
 @app.route('/process', methods=['GET'])
 def process_payment():
     """processes payment"""
+
+    #If it's made it this far, the payment went through.
+    #update transaction in the database
+    paypal_id = request.args.get('paymentId')
+
+    transaction = Transaction.query.all()[-1]
+
+    transaction.status = "pending delivery to org"
+    db.session.commit()
 
     print "I'm here!"
 
@@ -251,11 +251,14 @@ def process_payment():
 
     #TODO If we get here, figure out how to update transaction status
 
-    flash('I think I just processed a payment')
+    flash('Payment successful')
     return redirect('/')
 
 
-
+@app.route('/buttons')
+def show_button_options():
+    """shows all the buttons I've copied and pasted from paypal"""
+    return render_template('buttons.html')
 
 
 if __name__ == "__main__":
