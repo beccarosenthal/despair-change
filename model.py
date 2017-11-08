@@ -107,6 +107,7 @@ class Transaction(db.Model):
                         nullable=False)
 
     #payment_id generated from paypal payment
+    #TODO Change name to paypal ID
     payment_id = db.Column(db.String(40), nullable=False)
 
     amount = db.Column(db.Float, nullable=False)

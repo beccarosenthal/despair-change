@@ -180,10 +180,26 @@ def process_donation():
     user_id = session['current_user']
     org_id = request.form.get('org')
 
-    ##TODO maybe create transaction object - with transaction attempt
-
     print "user_id=", user_id
     print "org_id=", org_id
+
+    amount = User.query.get(user_id).default_amount
+    #TODO change status=pending_delivery to donation attempted, change data model
+
+    transaction = Transaction(org_id=org_id,
+                              user_id=user_id,
+                              payment_id="Unrequested",
+                              amount=amount,
+                              status="pending_delivery"
+                              )
+    print transaction
+
+    import pdb; pdb.set_trace()
+
+    db.session.add(transaction)
+    db.session.commit()
+    ##TODO maybe create transaction object - with transaction attempt
+
 
     #generate the payment object using information from the database
     redirect_url, payment_object = generate_payment_object(user_id, org_id)
@@ -203,6 +219,15 @@ def process_donation():
     paypal_id = payment_object.id
 
     import pdb; pdb.set_trace()
+
+    transaction.payment_id = paypal_id
+
+    db.session.commit()
+
+
+
+
+    #TODO figure out why this doesn't go to process
     return redirect(redirect_url)
 
     ##At this point, it generates payment, redirects to paypal, invites me to log in.
@@ -210,7 +235,6 @@ def process_donation():
     ##the buyer account to the facilitator account with paypal.
     ##it keeps me on the paypal test page instead of kicking me back to the /process
     ##route
-
 
 
     # eventually...

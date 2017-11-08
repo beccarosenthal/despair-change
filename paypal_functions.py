@@ -27,16 +27,16 @@ def generate_payment_object(user_id, org_id):
     org_obj = Organization.query.filter(Organization.org_id == org_id).one()
 
     #Generate Payment Object
+        #TODO #Figure out how to make intent donate
     payment = Payment({
         "intent": "sale",
 
       # Set payment method
         "payer": {
 
-        #TODO #add intent donate
             "payer_info": {"email": user_obj.user_email,
                          "first_name": user_obj.fname,
-                         "last_name": user_obj.lname,
+                         "last_name": user_obj.lname
                          },
 
             "payment_method": "paypal",
@@ -44,8 +44,8 @@ def generate_payment_object(user_id, org_id):
 
         # Set redirect urls
         "redirect_urls": {
-            "return_url": "/process",
-            "cancel_url": "/cancel"
+            "return_url": "http://localhost:5000/process",
+            "cancel_url": "http://localhost:5000/cancel"
             },
       #TODO make connect this to db
       # Set transaction object
@@ -63,8 +63,8 @@ def generate_payment_object(user_id, org_id):
                         {'brand_name': org_obj.name},
                       },
 
-          }
-          ]
+        }
+        ]
         })
 
     print "###############"
@@ -74,7 +74,8 @@ def generate_payment_object(user_id, org_id):
     print "#################"
     print "#################"
 
-     # Create payment
+    #todo maybe update transaction status
+    # Create payment
     if payment.create():
 
         print "###############"
@@ -83,12 +84,15 @@ def generate_payment_object(user_id, org_id):
         print payment
         print "#################"
         print "#################"
+
+        #TODO update transaction status
+
         # Extract redirect url
         for link in payment.links:
           if link.method == "REDIRECT":
             # Capture redirect url
             redirect_url = str(link.href)
-            import pdb; pdb.set_trace()
+            # import pdb; pdb.set_trace()
 
         return redirect_url, payment
 
@@ -96,13 +100,14 @@ def generate_payment_object(user_id, org_id):
     else:
         print("Error while creating payment:")
         print(payment.error)
+
+        #TODO Update Transaction status
         return("this didn't work", payment)
 
 
 if __name__ == "__main__":
 ###payment is a dictionary, representing the transaction between person being paid and doing paying
-  # Payment id obtained when creating the payment (following redirect)
-    payment = Payment.find("PAY-28103131SP722473WKFD7VGQ")
+
 
     # Execute payment using payer_id obtained when creating the payment (following redirect)
     if payment.execute({"payer_id": "DUFRQ8GWYMJXC"}):
