@@ -274,16 +274,18 @@ def example_users():
 
 def example_orgs():
     """Create org data"""
+
     logo_url = "https://media.makeameme.org/created/how-about-getting.jpg"
-    mission = "At the Institute of Finishing Projects, we finish projects."
+    mission = "At the Institute of Finishing Projects, we finish proje"
 
     org = Organization(
-        name="Institute of Finishing Projects",
-        payee_email=FACILITATOR_EMAIL,
-        logo_url=logo_url,
-        mission_statement=mission,
-        website_url="http://www.incredibox.com/",
-        has_chapters=False)
+                       name="Institute of Finishing Projects",
+                       payee_email=FACILITATOR_EMAIL,
+                       logo_url=logo_url,
+                       mission_statement=mission,
+                       website_url="http://www.incredibox.com/",
+                       has_chapters=False
+                       )
 
     return org
 
@@ -301,7 +303,7 @@ def example_transaction():
                           user_id=user.user_id,
                           payment_id='insert valid payment_id here',
                           amount=1.00,
-                          status='pending_delivery')
+                          status='pending delivery to org')
 
     return transaction
 
