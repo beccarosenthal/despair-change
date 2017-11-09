@@ -112,7 +112,7 @@ class DespairChangeTestsDatabase(TestCase):
         self.assertNotIn("donation", result.data.lower())
         self.assertIn("You need to register first!", result.data)
 
-    def test_register(self):
+    def test_register_new_user_success_no_null(self):
         """Test register new User"""
 
         result = self.client.post('/register',
@@ -127,6 +127,20 @@ class DespairChangeTestsDatabase(TestCase):
         #for the department of Parks and Rec at the most obese city in Indiana
                                         "phone": "8124356141"},
                                         follow_redirects=True)
+        #make sure it brings you to donation page, not login page
+        self.assertIn("donation", result.data.lower())
+        self.assertNotIn('login', result.data)
+
+    def test_register_new_user_success_null_items(self):
+        """Test register new User"""
+
+        result = self.client.post('/register',
+                                  data={"email": "NothingButKnope@pawnee.gov",
+                                        "password": "Eagleton$UX",
+                                        'fname': "Leslie",
+                                        "lname": "Knope"},
+                                        follow_redirects=True)
+        #make sure it brings you to donation page, not login page
         self.assertIn("donation", result.data.lower())
         self.assertNotIn('login', result.data)
 
@@ -138,7 +152,8 @@ class DespairChangeTestsDatabase(TestCase):
     #TODO
 
     # /register
-        #     user input added correct
+        #     user input added correct, nothing null
+        #
         #     user input added incorrectly
                 #bad phone, zip, email, etc
         #     user email already in there
