@@ -26,31 +26,31 @@ class FlaskTestsBasic(TestCase):
         # Show Flask errors that happen during tests
         app.config['TESTING'] = True
 
-    def test_index(self):
+    def test_index_route(self):
         """Test homepage page."""
 
         result = self.client.get("/")
         self.assertIn("Welcome to Despair Change", result.data)
 
 
-    def test_about(self): ##NOTE: TEST WILL BREAK IF DOUCHEBAG JAR VID REMOVED
+    def test_about_route(self): ##NOTE: TEST WILL BREAK IF DOUCHEBAG JAR VID REMOVED
         """Test about page."""
 
         result = self.client.get("/about")
         self.assertIn("/www.youtube.com/embed/fWSKU3-52pk", result.data)
 
-    def test_login(self):
+    def test_login_route(self):
         """Test login page."""
         route = self.client.get('/login')
         self.assertIn('Email Address:', route.data)
 
-    def test_register(self):
+    def test_register_route(self):
         """Test register page."""
         route = self.client.get('/register')
         self.assertIn('Age:', route.data)
 
 
-class FlaskTestsDatabase(TestCase):
+class DespairChangeTestsDatabase(TestCase):
     """Flask tests that use the database."""
 
     def setUp(self):
@@ -82,15 +82,15 @@ class FlaskTestsDatabase(TestCase):
                                       "password": SAMPLE_PASSWORD},
                                 follow_redirects=True)
 
-    def test_correct_login(self): #NOTE: if you get rid of "DONATION" on /donate, test will fail
+    def test_login_correct_password(self): #NOTE: if you get rid of "DONATION" on /donate, test will fail
         """Test login page."""
 
         result = self.login()
-        self.assertIn("DONATION", result.data)
+        self.assertIn("donation", result.data.lower())
         self.assertNotIn("That is an incorrect password", result.data)
 
 
-    def test_failed_login(self): #NOTE: if you get rid of "DONATION" on /donate, test will fail
+    def test_login_incorrect_password(self):
         """Test unsuccessful login page."""
 
         result = self.client.post("/login",
@@ -101,11 +101,79 @@ class FlaskTestsDatabase(TestCase):
         self.assertNotIn("donation", result.data.lower())
         self.assertIn("That is an incorrect password", result.data)
 
-    def test_donate_while_logged_in(self):
-        """Test donate page."""
-        self.login()
-        route = self.client.get('/donate')
-        self.assertIn('DONATION', route.data)
+    def test_login_no_account(self):
+        """Test login attempt for nonexistent account."""
+
+        result = self.client.post("/login",
+                                  data={"email": "privacy4lyfe@EdSnowden.com",
+                                        "password": "Password1!"},
+                                  follow_redirects=True)
+
+        self.assertNotIn("donation", result.data.lower())
+        self.assertIn("You need to register first!", result.data)
+
+    def test_register(self):
+        """Test register new User"""
+
+        result = self.client.post('/register',
+                                  data={"email": "NothingButKnope@pawnee.gov",
+                                        "password": "Eagleton$UX",
+                                        'fname': "Leslie",
+                                        "lname": "Knope",
+                                        "age": 37,
+                                        "zipcode": "46001",
+                                        "state": "IN",
+        #FOR THE RECORD: the phone number listed here is the actual phone number
+        #for the department of Parks and Rec at the most obese city in Indiana
+                                        "phone": "8124356141"},
+                                        follow_redirects=True)
+        self.assertIn("donation", result.data.lower())
+        self.assertNotIn('login', result.data)
+
+
+
+
+
+
+    #TODO
+
+    # /register
+        #     user input added correct
+        #     user input added incorrectly
+                #bad phone, zip, email, etc
+        #     user email already in there
+        #         *****TODO fix server.py logic so that user registering with
+        #         wrong password redirects them to login page
+
+
+####################################################################################
+class DespairChangeLoggedIn(TestCase):
+    """Despair Change tests with user logged in to session."""
+
+    def setUp(self):
+        """Stuff to do before every test."""
+
+        app.config['TESTING'] = True
+        app.config['SECRET_KEY'] = 'key'
+        self.client = app.test_client()
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['current_user'] = 1
+
+    # #goal is to make sure what pages you can and cannot see
+    # def test_donate_while_logged_in(self):
+    #     """Test donate page."""
+    #     route = self.client.get('/donate')
+    #     self.assertIn('DONATION', route.data)
+
+    # def test_important_page(self):
+    #     """Test important page."""
+
+    #     result = self.client.get("/important")
+    #     self.assertIn("You are a valued user", result.data)
+
+
 
     ##Right now buttons fails because it's not connected to db
     # def test_buttons(self): ##NOTE: This page will likely not be in final project
@@ -119,12 +187,6 @@ class FlaskTestsDatabase(TestCase):
         # / - basically a question of what they can see on the nav bar
             # if logged in
             # if not logged in
-
-        # /login
-        #     user exists
-        #         correct password
-        #         incorrect password
-        #     user does not exist
 
         # /register
         #     user input added correct

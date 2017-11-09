@@ -56,8 +56,6 @@ def show_button_options():
 
 # Registration and login logic functions
 ###############################################################################
-
-
 @app.route('/register')
 def show_registration_form():
     """render registration form"""
@@ -78,8 +76,7 @@ def process_registration():
     # wrong password redirects them to login page
     if 'current_user' in session:
         print "***current user in session"
-        import pdb; pdb.set_trace()
-        return redirect('/login')
+        return redirect('/')
 
     #TODO add logic about making sure they type a password that matches -
     # it may be on the html template, not here
@@ -93,11 +90,10 @@ def process_registration():
     phone = request.form.get('phone')
 
     user_object = User.query.filter(User.user_email == user_email).first()
-    password = user_object.password
 
     #If user object with email address provided doens't exist, add to db...
     if not user_object :
-        new_user = User(user_email=user_email,
+        user_object = User(user_email=user_email,
                         password=user_password,
                         fname=fname,
                         lname=lname,
@@ -105,11 +101,17 @@ def process_registration():
                         zipcode=zipcode,
                         state_code=state,
                         phone=phone)
-        db.session.add(new_user)
+        db.session.add(user_object)
         db.session.commit()
 
-    session['current_user'] = user_object.user_id
-    print session['current_user']
+    #if user email existed in db and password is right, log them in
+    if user_password == user_object.password:
+        session['current_user'] = user_object.user_id
+        print session['current_user']
+        #They already logged in; send them to the donate page
+        return redirect('/donate')
+
+    # Make user sign in with correct password
     return redirect('/login')
 
 
@@ -118,7 +120,6 @@ def show_login_form():
     """render login form"""
 
     if 'current_user' in session:
-        flash('You\'re already logged in...let\'s go make an impact!')
         return redirect('/donate')
 
     return render_template('login.html')
@@ -157,7 +158,7 @@ def login_user():
 
     else:
         flash('You need to register first!')
-        return redirect('/register.html')
+        return redirect('/register')
 
 
 @app.route('/logout')

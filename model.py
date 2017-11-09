@@ -296,7 +296,7 @@ def example_orgs():
                        payee_email=FACILITATOR_EMAIL,
                        logo_url=logo_url,
                        mission_statement=mission,
-                       website_url="http://www.incredibox.com/",
+                       website_url="http://www.pawneeindiana.com/",
                        has_chapters=False
                        )
 
