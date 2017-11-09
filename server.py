@@ -8,7 +8,7 @@ from flask import (Flask, render_template, redirect, request, flash,
                    session, jsonify)
 from flask_debugtoolbar import DebugToolbarExtension
 from jinja2 import StrictUndefined
-from paypalrestsdk import Payment, configure
+from paypalrestsdk import Payment, configure, WebProfile
 
 
 #import from my files
@@ -90,9 +90,6 @@ def process_registration():
     zipcode = request.form.get('zipcode')
     state = request.form.get('state')
     phone = request.form.get('phone')
-
-
-
 
     user_object = User.query.filter(User.user_email == user_email).first()
 

@@ -1,6 +1,8 @@
 import os
+import random
+import string
 
-from paypalrestsdk import Payment, configure
+from paypalrestsdk import Payment, configure, WebProfile
 
 from model import (User, Organization, Transaction,
                    UserOrg, State,
@@ -30,11 +32,37 @@ def generate_payment_object(user_id, org_id):
     current_transaction = Transaction.query.all()[-1]
 
 
-    #Generate Payment Object
+    #TODO add webprofile that has no shipping, org info
+
         #TODO #Figure out how to make intent donate
+
+    # Name needs to be unique so just generating a random one
+    wpn = ''.join(random.choice(string.ascii_uppercase) for i in range(12))
+    web_profile = WebProfile({
+        "name": wpn,
+        "presentation": {
+            "brand_name": org_obj.name,
+            "logo_image": org_obj.logo_url,
+            "locale_code": "US"
+        },
+        "input_fields": {
+            "allow_note": True,
+            "no_shipping": 1,
+            "address_override": 1
+        },
+        "flow_config": {
+            "landing_page_type": "login",
+            "bank_txn_pending_url": "http://www.yeowza.com"
+        }
+        })
+    if web_profile.create():
+        print("Web Profile[%s] created successfully" % (web_profile.id))
+    else:
+        print(web_profile.error)
+    #Generate Payment Object
     payment = Payment({
         "intent": "sale",
-
+        "experience_profile_id": web_profile.id,
       # Set payment method
         "payer": {
 

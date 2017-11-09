@@ -48,7 +48,6 @@ class User(db.Model):
                                default=1.00)
 
     phone = db.Column(db.String(15), nullable=True)
-
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.datetime.utcnow)
 
@@ -57,6 +56,9 @@ class User(db.Model):
 
     #in case I want to reference state data through the User
     state = db.relationship("State", backref="users")
+
+    #TODO if you add referrals, do something with this
+    # referred_by = db.Column(db.Integer, nullable=True)
 
     def __repr__(self):
         """Provide helpful representation when printed."""

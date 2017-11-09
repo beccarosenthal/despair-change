@@ -212,11 +212,18 @@ class DespairChangeLoggedIn(TestCase):
             with c.session_transaction() as sess:
                 sess['current_user'] = 1
 
-    # #goal is to make sure what pages you can and cannot see
-    # def test_donate_while_logged_in(self):
-    #     """Test donate page."""
-    #     route = self.client.get('/donate')
-    #     self.assertIn('DONATION', route.data)
+    #goal is to make sure what pages you can and cannot see
+
+    ##currently errors out because no org obj being passed through
+    def test_donate_while_logged_in(self):
+        """Test donate page."""
+        route = self.client.get('/donate')
+        self.assertIn('donation', route.data.lower())
+
+    def test_login_while_logged_in(self):
+        """Test donate page."""
+        route = self.client.get('/login')
+        self.assertIn('dashboard', route.data)
 
     # def test_important_page(self):
     #     """Test important page."""
