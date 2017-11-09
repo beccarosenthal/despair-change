@@ -1,10 +1,17 @@
+"""TESTS FOR DESPAIR CHANGE"""
+import os
 from unittest import TestCase
 # from faker import faker
 from flask import session
 
 from model import (User, Organization, Transaction, State,
                    UserOrg, connect_to_db, db, create_example_data)
+from seed import load_states
 from server import app
+
+SAMPLE_PASSWORD = os.environ.get("SAMPLE_PASSWORD")
+BUYER_EMAIL = os.environ.get("BUYER_EMAIL")
+FACILITATOR_EMAIL = os.environ.get("FACILITATOR_EMAIL")
 
 
 class FlaskTestsBasic(TestCase):
@@ -32,8 +39,86 @@ class FlaskTestsBasic(TestCase):
         result = self.client.get("/about")
         self.assertIn("/www.youtube.com/embed/fWSKU3-52pk", result.data)
 
+    def test_login(self):
+        """Test login page."""
+        route = self.client.get('/login')
+        self.assertIn('Email Address:', route.data)
+
+    def test_register(self):
+        """Test register page."""
+        route = self.client.get('/register')
+        self.assertIn('Age:', route.data)
+
+
+class FlaskTestsDatabase(TestCase):
+    """Flask tests that use the database."""
+
+    def setUp(self):
+        """Stuff to do before every test."""
+
+        # Get the Flask test client
+        self.client = app.test_client()
+        app.config['TESTING'] = True
+
+        # Connect to test database
+        connect_to_db(app, "postgresql:///testdb")
+
+        # Create tables and add sample data
+        db.create_all()
+        load_states()
+
+        create_example_data()
+
+    def tearDown(self):
+        """Do at end of every test."""
+
+        db.session.close()
+        db.drop_all()
+
+    def login(self):
+        """Helper function to allow self.client to see site as logged in"""
+        return self.client.post("/login",
+                                data={"email": BUYER_EMAIL,
+                                      "password": SAMPLE_PASSWORD},
+                                follow_redirects=True)
+
+    def test_correct_login(self): #NOTE: if you get rid of "DONATION" on /donate, test will fail
+        """Test login page."""
+
+        result = self.login()
+        self.assertIn("DONATION", result.data)
+        self.assertNotIn("That is an incorrect password", result.data)
+
+
+    def test_failed_login(self): #NOTE: if you get rid of "DONATION" on /donate, test will fail
+        """Test unsuccessful login page."""
+
+        result = self.client.post("/login",
+                                  data={"email": BUYER_EMAIL,
+                                        "password": "Pa$$word124"},
+                                  follow_redirects=True)
+
+        self.assertNotIn("donation", result.data.lower())
+        self.assertIn("That is an incorrect password", result.data)
+
+    def test_donate_while_logged_in(self):
+        """Test donate page."""
+        self.login()
+        route = self.client.get('/donate')
+        self.assertIn('DONATION', route.data)
+
+    ##Right now buttons fails because it's not connected to db
+    # def test_buttons(self): ##NOTE: This page will likely not be in final project
+    #     """Test buttons page."""
+
+    #     ##NOTE: Test will break if monkey gif removed
+    #     result = self.client.get("/buttons")
+    #     self.assertIn("giphy.com/embed/5Zesu5VPNGJlm", result.data)
+
     #TODO Write Tests for:
-        # /about
+        # / - basically a question of what they can see on the nav bar
+            # if logged in
+            # if not logged in
 
         # /login
         #     user exists

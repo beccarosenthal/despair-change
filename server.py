@@ -43,14 +43,15 @@ def show_about_page():
     return render_template('about.html')
 
 
-@app.route('/dashboard')
-def show_user_dashboard():
-    """show user dashboard"""
+@app.route('/buttons')
+def show_button_options():
+    """shows all the buttons I've copied and pasted from paypal"""
 
-    current_user_id = session['current_user']
-    user_object = User.query.filter(User.user_id == current_user_id).first()
+    org = Organization.query.filter(Organization.name.like('Institute%')).first()
 
-    return render_template('dashboard.html', user=user_object)
+    return render_template('buttons.html', org=org)
+
+
 
 
 # Registration and login logic functions
@@ -168,14 +169,15 @@ def logout_user():
     return redirect ('/')
 
 
-@app.route('/cancel')
-def cancel_payment():
-    """cancels payment"""
 
+@app.route('/dashboard')
+def show_user_dashboard():
+    """show user dashboard"""
 
-    flash('I think I just canceled a payment')
-    return redirect('/')
+    current_user_id = session['current_user']
+    user_object = User.query.filter(User.user_id == current_user_id).first()
 
+    return render_template('dashboard.html', user=user_object)
 
 #routes about paypal/payment things
 ###############################################################################
@@ -273,13 +275,14 @@ def process_payment():
     return redirect('/')
 
 
-@app.route('/buttons')
-def show_button_options():
-    """shows all the buttons I've copied and pasted from paypal"""
+@app.route('/cancel')
+def cancel_payment():
+    """cancels payment"""
 
-    org = Organization.query.filter(Organization.name.like('Institute%')).first()
 
-    return render_template('buttons.html', org=org)
+    flash('I think I just canceled a payment')
+    return redirect('/')
+
 
 
 if __name__ == "__main__":

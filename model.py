@@ -58,7 +58,6 @@ class User(db.Model):
     #in case I want to reference state data through the User
     state = db.relationship("State", backref="users")
 
-
     def __repr__(self):
         """Provide helpful representation when printed."""
         repr_string = "<User user_id={id} fname={first} lname={last}>"
