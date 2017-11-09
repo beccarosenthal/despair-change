@@ -140,11 +140,38 @@ class DespairChangeTestsDatabase(TestCase):
                                         'fname': "Leslie",
                                         "lname": "Knope"},
                                         follow_redirects=True)
-        #make sure it brings you to donation page, not login page
+
+        #make sure it brings user to donation page, not login page
         self.assertIn("donation", result.data.lower())
         self.assertNotIn('login', result.data)
 
+    def test_register_existing_user_good_password(self):
+        """Test register preexisting User"""
 
+        result = self.client.post('/register',
+                                  data={"email": BUYER_EMAIL,
+                                        "password": SAMPLE_PASSWORD},
+                                        "fname": "Anne",
+                                        "lname": "Perkins"},
+                                        follow_redirects=True)
+
+        #make sure it brings user to donation page, not login page
+        self.assertIn("donation", result.data.lower())
+        self.assertNotIn('login', result.data)
+
+    def test_register_existing_user_bad_password(self):
+        """Test register preexisting User"""
+
+        result = self.client.post('/register',
+                                  data={"email": BUYER_EMAIL,
+                                        "password": "IceTownMayer"},
+                                        "fname": "Ben",
+                                        "lname": "Wyatt"},
+                                        follow_redirects=True)
+
+        #make sure it brings user to login page, not donation page
+        self.assertNotIn("donation", result.data.lower())
+        self.assertIn('login', result.data)
 
 
 
