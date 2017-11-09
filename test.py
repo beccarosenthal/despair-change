@@ -150,7 +150,7 @@ class DespairChangeTestsDatabase(TestCase):
 
         result = self.client.post('/register',
                                   data={"email": BUYER_EMAIL,
-                                        "password": SAMPLE_PASSWORD},
+                                        "password": SAMPLE_PASSWORD,
                                         "fname": "Anne",
                                         "lname": "Perkins"},
                                         follow_redirects=True)
@@ -164,7 +164,7 @@ class DespairChangeTestsDatabase(TestCase):
 
         result = self.client.post('/register',
                                   data={"email": BUYER_EMAIL,
-                                        "password": "IceTownMayer"},
+                                        "password": "IceTownMayer",
                                         "fname": "Ben",
                                         "lname": "Wyatt"},
                                         follow_redirects=True)
