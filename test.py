@@ -173,6 +173,15 @@ class DespairChangeTestsDatabase(TestCase):
         self.assertNotIn("donation", result.data.lower())
         self.assertIn('login', result.data)
 
+    def test_register_bad_inputs(self):
+        """If fields are filled out incorrectly, return to register page"""
+
+        ##This can probably be done on the browser side
+        pass
+
+    def test_logout(self):
+        """test logout"""
+        pass
 
 
 

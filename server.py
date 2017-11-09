@@ -78,16 +78,21 @@ def process_registration():
         print "***current user in session"
         return redirect('/')
 
-    #TODO add logic about making sure they type a password that matches -
-    # it may be on the html template, not here
     user_email = request.form.get('email')
     user_password = request.form.get('password')
     fname = request.form.get('fname')
     lname = request.form.get('lname')
+
+    ##Add logic to make sure that if there is a problem with any
+    ##of the nullable things, they don't go into DB
+
     age = request.form.get('age')
     zipcode = request.form.get('zipcode')
     state = request.form.get('state')
     phone = request.form.get('phone')
+
+
+
 
     user_object = User.query.filter(User.user_email == user_email).first()
 
