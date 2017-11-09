@@ -230,10 +230,12 @@ def create_example_data():
     chinandler = users[2]
 
     print "Added Users"
-    org = example_orgs()
+    orgs = example_orgs()
+    org1 = orgs[0]
+    org2 = orgs[1]
 
     #add users and org to DB
-    db.session.add_all([pink, glen, chinandler, org])
+    db.session.add_all([pink, glen, chinandler, org1, org2])
     db.session.commit()
 
     # import pdb; pdb.set_trace()
@@ -249,7 +251,6 @@ def create_example_data():
     db.session.add_all([transaction, user_org])
     db.session.commit()
 
-    print pink, glen, chinandler, org, transaction, user_org
 
 
 def example_users():
@@ -290,19 +291,30 @@ def example_users():
 def example_orgs():
     """Create org data"""
 
-    logo_url = "https://media.makeameme.org/created/how-about-getting.jpg"
-    mission = "At the Institute of Finishing Projects, we finish proje"
+    logo_url1 = "https://media.makeameme.org/created/how-about-getting.jpg"
+    mission1 = "At the Institute of Finishing Projects, we finish proje"
 
     org = Organization(
                        name="Institute of Finishing Projects",
                        payee_email=FACILITATOR_EMAIL,
-                       logo_url=logo_url,
-                       mission_statement=mission,
+                       logo_url=logo_url1,
+                       mission_statement=mission1,
                        website_url="http://www.pawneeindiana.com/",
                        has_chapters=False
                        )
 
-    return org
+    logo_url2 = "https://ih1.redbubble.net/image.294685880.6679/flat,800x800,075,f.jpg"
+    mission2 = ("At Rent-A-Swag, we bring you the dopest shirts, the swankiest jackets, the slickest cardigans, the flashiest fedoras, the hottest ties, the snazziest canes and more!")
+    org2 = Organization(
+                       name="Rent-A-Swag",
+                       payee_email=FACILITATOR_EMAIL1,
+                       logo_url=logo_url2,
+                       mission_statement=mission2,
+                       website_url="http://parksandrecreation.wikia.com/wiki/Rent-A-Swag",
+                       has_chapters=False
+                       )
+
+    return org, org2
 
 
 def example_transaction():

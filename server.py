@@ -188,11 +188,15 @@ def show_user_dashboard():
 def donation_page():
     """render page to donate"""
 
-    #TODO - when project develops into multiple orgs, target_org-->list
+    #     send over list of all orgs available
+    orgs = Organization.query.all()
+    print orgs
+    import pdb; pdb.set_trace()
 
-    org = Organization.query.filter(Organization.name.like('Institute%')).first()
+    #just send over Institute of Finishing Projects
+    # org = Organization.query.filter(Organization.name.like('Institute%')).first()
 
-    return render_template('donate.html', org=org)
+    return render_template('donate.html', orgs=orgs)
 
 
 @app.route('/donated', methods=['POST'])
@@ -204,7 +208,7 @@ def process_donation():
 
     print "user_id=", user_id
     print "org_id=", org_id
-
+    import pdb; pdb.set_trace()
     amount = User.query.get(user_id).default_amount
     #TODO change status=pending_delivery to donation attempted, change data model
 
@@ -275,7 +279,7 @@ def process_payment():
     #TODO If we get here, figure out how to update transaction status
 
     flash('Payment successful')
-    return redirect('/')
+    return redirect('/dashboard')
 
 
 @app.route('/cancel')

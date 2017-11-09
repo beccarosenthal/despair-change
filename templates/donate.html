@@ -5,8 +5,10 @@
 <h1>IT'S A DONATION PAGE!!!</h1>
 
 <iframe src="https://giphy.com/embed/VTxmwaCEwSlZm" width="480" height="198" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p>
-
-<h4>Donate to the {{org.name}}</h4>
+{{orgs[0]}}
+{% for org in orgs %}
+<div id="donate-to{{org.name}}">
+<h1>Donate to {{org.name}}</h1>
 <form action="/donated" method="POST">
 
     <!-- Identify your business so that you can collect the payments. -->
@@ -22,13 +24,13 @@
 
 </form>
 <!-- TODO Create container for org with info -->
-<h5>In the future, this will be a container with really pretty info like...</h5>
-<h3>About the {{org.name}}</h3>
-<img alt='' width="300" height="200" src='https://media.makeameme.org/created/how-about-getting.jpg' >
+<h3>About {{org.name}}</h3>
+<img alt='' width="300" height="200" src="{{org.logo_url}}" >
 <ul>
     <li><b>Mission: </b>{{org.mission_statement}}</li>
     <li><a href="{{org.website_url}}">Our Website</a></li>
 </ul>
-
+</div>
+{%endfor%}
 {% endblock %}
 
