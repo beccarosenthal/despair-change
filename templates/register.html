@@ -31,11 +31,11 @@
     </tr>
     <tr>
        <td>Last Name: </td>
-       <td> <input id="lname" name="lname"  type='text' required></td>
+       <td> <input id="lname" value="Knope" name="lname"  type='text' required></td>
     </tr>
     <tr>
       <td>Phone: </td>
-      <td><input id="phone" name="phone" type='tel'></td>
+      <td><input id="phone" name="phone" value="(XXX) XXX-XXXX" type='tel'></td>
     </tr>
     <tr>
       <td>Age:</td>
@@ -48,7 +48,7 @@
     <tr>
       <td>State: </td>
       <td>
-        <select name="state" id="state">
+        <select name="state" id="state" required>
           <option value="" selected="selected">Select a State</option>
           <option value="AL">Alabama</option>
           <option value="AK">Alaska</option>
@@ -105,13 +105,13 @@
       </td>
     </tr>
   </table>
-  <input type="submit" id="submit-button">
 </form>
+  <button type="register-button" id="submit-button" >Submit</button>
 
-<script type="text/javascript" src="/static/js/register.js"></script>
-get event listener on button
+<script type="text/javascript" src="static/js/register.js"> </script>
+<!-- get event listener on button
 check them
-if it's all good, then submit it
+if it's all good, then submit it -->
 
 
 {% endblock %}

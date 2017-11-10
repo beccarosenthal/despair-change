@@ -138,7 +138,8 @@ class DespairChangeTestsDatabase(TestCase):
                                   data={"email": "NothingButKnope@pawnee.gov",
                                         "password": "Eagleton$UX",
                                         'fname': "Leslie",
-                                        "lname": "Knope"},
+                                        "lname": "Knope",
+                                        "age": ""},
                                         follow_redirects=True)
 
         #make sure it brings user to donation page, not login page
