@@ -9,6 +9,7 @@ from flask import (Flask, render_template, redirect, request, flash,
 from flask_debugtoolbar import DebugToolbarExtension
 from jinja2 import StrictUndefined
 from paypalrestsdk import Payment, configure, WebProfile
+from sqlalchemy import func
 
 
 #import from my files
@@ -180,7 +181,32 @@ def show_user_dashboard():
     current_user_id = session['current_user']
     user_object = User.query.filter(User.user_id == current_user_id).first()
 
-    return render_template('dashboard.html', user=user_object)
+    total_donated = (db.session.query(func.sum(Transaction.amount))
+                               .filter(Transaction.user_id == current_user_id)
+                               .first())
+
+    users_donations = (db.session.query(func.sum(Transaction.amount),
+                                                      Transaction.org_id)
+                                      .filter(Transaction.user_id == current_user_id)
+                                      .group_by(Transaction.org_id)
+                                      .all())
+
+
+
+    # donations = {}
+    # for amount, org_id in total_donated_by_org:
+    #     org_name = Organization.query.get(org_id).name
+    #     donations[org_name] = amount
+
+    #Create dictionary with key value pairs of {org: amt donated by user}
+    donations_by_org = {Organization.query.get(org_id).name: amount
+                        for amount, org_id in users_donations}
+
+    print total_donated
+    return render_template('dashboard.html',
+                           user=user_object,
+                           total_donated=total_donated[0],
+                           donations_by_org=donations_by_org)
 
 #routes about paypal/payment things
 ###############################################################################
@@ -191,7 +217,7 @@ def donation_page():
     #     send over list of all orgs available
     orgs = Organization.query.all()
     print orgs
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
     #just send over Institute of Finishing Projects
     # org = Organization.query.filter(Organization.name.like('Institute%')).first()

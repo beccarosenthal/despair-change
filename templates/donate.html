@@ -2,10 +2,9 @@
 {% block title %} Donate {% endblock %}
 {% block content %}
 
-<h1>IT'S A DONATION PAGE!!!</h1>
+<div id="donation-page-welcolme">
 
-<iframe src="https://giphy.com/embed/VTxmwaCEwSlZm" width="480" height="198" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p>
-{{orgs[0]}}
+
 {% for org in orgs %}
 <div id="donate-to{{org.name}}">
 <h1>Donate to {{org.name}}</h1>
@@ -18,7 +17,7 @@
     <!-- Display the payment button. -->
     <input type="image" name="submit"
     src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_donate_92x26.png"
-    alt="Donate">
+    alt="Donate to {{org.name}}">
     <img alt="" width="1" height="1"
     src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >
 
@@ -28,9 +27,13 @@
 <img alt='' width="300" height="200" src="{{org.logo_url}}" >
 <ul>
     <li><b>Mission: </b>{{org.mission_statement}}</li>
-    <li><a href="{{org.website_url}}">Our Website</a></li>
+    <li><a href="{{org.website_url}}" target="_blank">Our Website</a></li>
 </ul>
 </div>
 {%endfor%}
+
+<h3>What are you waiting for? Turn your despair into good now!</h3>
+
+<iframe src="https://giphy.com/embed/VTxmwaCEwSlZm" width="480" height="198" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p>
 {% endblock %}
 

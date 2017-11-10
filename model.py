@@ -224,10 +224,7 @@ def create_example_data():
 
     print 'Deleted tables'
 
-    users = example_users()
-    pink = users[0]
-    glen = users[1]
-    chinandler = users[2]
+    pink, glen, chinandler = example_users()
 
     print "Added Users"
     orgs = example_orgs()
@@ -299,7 +296,7 @@ def example_orgs():
                        payee_email=FACILITATOR_EMAIL,
                        logo_url=logo_url1,
                        mission_statement=mission1,
-                       website_url="http://www.pawneeindiana.com/",
+                       website_url="http://Iwastesomuchtime.com",
                        has_chapters=False
                        )
 
@@ -310,7 +307,7 @@ def example_orgs():
                        payee_email=FACILITATOR_EMAIL1,
                        logo_url=logo_url2,
                        mission_statement=mission2,
-                       website_url="http://parksandrecreation.wikia.com/wiki/Rent-A-Swag",
+                       website_url="http://www.pawneeindiana.com/",
                        has_chapters=False
                        )
 

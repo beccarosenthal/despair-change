@@ -112,7 +112,7 @@ def generate_payment_object(user_id, org_id):
     current_transaction.status = "payment object built"
     db.session.commit()
 
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     # Create payment
     if payment.create():
 
