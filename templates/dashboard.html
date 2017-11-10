@@ -7,8 +7,8 @@
     <p>You've donated {{total_donated}} so far</p>
     <p>{{donations_by_org}}</p>
 
-    {% for donation, amount in donatations_by_org %}
-    <p> {{donation}}, {{amount}}</p>
+    {% for org, amount in donations_by_org.items() %}
+    <p> {{org}}: ${{ amount}}0</p>
     {% endfor %}
     <br>
     <br>

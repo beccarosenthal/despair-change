@@ -41,7 +41,7 @@ def generate_payment_object(user_id, org_id):
     web_profile = WebProfile({
         "name": wpn,
         "presentation": {
-            "brand_name": "NAME OF ORG",
+            "brand_name": org_obj.name,
             "logo_image": org_obj.logo_url,
             "locale_code": "US"
         },

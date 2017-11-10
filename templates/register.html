@@ -10,36 +10,40 @@
   into positivity in no time!</p>
 
 
-<form action="/register" method="POST">
+<form id="register" action="/register" onsubmit="return validateForm()" method="POST">
   <table>
     <tr>
        <td>Email Address: </td>
-       <td> <input name="email" type='email' required></td>
+       <td> <input id="email" name="email" type='email' required></td>
     </tr>
     <tr>
       <td>Password: </td>
-      <td><input name="password" type="password" required> </td>
+      <td><input id="password" name="password" type="password" required> </td>
     </tr>
     <tr>
-       <td>First Name: </td>
-       <td> <input name="fname" type='text' required></td>
-    </tr>
-    <tr>
-       <td>Last Name: </td>
-       <td> <input name="lname" type='text' required></td>
+      <td>Verify Your Password: </td>
+      <td><input id="password_validate" name="password" type="password" required> </td>
     </tr>
 
     <tr>
+       <td>First Name: </td>
+       <td> <input id="fname" name="fname" type='text' required></td>
+    </tr>
+    <tr>
+       <td>Last Name: </td>
+       <td> <input id="lname" name="lname"  type='text' required></td>
+    </tr>
+    <tr>
       <td>Phone: </td>
-      <td><input name="phone" type='tel'></td>
+      <td><input id="phone" name="phone" type='tel'></td>
     </tr>
     <tr>
       <td>Age:</td>
-      <td><input name='age' type='number'></td>
+      <td><input id="age" name='age' type='number'></td>
     </tr>
     <tr>
       <td>Zip Code: </td>
-      <td><input name='zipcode' type='text' pattern="\d{5}"></td>
+      <td><input id="zipcode" name='zipcode' type='text' pattern="\d{5}"></td>
     </tr>
     <tr>
       <td>State: </td>
@@ -101,9 +105,13 @@
       </td>
     </tr>
   </table>
-  <input type="submit">
+  <input type="submit" id="submit-button">
 </form>
 
+<script type="text/javascript" src="/static/js/register.js"></script>
+get event listener on button
+check them
+if it's all good, then submit it
 
 
 {% endblock %}
