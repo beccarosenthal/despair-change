@@ -88,9 +88,16 @@ def process_registration():
     ##of the nullable things, they don't go into DB
 
     age = request.form.get('age')
+    if not age:
+        age = None
+
+
     zipcode = request.form.get('zipcode')
     state = request.form.get('state')
     phone = request.form.get('phone')
+
+
+    import pdb; pdb.set_trace()
 
     user_object = User.query.filter(User.user_email == user_email).first()
 
