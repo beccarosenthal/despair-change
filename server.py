@@ -180,7 +180,6 @@ def show_user_dashboard():
 
     current_user_id = session['current_user']
     user_object = User.query.filter(User.user_id == current_user_id).first()
-
     total_donated = (db.session.query(func.sum(Transaction.amount))
                                .filter(Transaction.user_id == current_user_id)
                                .first())
@@ -202,6 +201,9 @@ def show_user_dashboard():
     donations_by_org = {Organization.query.get(org_id).name: amount
                         for amount, org_id in users_donations}
 
+
+
+    #TODO use regex to make total donated and amounts look like dollar amounts
     print total_donated
     return render_template('dashboard.html',
                            user=user_object,
@@ -234,7 +236,7 @@ def process_donation():
 
     print "user_id=", user_id
     print "org_id=", org_id
-    import pdb; pdb.set_trace()
+
     amount = User.query.get(user_id).default_amount
     #TODO change status=pending_delivery to donation attempted, change data model
 
@@ -253,7 +255,7 @@ def process_donation():
 
     #generate the payment object using information from the database
     redirect_url, payment_object = generate_payment_object(user_id, org_id)
-    import pdb; pdb.set_trace
+
 
     print redirect_url
     print "###############"
@@ -273,9 +275,9 @@ def process_donation():
     transaction.payment_id = paypal_id
     transaction.status = "paypal payment instantiated"
     db.session.commit()
+
+
     import pdb; pdb.set_trace()
-
-
     return redirect(redirect_url)
     ##At this point, it generates payment, redirects to paypal, invites me to log in.
     ##once i log in, it lets me donate a dollar, and completes the transfer from
@@ -293,16 +295,34 @@ def process_payment():
     #update transaction in the database
     paypal_id = request.args.get('paymentId')
 
-    transaction = Transaction.query.all()[-1]
+    transaction = Transaction.query.filter(Transaction.payment_id == paypal_id).first()
+
+    print "************"
+    print
+    print "************"
+    print
+    print "in /process"
+    print "############"
+    print "TRANSACTION STATUS BEFORE CHANGED FOR DB"
+    print transaction.status
+    import pdb; pdb.set_trace()
 
     transaction.status = "pending delivery to org"
     db.session.commit()
 
-    print "I'm here!"
+    print "************"
+    print
+    print "************"
+    print
+    print
+    print "############"
+    print "TRANSACTION STATUS AFTER CHANGED FOR DB"
+    print transaction.status
+
+    import pdb; pdb.set_trace()
 
     # paymentID = request.form.get('paymentID')
 
-    #TODO If we get here, figure out how to update transaction status
 
     flash('Payment successful')
     return redirect('/dashboard')

@@ -4,11 +4,10 @@
 
 <h1>Welcome, {{ user.fname }}</h1>
 <h2>Check out your impact</h2>
-    <p>You've donated {{total_donated}} so far</p>
-    <p>{{donations_by_org}}</p>
+    <p>You've donated ${{total_donated}}0 so far</p>
 
     {% for org, amount in donations_by_org.items() %}
-    <p> {{org}}: ${{ amount}}0</p>
+    <p> <b>{{org}}:</b> ${{ amount}}0</p>
     {% endfor %}
     <br>
     <br>

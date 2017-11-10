@@ -94,7 +94,7 @@ def generate_payment_object(user_id, org_id):
             "payee": {
                       'email': org_obj.payee_email,
                       'payee_display_metadata':
-                        {'brand_name': org_obj.name},
+                     {'brand_name': org_obj.name},
                       },
 
         }
@@ -133,6 +133,7 @@ def generate_payment_object(user_id, org_id):
             redirect_url = str(link.href)
             # import pdb; pdb.set_trace()
 
+
         return redirect_url, payment
 
             # REDIRECT USER to redirect_url
@@ -147,9 +148,14 @@ def generate_payment_object(user_id, org_id):
 if __name__ == "__main__":
 ###payment is a dictionary, representing the transaction between person being paid and doing paying
 
+        # Execute payment using payer_id obtained when creating the payment (following redirect)
+        # if payment.execute({"payer_id": payment['payer_id']}):
+        #     print("Payment[%s] execute successfully" % (payment.id))
+        # else:
+        #     print(payment.error)
 
     # Execute payment using payer_id obtained when creating the payment (following redirect)
-    if payment.execute({"payer_id": "DUFRQ8GWYMJXC"}):
+    if payment.execute({"payer_id": "DUFR Q8GWYMJXC"}):
       print("Payment[%s] execute successfully" % (payment.id))
     else:
       print(payment.error)
