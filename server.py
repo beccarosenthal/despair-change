@@ -245,7 +245,7 @@ def process_donation():
     print "org_id=", org_id
 
     amount = User.query.get(user_id).default_amount
-    #TODO change status=pending_delivery to donation attempted, change data model
+
 
     transaction = Transaction(org_id=org_id,
                               user_id=user_id,
@@ -275,16 +275,11 @@ def process_donation():
     print "here comes the payment object from the paypal_functions file"
     print payment_object
 
-    # extract paypal id from paypal object
-    paypal_id = payment_object.id
-
-    #update transaction object in the database
-    transaction.payment_id = paypal_id
+    #update transaction object in the database to add paypal's ID
+    transaction.payment_id = payment_object.id
     transaction.status = "paypal payment instantiated"
     db.session.commit()
 
-
-    import pdb; pdb.set_trace()
     return redirect(redirect_url)
     ##At this point, it generates payment, redirects to paypal, invites me to log in.
     ##once i log in, it lets me donate a dollar, and completes the transfer from
@@ -298,10 +293,9 @@ def process_donation():
 def process_payment():
     """processes payment"""
 
-    #If it's made it this far, the payment went through.
-    #update transaction in the database
     paypal_id = request.args.get('paymentId')
 
+    #Get specific transaction out of DB
     transaction = Transaction.query.filter(Transaction.payment_id == paypal_id).first()
 
     print "************"
@@ -312,10 +306,35 @@ def process_payment():
     print "############"
     print "TRANSACTION STATUS BEFORE CHANGED FOR DB"
     print transaction.status
+
+    print "check dashboard to see progress of payment to figure out how to update status"
+
+
+
+    #payer ID paypal uses to physically execute the payment
+    payer_id = request.args.get('payer_id')
+
+    #Find the payment object from the paypal id
+    payment = Payment.find(paypal_id)
+    "figure out if payer_id is in the payment"
     import pdb; pdb.set_trace()
 
-    transaction.status = "pending delivery to org"
+        # If it was greated correctlyPhysically execute the paypal payment
+    if payment.execute({"payer_id": payer_id}):
+        print("Payment[%s] execute successfully" % (payment.id))
+        transaction.status = "payment succeeded"
+    else:
+        print(payment.error)
+        transaction.status = "payment failed"
+        flash("Payment Failed")
+
     db.session.commit()
+
+
+
+
+    #If it's made it this far, the payment went through.
+    #update transaction in the database
 
     print "************"
     print
@@ -326,12 +345,6 @@ def process_payment():
     print "TRANSACTION STATUS AFTER CHANGED FOR DB"
     print transaction.status
 
-    import pdb; pdb.set_trace()
-
-    # paymentID = request.form.get('paymentID')
-
-
-    flash('Payment successful')
     return redirect('/dashboard')
 
 

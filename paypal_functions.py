@@ -131,15 +131,16 @@ def generate_payment_object(user_id, org_id):
           if link.method == "REDIRECT":
             # Capture redirect url
             redirect_url = str(link.href)
-            # import pdb; pdb.set_trace()
 
 
-        return redirect_url, payment
+            return redirect_url, payment
 
             # REDIRECT USER to redirect_url
     else:
         print("Error while creating payment:")
+        current_transaction.status = "payment failed"
         print(payment.error)
+
 
         #TODO Update Transaction status
         return("this didn't work", payment)
@@ -155,7 +156,7 @@ if __name__ == "__main__":
         #     print(payment.error)
 
     # Execute payment using payer_id obtained when creating the payment (following redirect)
-    if payment.execute({"payer_id": "DUFR Q8GWYMJXC"}):
+    if payment.execute():
       print("Payment[%s] execute successfully" % (payment.id))
     else:
       print(payment.error)
