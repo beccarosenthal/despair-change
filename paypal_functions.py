@@ -29,7 +29,9 @@ def generate_payment_object(user_id, org_id):
     user_obj = User.query.filter(User.user_id == user_id).one()
     org_obj = Organization.query.filter(Organization.org_id == org_id).one()
 
-    current_transaction = Transaction.query.all()[-1]
+    current_transaction = (Transaction.query
+                                      .order_by(Transaction.transaction_id)
+                                      .all()[-1])
 
 
     #TODO add webprofile that has no shipping, org info

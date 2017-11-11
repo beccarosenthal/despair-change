@@ -263,7 +263,8 @@ def process_donation():
     db.session.commit()
 
     #generate the payment object using information from the database
-    redirect_url, payment_object = generate_payment_object(user_id, org_id)
+    redirect_url, payment_object = generate_payment_object(user_id,
+                                                           org_id)
 
 
     print redirect_url
@@ -285,6 +286,8 @@ def process_donation():
     print "transaction before getting committed"
     print "payment_id = ", transaction.payment_id
     print "status = ", transaction.status
+    print "compare what the transaction payment id is to what the db thinks it is"
+    import pdb; pdb.set_trace()
     db.session.commit()
 
     return redirect(redirect_url)
@@ -303,7 +306,9 @@ def process_payment():
     paypal_id = request.args.get('paymentId')
 
     #Get specific transaction out of DB
-    transaction = Transaction.query.filter(Transaction.payment_id == paypal_id).first()
+    transaction = (Transaction.query
+                              .filter(Transaction.payment_id == paypal_id)
+                              .first())
 
     print "************"
     print
