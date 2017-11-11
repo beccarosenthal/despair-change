@@ -88,7 +88,7 @@ def generate_payment_object(user_id, org_id):
                 "total": str(user_obj.default_amount) + "0",
                 "currency": "USD"
                 },
-            "description": "Donation",
+            "description": "Donation to " + org_obj.name,
 
             #TODO make payee info come from db
             "payee": {

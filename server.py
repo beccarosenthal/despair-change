@@ -246,6 +246,8 @@ def process_donation():
 
     amount = User.query.get(user_id).default_amount
 
+    #TODO Use regex to get amount to be a string format that paypal can take
+
 
     transaction = Transaction(org_id=org_id,
                               user_id=user_id,
@@ -278,6 +280,11 @@ def process_donation():
     #update transaction object in the database to add paypal's ID
     transaction.payment_id = payment_object.id
     transaction.status = "paypal payment instantiated"
+    print "*********"
+    print "##########"
+    print "transaction before getting committed"
+    print "payment_id = ", transaction.payment_id
+    print "status = ", transaction.status
     db.session.commit()
 
     return redirect(redirect_url)
@@ -312,7 +319,7 @@ def process_payment():
 
 
     #payer ID paypal uses to physically execute the payment
-    payer_id = request.args.get('payer_id')
+    payer_id = request.args.get('PayerID')
 
     #Find the payment object from the paypal id
     payment = Payment.find(paypal_id)
