@@ -342,7 +342,6 @@ def process_payment():
     db.session.commit()
 
 
-
     return redirect('/dashboard')
 
 
@@ -365,7 +364,7 @@ def user_impact_donut_data():
                                .filter(Transaction.user_id == current_user_id)
                                .first())
 
-    #Create dictionary with key value pairs of {org: amt donated by user}
+    #Create dictionary with key value pairs of {org_id: amt donated by user}
     donations_by_org = query_for_donations_by_org_dict(current_user_id)
 
     labels = []
@@ -404,7 +403,7 @@ def user_impact_data():
                                .filter(Transaction.user_id == current_user_id)
                                .first())
 
-    #Create dictionary with key value pairs of {org: amt donated by user}
+    #Create dictionary with key value pairs of {org_id: amt donated by user}
     donations_by_org = query_for_donations_by_org_dict(current_user_id)
 
     labels = []
@@ -451,12 +450,15 @@ def query_for_donations_by_org_dict(user_id):
     """return dictionary of org name: amount donated by given user"""
     #find all donations that were successful
     #todo fix this query to include Transaction.status = "delivered to org"
+
+
     users_donations = (db.session.query(func.sum(Transaction.amount),
                                                  Transaction.org_id)
                                  .filter(Transaction.user_id == user_id)
                                  .filter(Transaction.status == "pending delivery to org")
                                  .group_by(Transaction.org_id)
                                  .all())
+
 
     donations_by_org = {Organization.query.get(org_id).name: amount
                         for amount, org_id in users_donations}
