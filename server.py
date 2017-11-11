@@ -180,35 +180,24 @@ def logout_user():
     return redirect ('/')
 
 
-
 @app.route('/dashboard')
 def show_user_dashboard():
     """show user dashboard"""
 
-    current_user_id = session['current_user']
-    user_object = User.query.filter(User.user_id == current_user_id).first()
+    user_object, current_user_id = get_user_object_and_current_user_id()
+
+    #get total amount of money user has attempted to donate
     total_donated = (db.session.query(func.sum(Transaction.amount))
                                .filter(Transaction.user_id == current_user_id)
                                .first())
-    #TODO find the right query to make this work
-    users_donations = (db.session.query(func.sum(Transaction.amount),
-                                                 Transaction.org_id)
-                                 .filter(Transaction.user_id == current_user_id)
-                                 .filter(Transaction.status == "pending delivery to org")
-                                 .group_by(Transaction.org_id)
-                                 .all())
 
-
-    print "check out transaction object"
-    import pdb; pdb.set_trace()
     # donations = {}
     # for amount, org_id in total_donated_by_org:
     #     org_name = Organization.query.get(org_id).name
     #     donations[org_name] = amount
 
     #Create dictionary with key value pairs of {org: amt donated by user}
-    donations_by_org = {Organization.query.get(org_id).name: amount
-                        for amount, org_id in users_donations}
+    donations_by_org = query_for_donations_by_org_dict(current_user_id)
 
 
 
@@ -219,51 +208,7 @@ def show_user_dashboard():
                            total_donated=total_donated[0],
                            donations_by_org=donations_by_org)
 
-@app.route('/user-impact.json')
-def user_impact_data():
-    """Return data about user impact."""
 
-    #TODO make sure that without being logged in, you can't go to donate page
-    current_user_id = session['current_user']
-
-    user_object = User.query.filter(User.user_id == current_user_id).first()
-    total_donated = (db.session.query(func.sum(Transaction.amount))
-                               .filter(Transaction.user_id == current_user_id)
-                               .first())
-    #TODO find the right query to make this work
-    users_donations = (db.session.query(func.sum(Transaction.amount),
-                                                 Transaction.org_id)
-                                 .filter(Transaction.user_id == current_user_id)
-                                 .filter(Transaction.status == "pending delivery to org")
-                                 .group_by(Transaction.org_id)
-                                 .all())
-
-    donations_by_org = {Organization.query.get(org_id).name: amount
-                        for amount, org_id in users_donations}
-    labels = []
-    data = []
-
-    for org, amount in donations_by_org.items():
-        labels.append(org)
-        data.append(amount)
-
-    data_dict = {
-                "labels": labels,
-                "datasets": [
-                    {
-                        "data": data,
-                        "backgroundColor": [
-                            "#FF6384",
-                            "#36A2EB",
-                        ],
-                        "hoverBackgroundColor": [
-                            "#FF6384",
-                            "#36A2EB",
-                        ]
-                    }]
-            }
-
-    return jsonify(data_dict)
 
 #routes about paypal/payment things
 ###############################################################################
@@ -369,17 +314,13 @@ def process_payment():
 
     print "check dashboard to see progress of payment to figure out how to update status"
 
-
-
     #payer ID paypal uses to physically execute the payment
     payer_id = request.args.get('PayerID')
 
     #Find the payment object from the paypal id
     payment = Payment.find(paypal_id)
-    "figure out if payer_id is in the payment"
-    import pdb; pdb.set_trace()
 
-        # If it was greated correctlyPhysically execute the paypal payment
+    # Physically execute the paypal payment
     if payment.execute({"payer_id": payer_id}):
         print("Payment[%s] execute successfully" % (payment.id))
         transaction.status = "payment succeeded"
@@ -389,9 +330,6 @@ def process_payment():
         flash("Payment Failed")
 
     db.session.commit()
-
-
-
 
     #If it's made it this far, the payment went through.
     #update transaction in the database
@@ -412,10 +350,80 @@ def process_payment():
 def cancel_payment():
     """cancels payment"""
 
-
     flash('I think I just canceled a payment')
     return redirect('/')
+#Routes about Data vis
+##############################################################################
+@app.route('/user-impact-donut.json')
+def user_impact_data():
+    """Return data about user impact."""
 
+    user_object, current_user_id = get_user_object_and_current_user_id()
+
+    # find all donations attempted by the user logged into the session
+    total_donated = (db.session.query(func.sum(Transaction.amount))
+                               .filter(Transaction.user_id == current_user_id)
+                               .first())
+
+    #Create dictionary with key value pairs of {org: amt donated by user}
+    donations_by_org = query_for_donations_by_org_dict(current_user_id)
+
+    labels = []
+    data = []
+
+    for org, amount in donations_by_org.items():
+        labels.append(org)
+        data.append(amount)
+
+    data_dict = {
+                "labels": labels,
+                "datasets": [
+                    {
+                        "data": data,
+                        "backgroundColor": [
+                            "#FF6384",
+                            "#36A2EB",
+                        ],
+                        "hoverBackgroundColor": [
+                            "#FF6384",
+                            "#36A2EB",
+                        ]
+                    }]
+            }
+
+    return jsonify(data_dict)
+
+
+
+#Helper Functions with queries
+##############################################################################
+
+def get_user_object_and_current_user_id():
+    """helper function to get user id out of session, return user object"""
+
+    current_user_id = session['current_user']
+    user_object = User.query.filter(User.user_id == current_user_id).first()
+
+    return user_object, user_object.user_id
+
+
+def query_for_donations_by_org_dict(user_id):
+    """return dictionary of org name: amount donated by given user"""
+    #find all donations that were successful
+    #todo fix this query to include Transaction.status = "delivered to org"
+    users_donations = (db.session.query(func.sum(Transaction.amount),
+                                                 Transaction.org_id)
+                                 .filter(Transaction.user_id == user_id)
+                                 .filter(Transaction.status == "pending delivery to org")
+                                 .group_by(Transaction.org_id)
+                                 .all())
+
+    donations_by_org = {Organization.query.get(org_id).name: amount
+                        for amount, org_id in users_donations}
+
+    import pdb; pdb.set_trace()
+    print "make sure donations_by_org is dictionary of orgs: amount"
+    return donations_by_org
 
 
 if __name__ == "__main__":
