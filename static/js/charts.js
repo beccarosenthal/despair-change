@@ -29,28 +29,28 @@ var options = {
                   },
 
                 scales: {
-    xAxes: [{
-      gridLines: {
-        display: false,
-        color: "black"
-      },
-      scaleLabel: {
-        display: true,
-        labelString: "Time in Seconds",
-        fontColor: "red"
-      }
-    }],
-    yAxes: [{
-      gridLines: {
-        color: "black",
-        borderDash: [2, 5],
-      },
-      scaleLabel: {
-        display: true,
-        labelString: "Speed in Miles per Hour",
-        fontColor: "green"
-      }
-    }],
+                    xAxes: [{
+                      gridLines: {
+                        display: false,
+                        color: "black"
+                      },
+                      scaleLabel: {
+                        display: true,
+                        labelString: "Organization",
+                        fontColor: "red"
+                      }
+                    }],
+                    yAxes: [{
+                      gridLines: {
+                        color: "black",
+                        borderDash: [2, 5],
+                      },
+                      scaleLabel: {
+                        display: true,
+                        labelString: "Dollars Donated",
+                        fontColor: "green"
+                      }
+                    }],
                 title: {
                     display: true,
                     text: 'My Donations',
@@ -65,7 +65,7 @@ var options = {
                         bottom: 0
                     }}
 
-                };
+                }};
 
 var ctx_bar = $("#userImpactBarChart").get(0).getContext("2d");
 
