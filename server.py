@@ -219,6 +219,47 @@ def show_user_dashboard():
                            total_donated=total_donated[0],
                            donations_by_org=donations_by_org)
 
+@app.route('/melon-types.json')
+def user_impact_data():
+    """Return data about user impact."""
+
+    #TODO make sure that without being logged in, you can't go to donate page
+    current_user_id = session['current_user']
+
+    user_object = User.query.filter(User.user_id == current_user_id).first()
+    total_donated = (db.session.query(func.sum(Transaction.amount))
+                               .filter(Transaction.user_id == current_user_id)
+                               .first())
+    #TODO find the right query to make this work
+    users_donations = (db.session.query(func.sum(Transaction.amount),
+                                                 Transaction.org_id)
+                                 .filter(Transaction.user_id == current_user_id)
+                                 .filter(Transaction.status == "pending delivery to org")
+                                 .group_by(Transaction.org_id)
+                                 .all())
+
+
+    data_dict = {
+                "labels": [
+                    "Christmas Melon",
+                    "Crenshaw",
+                ],
+                "datasets": [
+                    {
+                        "data": [300, 50],
+                        "backgroundColor": [
+                            "#FF6384",
+                            "#36A2EB",
+                        ],
+                        "hoverBackgroundColor": [
+                            "#FF6384",
+                            "#36A2EB",
+                        ]
+                    }]
+            }
+
+    return jsonify(data_dict)
+
 #routes about paypal/payment things
 ###############################################################################
 @app.route('/donate')
