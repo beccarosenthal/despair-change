@@ -4,7 +4,8 @@
 
 <h1>Welcome, {{ user.fname }}</h1>
 <h2>Check out your impact</h2>
-    <p>You've donated ${{total_donated}}0 so far</p>
+    <p>You've attempted to donate ${{total_donated}}0 so far</p>
+    <p>Thanks to technical difficulties, the reality on the ground is slightly different.</p>
 
     {% for org, amount in donations_by_org.items() %}
     <p> <b>{{org}}:</b> ${{ amount}}0</p>

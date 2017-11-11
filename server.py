@@ -190,15 +190,17 @@ def show_user_dashboard():
     total_donated = (db.session.query(func.sum(Transaction.amount))
                                .filter(Transaction.user_id == current_user_id)
                                .first())
-
+    #TODO find the right query to make this work
     users_donations = (db.session.query(func.sum(Transaction.amount),
-                                                      Transaction.org_id)
-                                      .filter(Transaction.user_id == current_user_id)
-                                      .group_by(Transaction.org_id)
-                                      .all())
+                                                 Transaction.org_id)
+                                 .filter(Transaction.user_id == current_user_id)
+                                 .filter(Transaction.status == "pending delivery to org")
+                                 .group_by(Transaction.org_id)
+                                 .all())
 
 
-
+    print "check out transaction object"
+    import pdb; pdb.set_trace()
     # donations = {}
     # for amount, org_id in total_donated_by_org:
     #     org_name = Organization.query.get(org_id).name
