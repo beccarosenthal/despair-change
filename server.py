@@ -96,9 +96,6 @@ def process_registration():
     state = request.form.get('state')
     phone = request.form.get('phone')
 
-
-    import pdb; pdb.set_trace()
-
     user_object = User.query.filter(User.user_email == user_email).first()
 
     #If user object with email address provided doens't exist, add to db...
@@ -340,8 +337,11 @@ def process_payment():
     print
     print
     print "############"
-    print "TRANSACTION STATUS AFTER CHANGED FOR DB"
-    print transaction.status
+    print "Money is in my hands, ready to be delivered to the org"
+    transaction.status = "pending delivery to org"
+    db.session.commit()
+
+
 
     return redirect('/dashboard')
 
@@ -355,8 +355,47 @@ def cancel_payment():
 #Routes about Data vis
 ##############################################################################
 @app.route('/user-impact-donut.json')
-def user_impact_data():
+def user_impact_donut_data():
     """Return data about user impact."""
+
+    user_object, current_user_id = get_user_object_and_current_user_id()
+
+    # find all donations attempted by the user logged into the session
+    total_donated = (db.session.query(func.sum(Transaction.amount))
+                               .filter(Transaction.user_id == current_user_id)
+                               .first())
+
+    #Create dictionary with key value pairs of {org: amt donated by user}
+    donations_by_org = query_for_donations_by_org_dict(current_user_id)
+
+    labels = []
+    data = []
+
+    for org, amount in donations_by_org.items():
+        labels.append(org)
+        data.append(amount)
+
+    data_dict = {
+                "labels": labels,
+                "datasets": [
+                    {
+                        "data": data,
+                        "backgroundColor": [
+                            "#FF6384",
+                            "#36A2EB",
+                        ],
+                        "hoverBackgroundColor": [
+                            "#FF6384",
+                            "#36A2EB",
+                        ]
+                    }]
+            }
+
+    return jsonify(data_dict)
+
+@app.route('/user-impact-bar.json')
+def user_impact_data():
+    """Return bar chart data about user impact."""
 
     user_object, current_user_id = get_user_object_and_current_user_id()
 
@@ -395,6 +434,7 @@ def user_impact_data():
 
 
 
+
 #Helper Functions with queries
 ##############################################################################
 
@@ -421,8 +461,6 @@ def query_for_donations_by_org_dict(user_id):
     donations_by_org = {Organization.query.get(org_id).name: amount
                         for amount, org_id in users_donations}
 
-    import pdb; pdb.set_trace()
-    print "make sure donations_by_org is dictionary of orgs: amount"
     return donations_by_org
 
 
