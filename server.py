@@ -219,7 +219,7 @@ def show_user_dashboard():
                            total_donated=total_donated[0],
                            donations_by_org=donations_by_org)
 
-@app.route('/melon-types.json')
+@app.route('/user-impact.json')
 def user_impact_data():
     """Return data about user impact."""
 
@@ -238,15 +238,20 @@ def user_impact_data():
                                  .group_by(Transaction.org_id)
                                  .all())
 
+    donations_by_org = {Organization.query.get(org_id).name: amount
+                        for amount, org_id in users_donations}
+    labels = []
+    data = []
+
+    for org, amount in donations_by_org.items():
+        labels.append(org)
+        data.append(amount)
 
     data_dict = {
-                "labels": [
-                    "Christmas Melon",
-                    "Crenshaw",
-                ],
+                "labels": labels,
                 "datasets": [
                     {
-                        "data": [300, 50],
+                        "data": data,
                         "backgroundColor": [
                             "#FF6384",
                             "#36A2EB",
