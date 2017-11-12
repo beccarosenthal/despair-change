@@ -34,7 +34,34 @@ client_secret = os.environ.get("PAYPAL_CLIENT_SECRET")
 def index():
     """renders homepage"""
 
-    return render_template('homepage.html')
+    total_attempted = (db.session.query(func.sum(Transaction.amount),
+                                                 Transaction.org_id)
+                                 .group_by(Transaction.org_id)
+                                 .all())
+    amount_attempted = 0
+    for key, amount in total_attempted.items():
+        amount_attempted += amount
+
+    #Get records of successful donations from db
+    total_donated = (db.session.query(func.sum(Transaction.amount),
+                                                 Transaction.org_id)
+                                 .filter(Transaction.status == "pending delivery to org")
+                                 .group_by(Transaction.org_id)
+                                 .all())
+
+    donations_by_org = {Organization.query.get(org_id).name: amount
+                        for amount, org_id in total_donated}
+
+    total_amount = 0
+    for key, amount in donations_by_org.items():
+        total_amount += amount
+
+    print donations_by_org
+    print total_amount
+    return render_template('homepage.html',
+                           donations_by_org=donations_by_org,
+                           total_amount=total_amount,
+                           amount_attempted=amount_attempted)
 
 
 @app.route('/about')
