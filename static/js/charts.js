@@ -34,6 +34,7 @@ var options = {
                 scales: {
                     xAxes: [{
                       barThickness: 25,
+                      barPercentage: .5,
                       gridLines: {
                         display: false,
                         color: "black"
@@ -87,4 +88,17 @@ $.get('/user-impact-bar.json', function (data) {
                                             options: options
                                           });
     $('#barLegend').html(myBarChart.generateLegend());
+});
+
+//all users impact
+var ctx_total_bar = $("#totalImpactBarChart").get(0).getContext("2d");
+
+$.get('/total-impact-bar.json', function (data) {
+    console.log(data);
+    var totalBarChart = new Chart(ctx_total_bar, {
+                                            type: 'bar',
+                                            data: data,
+                                            options: options
+                                          });
+    $('#totalBarLegend').html(totalBarChart.generateLegend());
 });

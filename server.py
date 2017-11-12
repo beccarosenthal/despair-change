@@ -34,12 +34,6 @@ client_secret = os.environ.get("PAYPAL_CLIENT_SECRET")
 def index():
     """renders homepage"""
 
-    transactions = Transaction.query.filter(Transaction.status == "payment succeeded").all()
-
-    for transaction in transactions:
-        transaction.status = "pending delivery to org"
-        db.session.commit
-    import pdb; pdb.set_trace()
     return render_template('homepage.html')
 
 
@@ -57,8 +51,6 @@ def show_button_options():
     org = Organization.query.filter(Organization.name.like('Institute%')).first()
 
     return render_template('buttons.html', org=org)
-
-
 
 
 # Registration and login logic functions
@@ -437,6 +429,43 @@ def user_impact_data():
 
     return jsonify(data_dict)
 
+
+@app.route('/total-impact-bar.json')
+def total_impact_data():
+    """return bar chart data about collective impact of all users"""
+
+    all_donations = (db.session.query(func.sum(Transaction.amount),
+                                               Transaction.org_id)
+                                 .filter(Transaction.status == "pending delivery to org")
+                                 .group_by(Transaction.org_id)
+                                 .all())
+
+    import pdb; pdb.set_trace()
+    print "figure out what all donations is"
+    labels = []
+    data = []
+
+    for org, amount in all_donations.items():
+        labels.append(org)
+        data.append(amount)
+
+    data_dict = {
+                "labels": labels,
+                "datasets": [
+                    {
+                        "data": data,
+                        "backgroundColor": [
+                            "#FF6384",
+                            "#36A2EB",
+                        ],
+                        "hoverBackgroundColor": [
+                            "#FF6384",
+                            "#36A2EB",
+                        ]
+                    }]
+            }
+
+    return jsonify(data_dict)
 
 
 
