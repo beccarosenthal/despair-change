@@ -34,6 +34,12 @@ client_secret = os.environ.get("PAYPAL_CLIENT_SECRET")
 def index():
     """renders homepage"""
 
+    transactions = Transaction.query.filter(Transaction.status == "payment succeeded").all()
+
+    for transaction in transactions:
+        transaction.status = "pending delivery to org"
+        db.session.commit
+    import pdb; pdb.set_trace()
     return render_template('homepage.html')
 
 

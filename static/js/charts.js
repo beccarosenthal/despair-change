@@ -7,6 +7,7 @@ var donut_options = { responsive: true };
 var ctx_donut = $("#userImpactDonutChart").get(0).getContext("2d");
 
 $.get("/user-impact-donut.json", function (data) {
+    console.log(data);
     var myDonutChart = new Chart(ctx_donut, {
                                             type: 'doughnut',
                                             data: data,
@@ -19,8 +20,10 @@ $.get("/user-impact-donut.json", function (data) {
 
 var options = {
                responsive: true,
+               barValueSpacing: 2,
+
                legend: {
-               display: true,
+                   display: true,
                    position: 'top',
                    labels: {
                         boxWidth: 80,
@@ -30,25 +33,32 @@ var options = {
 
                 scales: {
                     xAxes: [{
+                      barThickness: 25,
                       gridLines: {
                         display: false,
                         color: "black"
                       },
+                      ticks: {
+                        autoSkip: false,
+                        beginAtZero: true
+                            },
+
                       scaleLabel: {
                         display: true,
                         labelString: "Organization",
-                        fontColor: "red"
+                        fontColor: "name",
+                        fontSize: 14
                       }
                     }],
                     yAxes: [{
                       gridLines: {
                         color: "black",
-                        borderDash: [2, 5],
+                        borderDash: [5],
                       },
                       scaleLabel: {
                         display: true,
                         labelString: "Dollars Donated",
-                        fontColor: "green"
+                        fontColor: "black"
                       }
                     }],
                 title: {
@@ -70,6 +80,7 @@ var options = {
 var ctx_bar = $("#userImpactBarChart").get(0).getContext("2d");
 
 $.get('/user-impact-bar.json', function (data) {
+    console.log(data);
     var myBarChart = new Chart(ctx_bar, {
                                             type: 'bar',
                                             data: data,
