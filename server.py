@@ -122,13 +122,13 @@ def process_registration():
     #If user object with email address provided doens't exist, add to db...
     if not user_object :
         user_object = User(user_email=user_email,
-                        password=user_password,
-                        fname=fname,
-                        lname=lname,
-                        age=age,
-                        zipcode=zipcode,
-                        state_code=state,
-                        phone=phone)
+                           password=user_password,
+                           fname=fname,
+                           lname=lname,
+                           age=age,
+                           zipcode=zipcode,
+                           state_code=state,
+                           phone=phone)
         db.session.add(user_object)
         db.session.commit()
 
@@ -328,14 +328,7 @@ def process_payment():
     db.session.commit()
 
     #If it's made it this far, the payment went through.
-    #update transaction in the database
 
-    print "************"
-    print
-    print "************"
-    print
-    print
-    print "############"
     print "Money is in my hands, ready to be delivered to the org"
     transaction.status = "pending delivery to org"
     db.session.commit()

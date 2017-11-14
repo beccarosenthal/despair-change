@@ -138,6 +138,10 @@ def generate_payment_object(user_id, org_id):
         return("this didn't work", payment)
 
 
+def execute_payment(payer_id):
+    """helper function to execute payments"""
+    pass
+
 if __name__ == "__main__":
 ###payment is a dictionary, representing the transaction between person being paid and doing paying
 

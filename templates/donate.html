@@ -6,7 +6,7 @@
 
 
 {% for org in orgs %}
-<div id="donate-to{{org.name}}">
+<div id="donate-to-{{org.name}}">
 <h1>Donate to {{org.name}}</h1>
 <form action="/donated" method="POST">
 
@@ -23,12 +23,13 @@
 
 </form>
 <!-- TODO Create container for org with info -->
-<h3>About {{org.name}}</h3>
+<div id="about-{{org.name}}"><h3>About {{org.name}}</h3>
 <img alt='' width="300" height="200" src="{{org.logo_url}}" >
 <ul>
     <li><b>Mission: </b>{{org.mission_statement}}</li>
     <li><a href="{{org.website_url}}" target="_blank">Our Website</a></li>
 </ul>
+</div>
 </div>
 {%endfor%}
 

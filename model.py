@@ -229,10 +229,10 @@ def create_example_data():
     pink, glen, chinandler = example_users()
 
     print "Added Users"
-    org1, org2, org3, org4 = example_orgs()
+    org1, org2, org3, org4, org5 = example_orgs()
 
     #add users and org to DB
-    db.session.add_all([pink, glen, chinandler, org1, org2, org3, org4])
+    db.session.add_all([pink, glen, chinandler, org1, org2, org3, org4, org5])
     db.session.commit()
 
     # import pdb; pdb.set_trace()
@@ -333,9 +333,18 @@ def example_orgs():
         website_url="https://dzssite.wordpress.com/",
         has_chapters=False
         )
+    logo_url5="https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/American_Civil_Liberties_Union_logo.svg/1280px-American_Civil_Liberties_Union_logo.svg.png"
+    mission5="An organization that strives to achieve all of the goals of the ACLU with none of the resources."
+    org5 = Organization(
+                        name="Alt ACLU",
+                        payee_email="altaclu@gmail.com",
+                        logo_url=logo_url5,
+                        mission_statement=mission5,
+                        website_url="https://www.aclu.org/about-aclu",
+                        has_chapters=True)
 
 
-    return org, org2, org3, org4
+    return org, org2, org3, org4, org5
 
 
 def example_transaction():
