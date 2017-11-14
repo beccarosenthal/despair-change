@@ -269,25 +269,19 @@ def donation_page():
     """render page to donate"""
 
     user_id = session['current_user']
-    fave_org = (UserOrg.query.filter(UserOrg.user_id == user_id)
-                    .first()).org
+    fave_orgs = (UserOrg.query
+                       .filter(UserOrg.user_id == user_id)
+                       .order_by(UserOrg.rank)
+                       .all()).org
 
     print fave_org
-    #     send over list of all orgs available
+    # send over list of all orgs available
     # If user doesn't have any UserOrgs, send over the whole org list
     # if not fave_org_id:
     other_orgs = Organization.query.filter(Organization.org_id != fave_org.org_id).all()
 
     orgs = [fave_org]
     orgs.extend(other_orgs)
-
-    # else:
-    #     orgs = []
-
-    # import pdb; pdb.set_trace()
-
-    #just send over Institute of Finishing Projects
-    # org = Organization.query.filter(Organization.name.like('Institute%')).first()
 
     return render_template('donate.html', orgs=orgs)
 
@@ -368,7 +362,6 @@ def process_payment():
         print "Money is in my hands, ready to be delivered to the org"
         transaction.status = "pending delivery to org"
         db.session.commit()
-
 
     return redirect('/dashboard')
 
