@@ -234,9 +234,22 @@ def show_user_dashboard():
 def donation_page():
     """render page to donate"""
 
+    user_id = session['current_user']
+    fave_org = (UserOrg.query.filter(UserOrg.user_id == user_id)
+                    .first()).org
+
+    print fave_org
     #     send over list of all orgs available
-    orgs = Organization.query.all()
-    print orgs
+    # If user doesn't have any UserOrgs, send over the whole org list
+    # if not fave_org_id:
+    other_orgs = Organization.query.filter(Organization.org_id != fave_org.org_id).all()
+
+    orgs = [fave_org]
+    orgs.extend(other_orgs)
+
+    # else:
+    #     orgs = []
+
     # import pdb; pdb.set_trace()
 
     #just send over Institute of Finishing Projects
