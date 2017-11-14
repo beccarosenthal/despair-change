@@ -33,9 +33,7 @@ def generate_payment_object(user_id, org_id):
                                       .order_by(Transaction.transaction_id)
                                       .all()[-1])
 
-    #TODO add webprofile that has no shipping, org info
 
-        #TODO #Figure out how to make intent donate
 
     # Name needs to be unique so just generating a random one
     wpn = ''.join(random.choice(string.ascii_uppercase) for i in range(12))
@@ -159,7 +157,7 @@ if __name__ == "__main__":
     from paypalrestsdk import Payment
 
     # Payment id obtained when creating the payment (following redirect)
-    payment = Payment.find("PAY-28103131SP722473WKFD7VGQ")
+    payment = Payment.find("PAY-1CR30319DP127223ALIFDRPI")
 
     # Execute payment using payer_id obtained when creating the payment (following redirect)
     if payment.execute({"payer_id": "DUFRQ8GWYMJXC"}):
