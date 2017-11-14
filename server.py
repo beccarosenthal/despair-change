@@ -16,7 +16,7 @@ from sqlalchemy import func
 from model import (User, Organization, Transaction,
                    UserOrg, State,
                    connect_to_db, db)
-from paypal_functions import generate_payment_object, api
+from paypal_functions import generate_payment_object, api, execute_payment
 
 
 app = Flask(__name__)
@@ -346,9 +346,6 @@ def process_payment():
                               .filter(Transaction.payment_id == paypal_id)
                               .first())
 
-    print "************"
-    print
-    print "************"
     print
     print "in /process"
     print "############"
@@ -363,22 +360,14 @@ def process_payment():
     #Find the payment object from the paypal id
     payment = Payment.find(paypal_id)
 
-    # Physically execute the paypal payment
-    if payment.execute({"payer_id": payer_id}):
-        print("Payment[%s] execute successfully" % (payment.id))
-        transaction.status = "payment succeeded"
-    else:
-        print(payment.error)
-        transaction.status = "payment failed"
-        flash("Payment Failed")
+    execute_payment(payer_id, payment, transaction)
 
-    db.session.commit()
 
     #If it's made it this far, the payment went through.
-
-    print "Money is in my hands, ready to be delivered to the org"
-    transaction.status = "pending delivery to org"
-    db.session.commit()
+    if transaction.status == "payment succeeded":
+        print "Money is in my hands, ready to be delivered to the org"
+        transaction.status = "pending delivery to org"
+        db.session.commit()
 
 
     return redirect('/dashboard')

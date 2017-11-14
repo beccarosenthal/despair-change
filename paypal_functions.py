@@ -133,14 +133,26 @@ def generate_payment_object(user_id, org_id):
         current_transaction.status = "payment failed"
         print(payment.error)
 
-
         #TODO Update Transaction status
         return("this didn't work", payment)
 
 
-def execute_payment(payer_id):
+def execute_payment(payer_id, payment, transaction):
     """helper function to execute payments"""
-    pass
+
+            # Physically execute the paypal payment
+    if payment.execute({"payer_id": payer_id}):
+        print("Payment[%s] execute successfully" % (payment.id))
+        transaction.status = "payment succeeded"
+    else:
+        print(payment.error)
+        transaction.status = "payment failed"
+        flash("Payment Failed")
+
+    print "after execution, transaction status:"
+    print transaction.status
+
+    db.session.commit()
 
 if __name__ == "__main__":
 ###payment is a dictionary, representing the transaction between person being paid and doing paying
