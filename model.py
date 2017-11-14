@@ -15,6 +15,7 @@ BUYER_EMAIL1 = os.environ.get("BUYER_EMAIL1")
 RENT_A_SWAG = os.environ.get("RENT_A_SWAG")
 SAMPLE_PHONE = os.environ.get("SAMPLE_PHONE")
 ALT_NPS_EMAIL = os.environ.get("ALT_NPS")
+READING_CENTER = os.environ.get("READING_CENTER")
 
 
 
@@ -228,10 +229,10 @@ def create_example_data():
     pink, glen, chinandler = example_users()
 
     print "Added Users"
-    org1, org2, org3 = example_orgs()
+    org1, org2, org3, org4 = example_orgs()
 
     #add users and org to DB
-    db.session.add_all([pink, glen, chinandler, org1, org2, org3])
+    db.session.add_all([pink, glen, chinandler, org1, org2, org3, org4])
     db.session.commit()
 
     # import pdb; pdb.set_trace()
@@ -300,7 +301,7 @@ def example_orgs():
                        )
 
     logo_url2 = "https://ih1.redbubble.net/image.294685880.6679/flat,800x800,075,f.jpg"
-    mission2 = ("At Rent-A-Swag, we bring you the dopest shirts, the swankiest jackets, the slickest cardigans, the flashiest fedoras, the hottest ties, the snazziest canes and more!")
+    mission2 = "At Rent-A-Swag, we bring you the dopest shirts, the swankiest jackets, the slickest cardigans, the flashiest fedoras, the hottest ties, the snazziest canes and more!"
     org2 = Organization(
                        name="Rent-A-Swag",
                        payee_email=RENT_A_SWAG,
@@ -322,7 +323,19 @@ def example_orgs():
                        has_chapters=False
                        )
 
-    return org, org2, org3
+    logo_url4 = "http://cdn.hexjam.com/editorial_service/bases/images/000/009/138/xlarge/zoolander-for-blog.jpg?1427992126"
+    mission4 = "We teach you that there's more to life than being really, really good looking"
+    org4 = Organization(
+        name="The Derek Zoolander Center For Kids Who Can't Read Good And Wanna Learn To Do Other Stuff Good Too",
+        payee_email=READING_CENTER,
+        logo_url=logo_url4,
+        mission_statement=mission4,
+        website_url="https://dzssite.wordpress.com/",
+        has_chapters=False
+        )
+
+
+    return org, org2, org3, org4
 
 
 def example_transaction():
