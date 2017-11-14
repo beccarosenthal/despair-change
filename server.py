@@ -252,20 +252,48 @@ def change_user_settings():
     print "we're here!"
 
     user_id = session['current_user']
-    fave_org = request.args.get("org_id")
-    rank = request.args.get("rank")
+    ##Get the info for what org_id users designated for which rank
+    rank_1 = request.args.get("rank_1")
+    rank_2 = request.args.get("rank_2")
+    rank_3= request.args.get("rank_3")
 
-    current_favorites = UserOrg.query.filter(UserOrg.user_id == user_id).all()
-    for user_org in current_favorites:
-        if user_org.rank == 1:
-            pass
+    ##Eventually, refactor to not require deleting all old ranks to put in new one
 
-    new_user_org = UserOrg(user_id=user_id,
-                           org_id=fave_org)
+    for i in range(1, 4):
+        if request.args.get("rank_" + str(i)):
+            rank = request.args.get("rank_" + str(i))
+            #do they already have a rank 1? if so, make it None, because it's getting replaced
+            UserOrg.query.filter(UserOrg.user_id == user_id, UserOrg.rank == i).first().rank = None
+            #do they already have a relationship between themselves and that org
+            old_relationship = UserOrg.query.filter(UserOrg.user_id == user_id, UserOrg.org_id == rank).first()
+            if old_relationship:
+                old_relationship.rank = i
+            else:
+                new_user_org = UserOrg(user_id=user_id,
+                                       org_id=rank,
+                                       rank=i)
+                db.session.add(new_user_org)
 
-    import pdb; pdb.set_trace()
-    db.session.add(new_user_org)
-    db.session.commit()
+        db.session.commit()
+
+    # if rank_2:
+    #     UserOrg.query.filter(UserOrg.user_id == user_id, UserOrg.rank == 2).delete()
+    #     new_user_org2 = UserOrg(user_id=user_id,
+    #                            org_id=rank_2,
+    #                            rank=2)
+    #     db.session.add(new_user_org2)
+    # if rank_3:
+    #     UserOrg.query.filter(UserOrg.user_id == user_id, UserOrg.rank == 3).delete()
+    #     new_user_org3 = UserOrg(user_id=user_id,
+    #                            org_id=rank_3,
+    #                            rank=3)
+    #     db.session.add(new_user_org3)
+
+    # db.session.commit()
+
+    # import pdb; pdb.set_trace()
+    # db.session.add(new_user_org)
+    # db.session.commit()
 
     org_object = Organization.query.get(fave_org)
     flash("Congrats! {{ org_object.name }}will now be even easier to donate to!")

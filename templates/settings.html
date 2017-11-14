@@ -17,7 +17,8 @@
     </ol>
     <b>Would you like to choose different favorites?</b>
 {% else%}
-    <p>Which organizations would you like to appear on the top of your donations page?</p>
+    <p>Which organizations would you like to appear on the top of your donations page? You can choose up to three.</p>
+
 {% endif %}
 
 </div>
@@ -28,21 +29,18 @@
             {% for org in orgs %}
                 <option value="{{org.org_id}}">{{org.name}}</option>
             {% endfor %}
-                <input type="hidden" name="rank" value="1">
         </select>
         <select name="rank_2">
             <option value=''>#2</option>
             {% for org in orgs %}
                 <option value="{{org.org_id}}">{{org.name}}</option>
             {% endfor %}
-                <input type="hidden" name="rank" value="2">
         </select>
         <select name="rank_3">
             <option value=''>#3</option>
             {% for org in orgs %}
                 <option value="{{org.org_id}}">{{org.name}}</option>
             {% endfor %}
-                <input type="hidden" name="rank" value="3">
         </select>
         <input type="submit">
 
