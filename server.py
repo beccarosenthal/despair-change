@@ -238,8 +238,25 @@ def show_user_settings():
                            user_obj=user_obj,
                            orgs=all_orgs)
 
-@app.route("/settings")
+@app.route("/adjust_settings")
 def change_user_settings():
+
+    print "we're here!"
+
+    user_id = session['current_user']
+    fave_org = request.args.get("org_id")
+
+    current_favorites = UserOrg.query.filter(UserOrg.user_id == user_id).all()
+    new_user_org = UserOrg(user_id=user_id,
+                           org_id=fave_org)
+
+    import pdb; pdb.set_trace()
+    db.session.add(new_user_org)
+    db.session.commit()
+
+    org_object = Organization.query.get(fave_org)
+    flash("Congrats! {{ org_object.name }}will now be even easier to donate to!")
+    return redirect("/dashboard")
 
     ##Make this route process the settings changes and reflect them in the db
     ##But maybe make this react

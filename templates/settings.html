@@ -9,13 +9,14 @@
 
         <p>Which org would you like to have listed first on your donate page?</p>
 
-    <form id="user_settings" action="/settings">
+    <form id="user_settings" action="/adjust_settings">
         <select name="org_id">
+            <option value=''>Please Select an Organization</option>
             {% for org in orgs %}
                 <option value="{{org.org_id}}">{{org.name}}</option>
             {% endfor %}
         </select>
-
+        <input type="submit">
 
     </form>
 <div id="settings"></div>
