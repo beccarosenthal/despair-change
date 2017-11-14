@@ -277,36 +277,14 @@ def process_donation():
     redirect_url, payment_object = generate_payment_object(user_id,
                                                            org_id)
 
-
-    print redirect_url
-    print "###############"
-    print "#################"
-
-    print "#################"
-    print "#################"
-    print
-    print "back in /donated route. "
-    print "here comes the payment object from the paypal_functions file"
-    print payment_object
-
     #update transaction object in the database to add paypal's ID
     transaction.payment_id = payment_object.id
     transaction.status = "paypal payment instantiated"
-    print "*********"
-    print "##########"
-    print "transaction before getting committed"
-    print "payment_id = ", transaction.payment_id
-    print "status = ", transaction.status
-    print "compare what the transaction payment id is to what the db thinks it is"
-    import pdb; pdb.set_trace()
+
+    # import pdb; pdb.set_trace()
     db.session.commit()
 
     return redirect(redirect_url)
-    ##At this point, it generates payment, redirects to paypal, invites me to log in.
-    ##once i log in, it lets me donate a dollar, and completes the transfer from
-    ##the buyer account to the facilitator account with paypal.
-    ##it keeps me on the paypal test page instead of kicking me back to the /process
-    ##route
 
 
 #   Figure this part out
@@ -427,28 +405,36 @@ def user_impact_data():
     #Create dictionary with key value pairs of {org_id: amt donated by user}
     donations_by_org = query_for_donations_by_org_dict(current_user_id)
 
-    labels = []
-    data = []
+    labels = [] #name of org
+    data = [] #amount of money
+    BACKGROUND_COLORS = ["#FF6384", "#36A2EB", "#FF6384", "#36A2EB",
+                         "#FF6384", "#36A2EB", "#FF6384", "#36A2EB", ]
+    HOVER_BACKGROUND_COLORS = ["#FF6384", "#36A2EB", "#FF6384", "#36A2EB",
+                              "#FF6384", "#36A2EB", "#FF6384", "#36A2EB"]
+    datasets = []
+    # datasets = [{"label": labels,
+    #              "data": data,
+    #              "backgroundColor": ["red", "blue"],
+    #              "hoverBackgroundColor": ["black", "grey"]}]
 
     for org, amount in donations_by_org.items():
         labels.append(org)
         data.append(amount)
 
+    for i in range(len(data)):
+        datasets.append({
+                       "label": labels[i],
+                       "data": [data[i]],
+                       "backgroundColor": [BACKGROUND_COLORS[i]],
+                       "hoverBackgroundColor": [HOVER_BACKGROUND_COLORS[i]]
+                       },)
+
     data_dict = {
                 "labels": labels,
-                "datasets": [
-                    {
-                        "data": data,
-                        "backgroundColor": [
-                            "#FF6384",
-                            "#36A2EB",
-                        ],
-                        "hoverBackgroundColor": [
-                            "#FF6384",
-                            "#36A2EB",
-                        ]
-                    }]
+                "datasets": datasets
             }
+    print data_dict
+    import pdb; pdb.set_trace()
 
     return jsonify(data_dict)
 

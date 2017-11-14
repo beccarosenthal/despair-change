@@ -33,7 +33,6 @@ def generate_payment_object(user_id, org_id):
                                       .order_by(Transaction.transaction_id)
                                       .all()[-1])
 
-
     #TODO add webprofile that has no shipping, org info
 
         #TODO #Figure out how to make intent donate
@@ -102,13 +101,6 @@ def generate_payment_object(user_id, org_id):
         }
         ]
         })
-
-    print "###############"
-    print "#################"
-    print "here is the payment before it's gotten sent to paypal to become real"
-    print payment
-    print "#################"
-    print "#################"
 
     # update transaction status in db
     current_transaction.status = "payment object built"

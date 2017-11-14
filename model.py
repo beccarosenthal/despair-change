@@ -10,10 +10,11 @@ from bcrypt import hashpw, gensalt
 
 SAMPLE_PASSWORD = os.environ.get("SAMPLE_PASSWORD")
 BUYER_EMAIL = os.environ.get("BUYER_EMAIL")
-FACILITATOR_EMAIL = os.environ.get("FACILITATOR_EMAIL")
+ORG_APP_EMAIL = os.environ.get("ORG_APP_EMAIL")
 BUYER_EMAIL1 = os.environ.get("BUYER_EMAIL1")
-FACILITATOR_EMAIL1 = os.environ.get("FACILITATOR_EMAIL1")
+RENT_A_SWAG = os.environ.get("RENT_A_SWAG")
 SAMPLE_PHONE = os.environ.get("SAMPLE_PHONE")
+ALT_NPS_EMAIL = os.environ.get("ALT_NPS")
 
 
 
@@ -74,7 +75,7 @@ class Organization(db.Model):
     """Org receiving donations"""
 
     __tablename__ = "organizations"
-    #the seed data has id on it already; will incriment fuck up
+    #the seed data has id on it already; will increment fuck up
     org_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     payee_email = db.Column(db.String(100), nullable=False)
@@ -227,12 +228,10 @@ def create_example_data():
     pink, glen, chinandler = example_users()
 
     print "Added Users"
-    orgs = example_orgs()
-    org1 = orgs[0]
-    org2 = orgs[1]
+    org1, org2, org3 = example_orgs()
 
     #add users and org to DB
-    db.session.add_all([pink, glen, chinandler, org1, org2])
+    db.session.add_all([pink, glen, chinandler, org1, org2, org3])
     db.session.commit()
 
     # import pdb; pdb.set_trace()
@@ -293,7 +292,7 @@ def example_orgs():
 
     org = Organization(
                        name="Institute of Finishing Projects",
-                       payee_email=FACILITATOR_EMAIL,
+                       payee_email=ORG_APP_EMAIL,
                        logo_url=logo_url1,
                        mission_statement=mission1,
                        website_url="http://Iwastesomuchtime.com",
@@ -304,14 +303,26 @@ def example_orgs():
     mission2 = ("At Rent-A-Swag, we bring you the dopest shirts, the swankiest jackets, the slickest cardigans, the flashiest fedoras, the hottest ties, the snazziest canes and more!")
     org2 = Organization(
                        name="Rent-A-Swag",
-                       payee_email=FACILITATOR_EMAIL1,
+                       payee_email=RENT_A_SWAG,
                        logo_url=logo_url2,
                        mission_statement=mission2,
                        website_url="http://www.pawneeindiana.com/",
                        has_chapters=False
                        )
 
-    return org, org2
+    logo_url3 = "https://pbs.twimg.com/profile_images/887766984745775104/_YfeP9WT_400x400.jpg"
+    mission3 = "45 messed with the wrong set of vested park rangers."
+
+    org3 = Organization(
+                       name="Alternative US National Parks Service",
+                       payee_email=ALT_NPS_EMAIL,
+                       logo_url=logo_url3,
+                       mission_statement=mission3,
+                       website_url="https://twitter.com/altnatparkser?lang=en",
+                       has_chapters=False
+                       )
+
+    return org, org2, org3
 
 
 def example_transaction():
@@ -319,7 +330,7 @@ def example_transaction():
 
     user = User.query.filter(User.user_email == BUYER_EMAIL).first()
 
-    org = Organization.query.filter(Organization.payee_email == FACILITATOR_EMAIL)\
+    org = Organization.query.filter(Organization.payee_email == ORG_APP_EMAIL)\
                             .first()
 
     transaction = Transaction(org_id=org.org_id,
@@ -336,7 +347,7 @@ def example_user_org():
 
     user = User.query.filter(User.user_email == BUYER_EMAIL).first()
 
-    org = Organization.query.filter(Organization.payee_email == FACILITATOR_EMAIL)\
+    org = Organization.query.filter(Organization.payee_email == ORG_APP_EMAIL)\
                             .first()
 
     user_org = UserOrg(user_id=user.user_id,
@@ -396,8 +407,8 @@ if __name__ == "__main__":
 
     from server import app
     connect_to_db(app)
-    db.create_all()
-    create_example_data()
+    # db.create_all()
+    # create_example_data()
 
     #When you're ready to start auto-incrementing for real, uncomment this
     # set_val_table_id()

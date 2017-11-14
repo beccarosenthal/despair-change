@@ -27,7 +27,6 @@ def load_states():
 
     db.session.commit()
 
-
     print "States Loaded"
 
 if __name__ == "__main__":

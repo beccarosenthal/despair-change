@@ -7,7 +7,7 @@ var donut_options = { responsive: true };
 var ctx_donut = $("#userImpactDonutChart").get(0).getContext("2d");
 
 $.get("/user-impact-donut.json", function (data) {
-    console.log(data);
+    // console.log(data);
     var myDonutChart = new Chart(ctx_donut, {
                                             type: 'doughnut',
                                             data: data,
@@ -34,7 +34,7 @@ var options = {
                 scales: {
                     xAxes: [{
                       barThickness: 25,
-                      barPercentage: .5,
+                      barPercentage: 0.5,
                       gridLines: {
                         display: false,
                         color: "black"
@@ -54,13 +54,14 @@ var options = {
                     yAxes: [{
                       gridLines: {
                         color: "black",
-                        borderDash: [5],
+                        borderDash: [1, 5],
                       },
                       scaleLabel: {
                         display: true,
                         labelString: "Dollars Donated",
                         fontColor: "black"
-                      }
+                      },
+                      ticks: { beginAtZero: true }
                     }],
                 title: {
                     display: true,
@@ -91,14 +92,14 @@ $.get('/user-impact-bar.json', function (data) {
 });
 
 //all users impact
-var ctx_total_bar = $("#totalImpactBarChart").get(0).getContext("2d");
+// var ctx_total_bar = $("#totalImpactBarChart").get(0).getContext("2d");
 
-$.get('/total-impact-bar.json', function (data) {
-    console.log(data);
-    var totalBarChart = new Chart(ctx_total_bar, {
-                                            type: 'bar',
-                                            data: data,
-                                            options: options
-                                          });
-    $('#totalBarLegend').html(totalBarChart.generateLegend());
-});
+// $.get('/total-impact-bar.json', function (data) {
+//     console.log(data);
+//     var totalBarChart = new Chart(ctx_total_bar, {
+//                                             type: 'bar',
+//                                             data: data,
+//                                             options: options
+//                                           });
+//     $('#totalBarLegend').html(totalBarChart.generateLegend());
+// });
