@@ -7,15 +7,42 @@
 <h2>Hey {{user_obj.fname}}!</h2>
 <p>Let's switch it up a bit</p>
 
-        <p>Which org would you like to have listed first on your donate page?</p>
+<div id="user-org-info"><p>Which org would you like to have listed first on your donate page?</p>
+{% if current_faves %}
+    You have chosen for your top organizations to be:
+    <ol>
+        {% for fave in current_faves %}
+        <li>{{fave.org.name}}</li>
+        {% endfor %}
+    </ol>
+    <b>Would you like to choose different favorites?</b>
+{% else%}
+    <p>Which organizations would you like to appear on the top of your donations page?</p>
+{% endif %}
 
-    <form id="user_settings" action="/adjust_settings">
-        <select name="org_id">
-            <option value=''>Please Select an Organization</option>
+</div>
+<!-- TODO add Javascript to make sure that each of the ranked items are different before submission -->
+    <form id="user_settings" action="/adjust_settings" required>
+        <select name="rank_1">
+            <option value=''>#1</option>
             {% for org in orgs %}
                 <option value="{{org.org_id}}">{{org.name}}</option>
-                <input type="hidden" name="rank" value="1">
             {% endfor %}
+                <input type="hidden" name="rank" value="1">
+        </select>
+        <select name="rank_2">
+            <option value=''>#2</option>
+            {% for org in orgs %}
+                <option value="{{org.org_id}}">{{org.name}}</option>
+            {% endfor %}
+                <input type="hidden" name="rank" value="2">
+        </select>
+        <select name="rank_3">
+            <option value=''>#3</option>
+            {% for org in orgs %}
+                <option value="{{org.org_id}}">{{org.name}}</option>
+            {% endfor %}
+                <input type="hidden" name="rank" value="3">
         </select>
         <input type="submit">
 

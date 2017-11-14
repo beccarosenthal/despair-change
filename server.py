@@ -231,12 +231,20 @@ def show_user_settings():
     """renders user settings form"""
 
     user_obj = User.query.filter(User.user_id == session['current_user']).first()
+
     all_orgs = Organization.query.all()
+    current_faves = (UserOrg.query
+                            .filter(UserOrg.user_id == user_obj.user_id)
+                            .order_by(UserOrg.rank)
+                            .all())
+
+    ##If you have a current #1, it is ___. Would you like to change it? What would you like to be your 2 /3 spots
 
     print all_orgs
     return render_template("settings.html",
                            user_obj=user_obj,
-                           orgs=all_orgs)
+                           orgs=all_orgs,
+                           current_faves=current_faves)
 
 @app.route("/adjust_settings")
 def change_user_settings():
@@ -245,8 +253,13 @@ def change_user_settings():
 
     user_id = session['current_user']
     fave_org = request.args.get("org_id")
+    rank = request.args.get("rank")
 
     current_favorites = UserOrg.query.filter(UserOrg.user_id == user_id).all()
+    for user_org in current_favorites:
+        if user_org.rank == 1:
+            pass
+
     new_user_org = UserOrg(user_id=user_id,
                            org_id=fave_org)
 
