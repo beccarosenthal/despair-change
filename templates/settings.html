@@ -1,1 +1,33 @@
-settings.html
+{% extends 'base.html' %}
+{% block title %} Settings {% endblock %}
+{% block content %}
+
+<iframe src="https://giphy.com/embed/cxKnnxcQWzwZO" width="480" height="245" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+
+<h2>Hey {{user_obj.fname}}!</h2>
+<p>Let's switch it up a bit</p>
+
+        <p>Which org would you like to have listed first on your donate page?</p>
+
+    <form id="user_settings" action="/settings">
+        <select name="org_id">
+            {% for org in orgs %}
+                <option value="{{org.org_id}}">{{org.name}}</option>
+            {% endfor %}
+        </select>
+
+
+    </form>
+<div id="settings">
+
+
+
+
+
+</div>
+<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+<script src="http://unpkg.com/babel-standalone"></script>
+<script src="settings.jsx" type="text/jsx"></script>
+{% endblock %}

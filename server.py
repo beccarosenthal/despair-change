@@ -226,7 +226,24 @@ def show_user_dashboard():
                            total_donated=total_donated[0],
                            donations_by_org=donations_by_org)
 
+@app.route("/settings")
+def show_user_settings():
+    """renders user settings form"""
 
+    user_obj = User.query.filter(User.user_id == session['current_user']).first()
+    all_orgs = Organization.query.all()
+
+    print all_orgs
+    return render_template("settings.html",
+                           user_obj=user_obj,
+                           orgs=all_orgs)
+
+@app.route("/settings")
+def change_user_settings():
+
+    ##Make this route process the settings changes and reflect them in the db
+    ##But maybe make this react
+    pass
 
 #routes about paypal/payment things
 ###############################################################################
