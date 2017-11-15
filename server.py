@@ -374,10 +374,6 @@ def process_payment():
                               .filter(Transaction.payment_id == paypal_id)
                               .first())
 
-    print
-    print "in /process"
-    print "############"
-    print "TRANSACTION STATUS BEFORE CHANGED FOR DB"
     print transaction.status
 
     print "check dashboard to see progress of payment to figure out how to update status"
@@ -389,7 +385,6 @@ def process_payment():
     payment = Payment.find(paypal_id)
 
     execute_payment(payer_id, payment, transaction)
-
 
     #If it's made it this far, the payment went through.
     if transaction.status == "payment succeeded":
@@ -505,7 +500,7 @@ def total_impact_data():
                                  .group_by(Transaction.org_id)
                                  .all())
 
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     print "figure out what all donations is"
     labels = []
     data = []

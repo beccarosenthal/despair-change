@@ -26,13 +26,6 @@ class FlaskTestsBasic(TestCase):
         # Show Flask errors that happen during tests
         app.config['TESTING'] = True
 
-    def test_index_route(self):
-        """Test homepage page."""
-
-        result = self.client.get("/")
-        self.assertIn("Welcome to Despair Change", result.data)
-
-
     def test_about_route(self): ##NOTE: TEST WILL BREAK IF DOUCHEBAG JAR VID REMOVED
         """Test about page."""
 
@@ -44,10 +37,10 @@ class FlaskTestsBasic(TestCase):
         route = self.client.get('/login')
         self.assertIn('Email Address:', route.data)
 
-    def test_register_route(self):
-        """Test register page."""
-        route = self.client.get('/register')
-        self.assertIn('Age:', route.data)
+    # def test_register_route(self):
+    #     """Test register page."""
+    #     route = self.client.get('/register')
+    #     self.assertIn('Age:', route.data)
 
 
 class DespairChangeTestsDatabase(TestCase):
@@ -68,6 +61,7 @@ class DespairChangeTestsDatabase(TestCase):
         load_states()
 
         create_example_data()
+
 
     def tearDown(self):
         """Do at end of every test."""
@@ -180,7 +174,11 @@ class DespairChangeTestsDatabase(TestCase):
         ##This is done on the browser side. How would you write a test for this
         pass
 
+    def test_index_route(self):
+        """Test homepage page."""
 
+        result = self.client.get("/")
+        self.assertIn("Welcome to Despair Change", result.data)
 
 
 
@@ -208,11 +206,24 @@ class DespairChangeLoggedIn(TestCase):
         app.config['SECRET_KEY'] = 'key'
         self.client = app.test_client()
 
+        # Connect to test database
+        connect_to_db(app, "postgresql:///testdb")
+        db.create_all()
+        load_states()
+
+        create_example_data()
+
         with self.client as c:
             with c.session_transaction() as sess:
                 sess['current_user'] = 1
 
     #goal is to make sure what pages you can and cannot see
+
+    def tearDown(self):
+        """Do at end of every test."""
+
+        db.session.close()
+        db.drop_all()
 
     ##currently errors out because no org obj being passed through
     def test_donate_while_logged_in(self):
@@ -223,7 +234,7 @@ class DespairChangeLoggedIn(TestCase):
     def test_login_while_logged_in(self):
         """Test donate page."""
         route = self.client.get('/login')
-        self.assertIn('dashboard', route.data)
+        self.assertIn('Redirecting', route.data)
 
     def test_logout(self):
         """test logout"""
@@ -232,6 +243,13 @@ class DespairChangeLoggedIn(TestCase):
 
         self.assertIn("redirected automatically to target", result.data)
         self.assertNotIn('/donate', result.data)
+
+
+    def test_donate_page(self):
+        """test /donate"""
+
+        result = self.client.get('/donate')
+        self.assertIn("your despair into good", result.data)
 
 
     # def test_important_page(self):
