@@ -177,12 +177,11 @@ class DespairChangeTestsDatabase(TestCase):
     def test_register_bad_inputs(self):
         """If fields are filled out incorrectly, return to register page"""
 
-        ##This can probably be done on the browser side
+        ##This is done on the browser side. How would you write a test for this
         pass
 
-    def test_logout(self):
-        """test logout"""
-        pass
+
+
 
 
 
@@ -225,6 +224,15 @@ class DespairChangeLoggedIn(TestCase):
         """Test donate page."""
         route = self.client.get('/login')
         self.assertIn('dashboard', route.data)
+
+    def test_logout(self):
+        """test logout"""
+
+        result = self.client.get('/logout')
+
+        self.assertIn("redirected automatically to target", result.data)
+        self.assertNotIn('/donate', result.data)
+
 
     # def test_important_page(self):
     #     """Test important page."""
