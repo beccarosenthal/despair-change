@@ -13,8 +13,7 @@ from sqlalchemy import func
 
 
 #import from my files
-from json_functions import (json_user_impact_bar,
-                            json_user_impact_donut,
+from json_functions import (json_user_impact_bar, json_user_impact_donut,
                             json_total_impact_bar)
 from model import (User, Organization, Transaction,
                    UserOrg, State,
@@ -418,39 +417,11 @@ def user_impact_donut_data():
     """Return data about user impact."""
 
     user_object, current_user_id = get_user_object_and_current_user_id()
-
-    # find all donations attempted by the user logged into the session
-    total_donated = (db.session.query(func.sum(Transaction.amount))
-                               .filter(Transaction.user_id == current_user_id)
-                               .first())
-
-    #Create dictionary with key value pairs of {org_id: amt donated by user}
-    donations_by_org = query_for_donations_by_org_dict(current_user_id)
-
-    labels = []
-    data = []
-
-    for org, amount in donations_by_org.items():
-        labels.append(org)
-        data.append(amount)
-
-    data_dict = {
-                "labels": labels,
-                "datasets": [
-                    {
-                        "data": data,
-                        "backgroundColor": [
-                            "#FF6384",
-                            "#36A2EB",
-                        ],
-                        "hoverBackgroundColor": [
-                            "#FF6384",
-                            "#36A2EB",
-                        ]
-                    }]
-            }
+    data_dict = json_user_impact_donut(user_object)
+    print data_dict
 
     return jsonify(data_dict)
+
 
 @app.route('/user-impact-bar.json')
 def user_impact_data():
@@ -458,7 +429,7 @@ def user_impact_data():
 
 
 # #####THE VERSION I HAVE THAT MAKES 5 BARS SHOW UP IN ONE SPOT
-#     user_object, current_user_id = get_user_object_and_current_user_id()
+    user_object, current_user_id = get_user_object_and_current_user_id()
 
 #     # find all donations attempted by the user logged into the session
 #     total_donated = (db.session.query(func.sum(Transaction.amount))
@@ -507,44 +478,45 @@ def user_impact_data():
 #     print "$$$$$$DATASETS"
 #     print datasets
 
-#     return jsonify(data_dict)
+    data_dict = json_user_impact_bar(user_object)
+    return jsonify(data_dict)
 
 
 @app.route('/total-impact-bar.json')
 def total_impact_data():
     """return bar chart data about collective impact of all users"""
 
-    all_donations = (db.session.query(func.sum(Transaction.amount),
-                                               Transaction.org_id)
-                                 .filter(Transaction.status == "pending delivery to org")
-                                 .group_by(Transaction.org_id)
-                                 .all())
+    # all_donations = (db.session.query(func.sum(Transaction.amount),
+    #                                            Transaction.org_id)
+    #                              .filter(Transaction.status == "pending delivery to org")
+    #                              .group_by(Transaction.org_id)
+    #                              .all())
 
-    # import pdb; pdb.set_trace()
-    print "figure out what all donations is"
-    labels = []
-    data = []
+    # # import pdb; pdb.set_trace()
+    # print "figure out what all donations is"
+    # labels = []
+    # data = []
 
-    for org, amount in all_donations.items():
-        labels.append(org)
-        data.append(amount)
+    # for org, amount in all_donations.items():
+    #     labels.append(org)
+    #     data.append(amount)
 
-    data_dict = {
-                "labels": labels,
-                "datasets": [
-                    {
-                        "data": data,
-                        "backgroundColor": [
-                            "#FF6384",
-                            "#36A2EB",
-                        ],
-                        "hoverBackgroundColor": [
-                            "#FF6384",
-                            "#36A2EB",
-                        ]
-                    }]
-            }
-
+    # data_dict = {
+    #             "labels": labels,
+    #             "datasets": [
+    #                 {
+    #                     "data": data,
+    #                     "backgroundColor": [
+    #                         "#FF6384",
+    #                         "#36A2EB",
+    #                     ],
+    #                     "hoverBackgroundColor": [
+    #                         "#FF6384",
+    #                         "#36A2EB",
+    #                     ]
+    #                 }]
+    #         }
+    data_dict = json_total_impact_bar()
     return jsonify(data_dict)
 
 

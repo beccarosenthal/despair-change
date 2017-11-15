@@ -16,97 +16,68 @@ $.get("/user-impact-donut.json", function (data) {
     $('#donutLegend').html(myDonutChart.generateLegend());
 });
 
-var options =  {
-  responsive: true,
-    legend: {
-      display: true,
-      position: 'bottom',
-      labels: {
-        fontColor: "#000080",
-      }
-    },
-    scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero: true
-        }
-      }]
-    }
-  };
-// var options = {  responsive: true,
-                    // yAxes: [{
-                    //   gridLines: {
-                    //     color: "black",
-                    //     borderDash: [1, 5],
-                    //   },
-                    //   scaleLabel: {
-                    //     display: true,
-                    //     labelString: "Dollars Donated",
-                    //     fontColor: "black"
-                    //   },
-                    //   ticks: { beginAtZero: true }
-                    // }] };
-// var options = {
-//                responsive: true,
-//                barValueSpacing: 2,
 
-//                legend: {
-//                    display: true,
-//                    position: 'top',
-//                    labels: {
-//                         display: true,
-//                         boxWidth: 80,
-//                         fontColor: 'black'
-//                     }
-//                   },
+var options = {
+               responsive: true,
+               barValueSpacing: 2,
 
-//                 scales: {
-//                     xAxes: [{
-//                       barThickness: 25,
-//                       barPercentage: 0.5,
-//                       gridLines: {
-//                         display: false,
-//                         color: "black"
-//                       },
-//                       ticks: {
-//                         autoSkip: false,
-//                         beginAtZero: true
-//                             },
+               legend: {
+                   display: true,
+                   position: 'top',
+                   labels: {
+                        display: true,
+                        boxWidth: 80,
+                        fontColor: '#000080'
+                    }
+                  },
 
-//                       scaleLabel: {
-//                         display: true,
-//                         labelString: "Organization",
-//                         fontColor: "name",
-//                         fontSize: 14
-//                       }
-//                     }],
-//                     yAxes: [{
-//                       gridLines: {
-//                         color: "black",
-//                         borderDash: [1, 5],
-//                       },
-//                       scaleLabel: {
-//                         display: true,
-//                         labelString: "Dollars Donated",
-//                         fontColor: "black"
-//                       },
-//                       ticks: { beginAtZero: true }
-//                     }],
-//                 title: {
-//                     display: true,
-//                     text: 'My Donations',
-//                     fontSize: 24,
-//                     fontStyle: 'bold'
-//                        },
-//                 layout: {
-//                     padding: {
-//                         left: 50,
-//                         right: 0,
-//                         top: 0,
-//                         bottom: 0
-//                     }}
+                scales: {
+                    xAxes: [{
+                      barThickness: 50,
+                      barPercentage: 0.5,
+                      gridLines: {
+                        display: false,
+                        color: "grey"
+                      },
+                      ticks: {
+                        autoSkip: false,
+                        beginAtZero: true
+                            },
 
-//                 }};
+                      scaleLabel: {
+                        display: true,
+                        labelString: "Organization",
+                        fontColor: "#000080",
+                        fontSize: 14
+                      }
+                    }],
+                    yAxes: [{
+                      gridLines: {
+                        color: "grey",
+                        borderDash: [1, 5],
+                      },
+                      scaleLabel: {
+                        display: true,
+                        labelString: "Dollars Donated",
+                        fontColor: "black"
+                      },
+                      ticks: { beginAtZero: true }
+                    }],
+                title: {
+                    display: true,
+                    text: 'My Donations',
+                    fontSize: 24,
+                    fontStyle: 'bold'
+                       },
+                layout: {
+                    padding: {
+                        left: 50,
+                        right: 0,
+                        top: 0,
+                        bottom: 0
+                    }}
+
+                }};
 
 var ctx_bar = $("#userImpactBarChart").get(0).getContext("2d");
 
