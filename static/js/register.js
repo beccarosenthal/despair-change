@@ -12,19 +12,23 @@ function validateForm() {
     }
 
     let fname = document.querySelector("#fname").value;
-    if (fname == "") {
+    if (fname === "") {
         alert("First name must be filled out.");
         return false;
     }
 
     let lname = document.querySelector("#lname").value;
-    if (lname == "") {
+    if (lname === "") {
         alert("Last name must be filled out.");
         return false;
     }
 
     // todo make sure they need to have a password at all
     let password = document.querySelector("#password").value;
+    if (password === "") {
+        alert("You must enter a password");
+        return false;
+    }
     let password_validate = document.querySelector("#password_validate").value;
     if (password != password_validate) {
         alert("Passwords must match.");
@@ -32,7 +36,7 @@ function validateForm() {
     }
 
     let state = document.querySelector("#state").value;
-    if (state == "Select a State") {
+    if (state === "Select a State") {
         alert("Please select a state.");
         return false;
     }
@@ -54,7 +58,6 @@ function validateForm() {
             return false;
     }
 }
-
     return true;
 }
 
@@ -96,16 +99,3 @@ function submitForm(evt) {
         alert("please fill out the form correctly.")
     }
 }
-
-
-// form = jquery $register.submit
-
-
-
-
-// if zip, phone,
-
-
-
-// click event on the button that calls validation code.
-// have the callback function that calls validate form call submit on the form if validate form returns true
