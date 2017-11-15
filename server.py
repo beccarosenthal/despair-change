@@ -134,6 +134,15 @@ def process_registration():
         db.session.add(user_object)
         db.session.commit()
 
+    #now that there's a user obj, fill out their first favorite
+    org_id = request.form.get('rank_1')
+    if org_id:
+        user_id = User.query.filter(User.user_email == user_email.first())
+        new_user_org = UserOrg(user_id=user_id,
+                               org_id=org_id,
+                               rank=1)
+        db.session.add(new_user_org)
+        db.session.commit()
     #if user email existed in db and password is right, log them in
     if user_password == user_object.password:
         session['current_user'] = user_object.user_id
