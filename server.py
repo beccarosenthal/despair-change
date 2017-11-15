@@ -85,8 +85,10 @@ def show_registration_form():
     #make sure that logged in user cannot see reg page
     if 'current_user' in session:
         return redirect('/')
+    orgs = Organization.query.all()
+    states = State.query.all()
 
-    return render_template('register.html')
+    return render_template('register.html', orgs=orgs, states=states)
 
 
 @app.route('/register', methods=['POST'])

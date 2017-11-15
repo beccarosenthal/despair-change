@@ -50,8 +50,10 @@
       <td>
         <select name="state" id="state" required>
           <option value="" selected="selected">Select a State</option>
-          <option value="AL">Alabama</option>
-          <option value="AK">Alaska</option>
+          {% for state in states%}
+            <option value="{{state.code}}">{{state.name}}</option>
+          {% endfor %}
+          <!-- <option value="AK">Alaska</option>
           <option value="AZ">Arizona</option>
           <option value="AR">Arkansas</option>
           <option value="CA">California</option>
@@ -100,7 +102,7 @@
           <option value="WA">Washington</option>
           <option value="WV">West Virginia</option>
           <option value="WI">Wisconsin</option>
-          <option value="WY">Wyoming</option>
+          <option value="WY">Wyoming</option> -->
         </select>
       </td>
     </tr>

@@ -6,7 +6,7 @@ function validateForm() {
     console.log("in validate form!");
 
     let email = document.querySelector("#email").value;
-    if (email == "") {
+    if (email === "") {
         alert("Email must be filled out.");
         return false;
     }
@@ -23,6 +23,7 @@ function validateForm() {
         return false;
     }
 
+    // todo make sure they need to have a password at all
     let password = document.querySelector("#password").value;
     let password_validate = document.querySelector("#password_validate").value;
     if (password != password_validate) {
@@ -39,35 +40,43 @@ function validateForm() {
     let phone = document.querySelector("#phone").value;
     //if no phone number submitted, totally fine
     //elif phone filled out in improper format,
-    if (phoneNumberCheck(phone) == false) {
-        alert("Format your phone number as (XXX) XXX-XXXX or leave the field blank.");
+    if (phone !== "") {
+        if (phoneNumberCheck(phone) == false) {
+        alert("Format your phone number as xxxxxxxxxx or leave the field blank.");
         return false;
     }
+}
 
     let zipcode = document.querySelector("#zipcode").value;
-    if (zipcodeCheck(zipcode) == false) {
-        alert("Zipcode should be 5 digits or left blank");
-        return false;
+    if (zipcode !== "") {
+        if (zipcodeCheck(zipcode) == false) {
+            alert("Zipcode should be 5 digits or left blank");
+            return false;
     }
+}
 
     return true;
 }
 
+  let phoneFormat = /^\d{10}$/
 function phoneNumberCheck(inputtxt) {
-  //(XXX) XXX-XXXX
-  let phoneFormat = /^\(\d{3}\) \d{3}\-\d{4}$/;
-  if(inputtxt.value.match(phoneFormat)) {
+  //XXXXXXXXXX
+  if(inputtxt.match(phoneFormat)) {
+    console.log("phone number good")
     return true;
+
+
   }
   else {
+    console.log("phone number bad")
     return false;
   }
 }
 
 function zipcodeCheck(inputtxt) {
     // ddddd
-  let zipcodeFormat = /^\(\d{5}\)/;
-  if(inputtxt.value.match(zipcodeFormat)) {
+  let zipcodeFormat = /^\d{5}$/;
+  if(inputtxt.match(zipcodeFormat)) {
     return true;
   }
   else {
