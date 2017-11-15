@@ -137,7 +137,7 @@ def process_registration():
     #now that there's a user obj, fill out their first favorite
     org_id = request.form.get('rank_1')
     if org_id:
-        user_id = User.query.filter(User.user_email == user_email.first())
+        user_id = User.query.filter(User.user_email == user_email).first()
         new_user_org = UserOrg(user_id=user_id,
                                org_id=org_id,
                                rank=1)
