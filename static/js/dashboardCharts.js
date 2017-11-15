@@ -1,20 +1,5 @@
 "use strict";
 
-// var donut_options = { responsive: true };
-
-// var ctx_donut = $("#userImpactDonutChart").get(0).getContext("2d");
-
-// $.get("/user-impact-donut.json", function (data) {
-//     // console.log(data);
-//     var myDonutChart = new Chart(ctx_donut, {
-//                                             type: 'doughnut',
-//                                             data: data,
-//                                             options: donut_options
-//                                           });
-//     $('#donutLegend').html(myDonutChart.generateLegend());
-// });
-
-
 var options = {
                 responsive: true,
                // barValueSpacing: 2,
@@ -36,7 +21,7 @@ var options = {
                 scales: {
                     xAxes: [{
                       // barThickness: 50,
-                      // barPercentage: 5,
+                      barPercentage: 0.5,
                       gridLines: {
                         display: false,
                         color: "grey"
@@ -63,10 +48,10 @@ var options = {
                         fontColor: "black"
                       },
                       ticks: {
-                      beginAtZero: true,
-                      stepSize: 1,
-                      callback: function(value, index, values) {
-                        return value.toLocaleString("en-US",{style:"currency",
+                        beginAtZero: true,
+                        stepSize: 1,
+                        callback: function(value, index, values) {
+                          return value.toLocaleString("en-US",{style:"currency",
                                                              currency:"USD"});
                         }
                     }
@@ -84,6 +69,7 @@ var ctx_bar = $("#userImpactBarChart").get(0).getContext("2d");
 
 $.get('/user-impact-bar.json', function (data) {
     console.log(data);
+    console.log("user impact bar function");
     var myBarChart = new Chart(ctx_bar, {
                                             type: 'bar',
                                             data: data,
@@ -92,15 +78,3 @@ $.get('/user-impact-bar.json', function (data) {
     $('#barLegend').html(myBarChart.generateLegend());
 });
 
-
-var ctx_total_bar = $("#totalImpactBarChart").get(0).getContext("2d");
-
-$.get('/total-impact-bar.json', function (data) {
-    console.log(data);
-    var totalBarChart = new Chart(ctx_total_bar, {
-                                            type: 'bar',
-                                            data: data,
-                                            options: options
-                                          });
-    $('#totalBarLegend').html(totalBarChart.generateLegend());
-});

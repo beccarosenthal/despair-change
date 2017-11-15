@@ -53,44 +53,6 @@ def json_user_impact_bar(user_object):
     return jsonify(data_dict)
 
 
-# def json_user_impact_donut(user_object):
-#     print "yo"
-#     """Return data about user impact for donut chart"""
-
-#     current_user_id = user_object.user_id
-
-#     #Create dictionary with key value pairs of {org_id: amt donated by user}
-#     users_donations = (db.session.query(func.sum(Transaction.amount),
-#                                                  Transaction.org_id)
-#                                  .filter(Transaction.user_id == current_user_id)
-#                                  .filter(Transaction.status == "pending delivery to org")
-#                                  .group_by(Transaction.org_id)
-#                                  .all())
-
-
-#     donations_by_org = {Organization.query.get(org_id).name: amount
-#                         for amount, org_id in users_donations}
-
-
-#     labels = []
-#     data = []
-
-#     for org, amount in donations_by_org.items():
-#         labels.append(org)
-#         data.append(amount)
-
-#     data_dict = {
-#                 "labels": labels,
-#                 "datasets": [
-#                     {
-#                         "data": data,
-#                         "backgroundColor": BACKGROUND_COLORS,
-#                         "hoverBackgroundColor": HOVER_BACKGROUND_COLORS
-#                     }]
-#             }
-#     return jsonify(data_dict)
-
-
 #TODO #THIS DOESN"T WORK YET
 def json_total_impact_bar():
     """generate data_dict with data for the total impact bar chart"""

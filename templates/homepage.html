@@ -6,6 +6,11 @@
 
 <p>Welcome to Despair Change, where we collectively channel our despair into positive actions.</p>
 
+<h2>BAR CHART!!!</h2>
+<div class="total-impact-bar">
+  <canvas id="totalImpactBarChart" ></canvas>
+  <div id="totalBarLegend" class="chart-legend"></div>
+<div>
 <p>It's working! Well intending and completely real users just like you have attempted to donate {{amount_attempted}} so far. Seriously. {{amount_attempted}}!! </p>
     <p>Thanks to technical difficulties, though, the reality on the ground is slightly different.
 
@@ -14,13 +19,8 @@
     {% endfor %}
     <br>
     <br>
-<b></b>
 
-<h2>BAR CHART!!!</h2>
-<div class="total-impact-bar">
-  <canvas id="totalImpactBarChart" ></canvas>
-  <div id="totalBarLegend" class="chart-legend"></div>
-<div>
+
 
 <iframe src="https://giphy.com/embed/CPlfH4SdK1h04" width="480" height="380" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
 <h3>Relax</h3>
@@ -28,5 +28,5 @@
 <iframe src="https://giphy.com/embed/O6VoexTrRs6eQ" width="480" height="332" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
 
 
-<script type="text/javascript" src="static/js/charts.js"> </script>
+<script type="text/javascript" src="static/js/homepageCharts.js"> </script>
 {% endblock %}

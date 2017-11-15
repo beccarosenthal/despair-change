@@ -14,7 +14,6 @@ from sqlalchemy import func
 
 #import from my files
 from json_functions import (json_user_impact_bar,
-                            # json_user_impact_donut,
                             json_total_impact_bar)
 from model import (User, Organization, Transaction,
                    UserOrg, State,
@@ -413,18 +412,6 @@ def cancel_payment():
     return redirect('/')
 #Routes about Data vis
 ##############################################################################
-# @app.route('/user-impact-donut.json')
-# def user_impact_donut_data():
-#     """Return data about user impact."""
-
-#     user_object, current_user_id = get_user_object_and_current_user_id()
-#     data_dict = json_user_impact_donut(user_object)
-#     print data_dict
-
-#     return data_dict
-
-
-
 @app.route('/user-impact-bar.json')
 def user_impact_data():
     """Return bar chart data about user impact."""
@@ -439,12 +426,6 @@ def user_impact_data():
 @app.route('/total-impact-bar.json')
 def total_impact_data():
     """return bar chart data about collective impact of all users"""
-
-    all_donations = (db.session.query(func.sum(Transaction.amount),
-                                               Transaction.org_id)
-                               .filter(Transaction.status == "pending delivery to org")
-                               .group_by(Transaction.org_id)
-                               .all())
 
     return json_total_impact_bar()
 
