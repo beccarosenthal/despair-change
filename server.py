@@ -420,102 +420,31 @@ def user_impact_donut_data():
     data_dict = json_user_impact_donut(user_object)
     print data_dict
 
-    return jsonify(data_dict)
+    return data_dict
+
 
 
 @app.route('/user-impact-bar.json')
 def user_impact_data():
     """Return bar chart data about user impact."""
 
-
-# #####THE VERSION I HAVE THAT MAKES 5 BARS SHOW UP IN ONE SPOT
     user_object, current_user_id = get_user_object_and_current_user_id()
 
-#     # find all donations attempted by the user logged into the session
-#     total_donated = (db.session.query(func.sum(Transaction.amount))
-#                                .filter(Transaction.user_id == current_user_id)
-#                                .first())
-
-#     #Create dictionary with key value pairs of {org_id: amt donated by user}
-#     donations_by_org = query_for_donations_by_org_dict(current_user_id)
-
-#     labels = [] #name of org
-#     data = [] #amount of money
-#     BACKGROUND_COLORS = ["#FF6384", "#36A2EB", "#FF6384", "#36A2EB",
-#                          "#FF6384", "#36A2EB", "#FF6384", "#36A2EB", ]
-#     HOVER_BACKGROUND_COLORS = ["#FF6384", "#36A2EB", "#FF6384", "#36A2EB",
-#                               "#FF6384", "#36A2EB", "#FF6384", "#36A2EB"]
-#     datasets = []
-#     # datasets = [{"label": labels,
-#     #              "data": data,
-#     #              "backgroundColor": ["red", "blue"],
-#     #              "hoverBackgroundColor": ["black", "grey"]}]
-
-#     for org, amount in donations_by_org.items():
-#         labels.append(org)
-#         data.append(amount)
-
-#     for i in range(len(data)):
-#         datasets.append({
-#                        "label": labels[i],
-#                        "data": [data[i]],
-#                        "backgroundColor": BACKGROUND_COLORS[i],
-#                        "hoverBackgroundColor": HOVER_BACKGROUND_COLORS[i]
-#                        },)
-#         print datasets
-#         # import pdb; pdb.set_trace()
-
-#     data_dict = {
-#                 "labels": labels,
-#                 "datasets": datasets
-#             }
-#     print
-#     print
-#     print "$$$$$$DATADICT"
-#     print data_dict
-#     print
-#     print
-#     print "$$$$$$DATASETS"
-#     print datasets
-
     data_dict = json_user_impact_bar(user_object)
-    return jsonify(data_dict)
+    return data_dict
 
-
+#TODO - this
 @app.route('/total-impact-bar.json')
 def total_impact_data():
     """return bar chart data about collective impact of all users"""
 
-    # all_donations = (db.session.query(func.sum(Transaction.amount),
-    #                                            Transaction.org_id)
-    #                              .filter(Transaction.status == "pending delivery to org")
-    #                              .group_by(Transaction.org_id)
-    #                              .all())
+    all_donations = (db.session.query(func.sum(Transaction.amount),
+                                               Transaction.org_id)
+                                 .filter(Transaction.status == "pending delivery to org")
+                                 .group_by(Transaction.org_id)
+                                 .all())
 
-    # # import pdb; pdb.set_trace()
-    # print "figure out what all donations is"
-    # labels = []
-    # data = []
 
-    # for org, amount in all_donations.items():
-    #     labels.append(org)
-    #     data.append(amount)
-
-    # data_dict = {
-    #             "labels": labels,
-    #             "datasets": [
-    #                 {
-    #                     "data": data,
-    #                     "backgroundColor": [
-    #                         "#FF6384",
-    #                         "#36A2EB",
-    #                     ],
-    #                     "hoverBackgroundColor": [
-    #                         "#FF6384",
-    #                         "#36A2EB",
-    #                     ]
-    #                 }]
-    #         }
     data_dict = json_total_impact_bar()
     return jsonify(data_dict)
 
@@ -550,6 +479,16 @@ def query_for_donations_by_org_dict(user_id):
                         for amount, org_id in users_donations}
 
     return donations_by_org
+
+#not sure if this works or not...
+def show_all_user_donations(user_id):
+    """find all donations attempted by the user logged into the session"""
+    total_donated = (db.session.query(func.sum(Transaction.amount))
+                               .filter(Transaction.user_id == current_user_id,
+                                       Transaction.status == "pending delivery to org")
+                               .first())
+
+    return total_donated
 
 
 if __name__ == "__main__":

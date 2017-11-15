@@ -8,6 +8,12 @@
 <h2>Head on over to the <a href="/donate">donate</a> page to start making an impact!</h2>
 {% else  %}
 <h2>Check out your impact</h2>
+
+<div class="user-impact-bar">
+  <canvas id="userImpactBarChart" ></canvas>
+  <div id="barLegend" class="chart-legend"></div>
+<div>
+
     <p>You've attempted to donate ${{total_donated}}0 so far</p>
     <p>Thanks to technical difficulties, the reality on the ground is slightly different.</p>
 
@@ -21,11 +27,6 @@
   <canvas id="userImpactChart" width="400" height="400"></canvas>
   <div id="userLegend" class="user-legend"></div>
 <div> -->
-<h2>BAR CHART!!!</h2>
-<div class="user-impact-bar">
-  <canvas id="userImpactBarChart" ></canvas>
-  <div id="barLegend" class="chart-legend"></div>
-<div>
 
 <h2>DONUT CHART!!!</h2>
 <div class="user-impact-chart">
