@@ -18,8 +18,8 @@ $.get("/user-impact-donut.json", function (data) {
 
 
 var options = {
-               responsive: true,
-               barValueSpacing: 2,
+                responsive: true,
+               // barValueSpacing: 2,
 
                legend: {
                    display: true,
@@ -30,11 +30,15 @@ var options = {
                         fontColor: '#000080'
                     }
                   },
+                // title: {
+                //   display: true,
+                //   text: "Your Impact"
+                // },
 
                 scales: {
                     xAxes: [{
-                      barThickness: 50,
-                      barPercentage: 0.5,
+                      // barThickness: 50,
+                      // barPercentage: 5,
                       gridLines: {
                         display: false,
                         color: "grey"
@@ -47,7 +51,7 @@ var options = {
                       scaleLabel: {
                         display: true,
                         labelString: "Organization",
-                        fontColor: "#000080",
+                        fontColor: "black",
                         fontSize: 14
                       }
                     }],
@@ -61,8 +65,15 @@ var options = {
                         labelString: "Dollars Donated",
                         fontColor: "black"
                       },
-                      ticks: { beginAtZero: true }
-                    }],
+                      ticks: {
+                      beginAtZero: true,
+                      stepSize: 1,
+                      callback: function(value, index, values) {
+                        return value.toLocaleString("en-US",{style:"currency",
+                                                             currency:"USD"});
+                        }
+                    }
+                  }],
                 title: {
                     display: true,
                     text: 'My Donations',

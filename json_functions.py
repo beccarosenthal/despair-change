@@ -6,10 +6,10 @@ from model import (User, Organization, Transaction,
                    connect_to_db, db)
 # from server import get_user_object_and_current_user_id
 
-BACKGROUND_COLORS = ["#C72DB3", "#36A2EB", "#FF00FF", "#6574DA",
+BACKGROUND_COLORS = ["#C72DB3", "#D9A622", "#2CA248", "#6574DA",
                      "#C72D2D", "#2DC7C0", "#FF6384", "#FEFF29", ]
-HOVER_BACKGROUND_COLORS = ["#C72DB3", "#36A2EB", "#FF00FF", "#6574DA",
-                     "#C72D2D", "#2DC7C0", "#FF6384", "#FEFF29", ]
+HOVER_BACKGROUND_COLORS = ["#2DC7C0", "#FF6384", "#FEFF29","#C72DB3",
+                           "#36A2EB", "#FF00FF", "#6574DA", "#C72D2D",  ]
 
 def json_user_impact_bar(user_object):
     #####THE VERSION I HAVE THAT MAKES 5 BARS SHOW UP IN ONE SPOT
@@ -20,7 +20,6 @@ def json_user_impact_bar(user_object):
                                .filter(Transaction.user_id == current_user_id)
                                .first())
 
-    #Create dictionary with key value pairs of {org_id: amt donated by user}
     #Create dictionary with key value pairs of {org_id: amt donated by user}
     users_donations = (db.session.query(func.sum(Transaction.amount),
                                                  Transaction.org_id)
@@ -33,8 +32,6 @@ def json_user_impact_bar(user_object):
     donations_by_org = {Organization.query.get(org_id).name: amount
                         for amount, org_id in users_donations}
 
-    ### 3 datasets - one for user, one for referrals, one for all users
-
 
     labels = [] #name of org
     data = [] #amount of money
@@ -44,6 +41,7 @@ def json_user_impact_bar(user_object):
         data.append(amount)
     #####TODO Add datasets to correspond with the referrals and total donations
     ###and make those labels different on stacked
+        ### 3 datasets - one for user, one for referrals, one for all users
 
     # datasets = []
     # # datasets = [{"label": labels,
@@ -63,7 +61,6 @@ def json_user_impact_bar(user_object):
     #                    "hoverBackgroundColor": HOVER_BACKGROUND_COLORS[i]
     #                    },)
     #     print datasets
-    #     # import pdb; pdb.set_trace()
 
 
     data_dict = {
@@ -72,10 +69,7 @@ def json_user_impact_bar(user_object):
                     {   "label": ["My Donations"],
                         "data": data,
                         "backgroundColor": BACKGROUND_COLORS,
-                        "hoverBackgroundColor": [
-                            "#FF6384",
-                            "#36A2EB",
-                        ]
+                        "hoverBackgroundColor": HOVER_BACKGROUND_COLORS
                     }]
             }
     return data_dict
@@ -116,14 +110,8 @@ def json_user_impact_donut(user_object):
                 "datasets": [
                     {
                         "data": data,
-                        "backgroundColor": [
-                            "#FF6384",
-                            "#36A2EB",
-                        ],
-                        "hoverBackgroundColor": [
-                            "#FF6384",
-                            "#36A2EB",
-                        ]
+                        "backgroundColor": BACKGROUND_COLORS,
+                        "hoverBackgroundColor": HOVER_BACKGROUND_COLORS
                     }]
             }
     return data_dict
