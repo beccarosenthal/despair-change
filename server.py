@@ -13,6 +13,9 @@ from sqlalchemy import func
 
 
 #import from my files
+from json_functions import (json_user_impact_bar,
+                            json_user_impact_donut,
+                            json_total_impact_bar)
 from model import (User, Organization, Transaction,
                    UserOrg, State,
                    connect_to_db, db)
@@ -453,90 +456,58 @@ def user_impact_donut_data():
 def user_impact_data():
     """Return bar chart data about user impact."""
 
-    # user_object, current_user_id = get_user_object_and_current_user_id()
 
-    # # find all donations attempted by the user logged into the session
-    # total_donated = (db.session.query(func.sum(Transaction.amount))
-    #                            .filter(Transaction.user_id == current_user_id)
-    #                            .first())
+# #####THE VERSION I HAVE THAT MAKES 5 BARS SHOW UP IN ONE SPOT
+#     user_object, current_user_id = get_user_object_and_current_user_id()
 
-    # #Create dictionary with key value pairs of {org_id: amt donated by user}
-    # donations_by_org = query_for_donations_by_org_dict(current_user_id)
+#     # find all donations attempted by the user logged into the session
+#     total_donated = (db.session.query(func.sum(Transaction.amount))
+#                                .filter(Transaction.user_id == current_user_id)
+#                                .first())
 
-    # labels = []
-    # data = []
+#     #Create dictionary with key value pairs of {org_id: amt donated by user}
+#     donations_by_org = query_for_donations_by_org_dict(current_user_id)
 
-    # for org, amount in donations_by_org.items():
-    #     labels.append(org)
-    #     data.append(amount)
+#     labels = [] #name of org
+#     data = [] #amount of money
+#     BACKGROUND_COLORS = ["#FF6384", "#36A2EB", "#FF6384", "#36A2EB",
+#                          "#FF6384", "#36A2EB", "#FF6384", "#36A2EB", ]
+#     HOVER_BACKGROUND_COLORS = ["#FF6384", "#36A2EB", "#FF6384", "#36A2EB",
+#                               "#FF6384", "#36A2EB", "#FF6384", "#36A2EB"]
+#     datasets = []
+#     # datasets = [{"label": labels,
+#     #              "data": data,
+#     #              "backgroundColor": ["red", "blue"],
+#     #              "hoverBackgroundColor": ["black", "grey"]}]
 
-    # data_dict = {
-    #             "labels": labels,
-    #             "datasets": [
-    #                 {
-    #                     "data": data,
-    #                     "backgroundColor": [
-    #                         "#FF6384",
-    #                         "#36A2EB",
-    #                     ],
-    #                     "hoverBackgroundColor": [
-    #                         "#FF6384",
-    #                         "#36A2EB",
-    #                     ]
-    #                 }]
-    #         }
+#     for org, amount in donations_by_org.items():
+#         labels.append(org)
+#         data.append(amount)
 
-    # return jsonify(data_dict)
-    user_object, current_user_id = get_user_object_and_current_user_id()
+#     for i in range(len(data)):
+#         datasets.append({
+#                        "label": labels[i],
+#                        "data": [data[i]],
+#                        "backgroundColor": BACKGROUND_COLORS[i],
+#                        "hoverBackgroundColor": HOVER_BACKGROUND_COLORS[i]
+#                        },)
+#         print datasets
+#         # import pdb; pdb.set_trace()
 
-    # find all donations attempted by the user logged into the session
-    total_donated = (db.session.query(func.sum(Transaction.amount))
-                               .filter(Transaction.user_id == current_user_id)
-                               .first())
+#     data_dict = {
+#                 "labels": labels,
+#                 "datasets": datasets
+#             }
+#     print
+#     print
+#     print "$$$$$$DATADICT"
+#     print data_dict
+#     print
+#     print
+#     print "$$$$$$DATASETS"
+#     print datasets
 
-    #Create dictionary with key value pairs of {org_id: amt donated by user}
-    donations_by_org = query_for_donations_by_org_dict(current_user_id)
-
-    labels = [] #name of org
-    data = [] #amount of money
-    BACKGROUND_COLORS = ["#FF6384", "#36A2EB", "#FF6384", "#36A2EB",
-                         "#FF6384", "#36A2EB", "#FF6384", "#36A2EB", ]
-    HOVER_BACKGROUND_COLORS = ["#FF6384", "#36A2EB", "#FF6384", "#36A2EB",
-                              "#FF6384", "#36A2EB", "#FF6384", "#36A2EB"]
-    datasets = []
-    # datasets = [{"label": labels,
-    #              "data": data,
-    #              "backgroundColor": ["red", "blue"],
-    #              "hoverBackgroundColor": ["black", "grey"]}]
-
-    for org, amount in donations_by_org.items():
-        labels.append(org)
-        data.append(amount)
-
-    for i in range(len(data)):
-        datasets.append({
-                       "label": labels[i],
-                       "data": [data[i]],
-                       "backgroundColor": BACKGROUND_COLORS[i],
-                       "hoverBackgroundColor": HOVER_BACKGROUND_COLORS[i]
-                       },)
-        print datasets
-        # import pdb; pdb.set_trace()
-
-    data_dict = {
-                "labels": labels,
-                "datasets": datasets
-            }
-    print
-    print
-    print "$$$$$$DATADICT"
-    print data_dict
-    print
-    print
-    print "$$$$$$DATASETS"
-    print datasets
-
-    return jsonify(data_dict)
+#     return jsonify(data_dict)
 
 
 @app.route('/total-impact-bar.json')

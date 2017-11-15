@@ -186,9 +186,6 @@ class DespairChangeTestsDatabase(TestCase):
     ###TO WRITE IN THIS CLASS (LOGGED IN, INTO DB)
          #settings_response - only one rank changed, 2 and three also
 
-
-
-
     #TODO
 
     # /register
@@ -197,8 +194,6 @@ class DespairChangeTestsDatabase(TestCase):
         #     user input added incorrectly
                 #bad phone, zip, email, etc
         #     user email already in there
-        #         *****TODO fix server.py logic so that user registering with
-        #         wrong password redirects them to login page
 
 
 ####################################################################################
@@ -262,6 +257,12 @@ class DespairChangeLoggedIn(TestCase):
 
         result = self.client.get("/settings")
         self.assertIn("listed first", result.data)
+
+    def test_dashboard_route(self): #test will fail if ""
+        """test dashboard route"""
+
+        result = self.client.get('/dashboard')
+        self.assertIn('impact', result.data)
 
 
     # def test_important_page(self):

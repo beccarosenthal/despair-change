@@ -155,6 +155,8 @@ def execute_payment(payer_id, payment, transaction):
     db.session.commit()
 
 if __name__ == "__main__":
+
+    pass
 ###payment is a dictionary, representing the transaction between person being paid and doing paying
 
         # Execute payment using payer_id obtained when creating the payment (following redirect)
@@ -164,29 +166,29 @@ if __name__ == "__main__":
         #     print(payment.error)
 
     # Execute payment using payer_id obtained when creating the payment (following redirect)
-    if payment.execute():
-      print("Payment[%s] execute successfully" % (payment.id))
-    else:
-      print(payment.error)
+    # if payment.execute():
+    #   print("Payment[%s] execute successfully" % (payment.id))
+    # else:
+    #   print(payment.error)
 
 
-    from paypalrestsdk import Payment
+    # from paypalrestsdk import Payment
 
-    # Payment id obtained when creating the payment (following redirect)
-    payment = Payment.find("PAY-1CR30319DP127223ALIFDRPI")
+    # # Payment id obtained when creating the payment (following redirect)
+    # payment = Payment.find("PAY-1CR30319DP127223ALIFDRPI")
 
-    # Execute payment using payer_id obtained when creating the payment (following redirect)
-    if payment.execute({"payer_id": "DUFRQ8GWYMJXC"}):
-      print("Payment[%s] execute successfully" % (payment.id))
-    else:
-      print(payment.error)
+    # # Execute payment using payer_id obtained when creating the payment (following redirect)
+    # if payment.execute({"payer_id": "DUFRQ8GWYMJXC"}):
+    #   print("Payment[%s] execute successfully" % (payment.id))
+    # else:
+    #   print(payment.error)
 
 
-    # Payment id obtained when creating the payment (following redirect)
-    payment = Payment.find("PAY-28103131SP722473WKFD7VGQ")
+    # # Payment id obtained when creating the payment (following redirect)
+    # payment = Payment.find("PAY-28103131SP722473WKFD7VGQ")
 
-    # Execute payment using payer_id obtained when creating the payment (following redirect)
-    if payment.execute({"payer_id": "DUFRQ8GWYMJXC"}):
-      print("Payment[%s] execute successfully" % (payment.id))
-    else:
-      print(payment.error)
+    # # Execute payment using payer_id obtained when creating the payment (following redirect)
+    # if payment.execute({"payer_id": "DUFRQ8GWYMJXC"}):
+    #   print("Payment[%s] execute successfully" % (payment.id))
+    # else:
+    #   print(payment.error)

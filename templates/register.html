@@ -62,16 +62,14 @@
             {% for org in orgs %}
                 <option value="{{org.org_id}}">{{org.name}}</option>
             {% endfor %}
-        </select>
+          </select>
+        </td>
     </tr>
   </table>
 </form>
   <button type="register-button" id="submit-button" >Submit</button>
 
 <script type="text/javascript" src="static/js/register.js"> </script>
-<!-- get event listener on button
-check them
-if it's all good, then submit it -->
 
 
 {% endblock %}

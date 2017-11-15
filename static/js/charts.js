@@ -16,19 +16,36 @@ $.get("/user-impact-donut.json", function (data) {
     $('#donutLegend').html(myDonutChart.generateLegend());
 });
 
-var options = {  responsive: true,
-                    yAxes: [{
-                      gridLines: {
-                        color: "black",
-                        borderDash: [1, 5],
-                      },
-                      scaleLabel: {
-                        display: true,
-                        labelString: "Dollars Donated",
-                        fontColor: "black"
-                      },
-                      ticks: { beginAtZero: true }
-                    }] };
+var options =  {
+  responsive: true,
+    legend: {
+      display: true,
+      position: 'bottom',
+      labels: {
+        fontColor: "#000080",
+      }
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    }
+  };
+// var options = {  responsive: true,
+                    // yAxes: [{
+                    //   gridLines: {
+                    //     color: "black",
+                    //     borderDash: [1, 5],
+                    //   },
+                    //   scaleLabel: {
+                    //     display: true,
+                    //     labelString: "Dollars Donated",
+                    //     fontColor: "black"
+                    //   },
+                    //   ticks: { beginAtZero: true }
+                    // }] };
 // var options = {
 //                responsive: true,
 //                barValueSpacing: 2,
