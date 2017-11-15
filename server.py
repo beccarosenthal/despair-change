@@ -13,7 +13,8 @@ from sqlalchemy import func
 
 
 #import from my files
-from json_functions import (json_user_impact_bar, json_user_impact_donut,
+from json_functions import (json_user_impact_bar,
+                            # json_user_impact_donut,
                             json_total_impact_bar)
 from model import (User, Organization, Transaction,
                    UserOrg, State,
@@ -412,15 +413,15 @@ def cancel_payment():
     return redirect('/')
 #Routes about Data vis
 ##############################################################################
-@app.route('/user-impact-donut.json')
-def user_impact_donut_data():
-    """Return data about user impact."""
+# @app.route('/user-impact-donut.json')
+# def user_impact_donut_data():
+#     """Return data about user impact."""
 
-    user_object, current_user_id = get_user_object_and_current_user_id()
-    data_dict = json_user_impact_donut(user_object)
-    print data_dict
+#     user_object, current_user_id = get_user_object_and_current_user_id()
+#     data_dict = json_user_impact_donut(user_object)
+#     print data_dict
 
-    return data_dict
+#     return data_dict
 
 
 
@@ -433,6 +434,7 @@ def user_impact_data():
     data_dict = json_user_impact_bar(user_object)
     return data_dict
 
+
 #TODO - this
 @app.route('/total-impact-bar.json')
 def total_impact_data():
@@ -440,13 +442,11 @@ def total_impact_data():
 
     all_donations = (db.session.query(func.sum(Transaction.amount),
                                                Transaction.org_id)
-                                 .filter(Transaction.status == "pending delivery to org")
-                                 .group_by(Transaction.org_id)
-                                 .all())
+                               .filter(Transaction.status == "pending delivery to org")
+                               .group_by(Transaction.org_id)
+                               .all())
 
-
-    data_dict = json_total_impact_bar()
-    return jsonify(data_dict)
+    return json_total_impact_bar()
 
 
 #Helper Functions with queries

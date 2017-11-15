@@ -9,6 +9,7 @@
 {% else  %}
 <h2>Check out your impact</h2>
 
+<!-- Bar Chart -->
 <div class="user-impact-bar">
   <canvas id="userImpactBarChart" ></canvas>
   <div id="barLegend" class="chart-legend"></div>
@@ -23,17 +24,12 @@
     <br>
     <br>
 
-<!-- <div class="user-impact-chart">
-  <canvas id="userImpactChart" width="400" height="400"></canvas>
-  <div id="userLegend" class="user-legend"></div>
-<div> -->
-
-<h2>DONUT CHART!!!</h2>
-<div class="user-impact-chart">
-  <canvas id="userImpactDonutChart"></canvas>
-  <div id="donutLegend" class="chart-legend"></div>
-<div>
 {% endif%}
+
+<!-- <h2>DONUT CHART!!!</h2> -->
+
+<!-- TODO: Figure out why getting rid of donut chart div fucks up bar chart -->
+
 <a href="/settings">Change your settings</a>
 
 <iframe src="https://giphy.com/embed/35jdDb13EhxxC" width="480" height="445" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
