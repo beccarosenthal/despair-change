@@ -446,6 +446,40 @@ def user_impact_donut_data():
 def user_impact_data():
     """Return bar chart data about user impact."""
 
+    # user_object, current_user_id = get_user_object_and_current_user_id()
+
+    # # find all donations attempted by the user logged into the session
+    # total_donated = (db.session.query(func.sum(Transaction.amount))
+    #                            .filter(Transaction.user_id == current_user_id)
+    #                            .first())
+
+    # #Create dictionary with key value pairs of {org_id: amt donated by user}
+    # donations_by_org = query_for_donations_by_org_dict(current_user_id)
+
+    # labels = []
+    # data = []
+
+    # for org, amount in donations_by_org.items():
+    #     labels.append(org)
+    #     data.append(amount)
+
+    # data_dict = {
+    #             "labels": labels,
+    #             "datasets": [
+    #                 {
+    #                     "data": data,
+    #                     "backgroundColor": [
+    #                         "#FF6384",
+    #                         "#36A2EB",
+    #                     ],
+    #                     "hoverBackgroundColor": [
+    #                         "#FF6384",
+    #                         "#36A2EB",
+    #                     ]
+    #                 }]
+    #         }
+
+    # return jsonify(data_dict)
     user_object, current_user_id = get_user_object_and_current_user_id()
 
     # find all donations attempted by the user logged into the session
@@ -469,23 +503,31 @@ def user_impact_data():
     #              "hoverBackgroundColor": ["black", "grey"]}]
 
     for org, amount in donations_by_org.items():
-        labels.append(org[:20])
+        labels.append(org)
         data.append(amount)
 
     for i in range(len(data)):
         datasets.append({
                        "label": labels[i],
                        "data": [data[i]],
-                       "backgroundColor": [BACKGROUND_COLORS[i]],
-                       "hoverBackgroundColor": [HOVER_BACKGROUND_COLORS[i]]
+                       "backgroundColor": BACKGROUND_COLORS[i],
+                       "hoverBackgroundColor": HOVER_BACKGROUND_COLORS[i]
                        },)
+        print datasets
+        # import pdb; pdb.set_trace()
 
     data_dict = {
                 "labels": labels,
                 "datasets": datasets
             }
+    print
+    print
+    print "$$$$$$DATADICT"
     print data_dict
-    import pdb; pdb.set_trace()
+    print
+    print
+    print "$$$$$$DATASETS"
+    print datasets
 
     return jsonify(data_dict)
 

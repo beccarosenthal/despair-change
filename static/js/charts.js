@@ -16,41 +16,7 @@ $.get("/user-impact-donut.json", function (data) {
     $('#donutLegend').html(myDonutChart.generateLegend());
 });
 
-
-
-var options = {
-               responsive: true,
-               barValueSpacing: 2,
-
-               legend: {
-                   display: true,
-                   position: 'top',
-                   labels: {
-                        boxWidth: 80,
-                        fontColor: 'black'
-                    }
-                  },
-
-                scales: {
-                    xAxes: [{
-                      barThickness: 25,
-                      barPercentage: 0.5,
-                      gridLines: {
-                        display: false,
-                        color: "black"
-                      },
-                      ticks: {
-                        autoSkip: false,
-                        beginAtZero: true
-                            },
-
-                      scaleLabel: {
-                        display: true,
-                        labelString: "Organization",
-                        fontColor: "name",
-                        fontSize: 14
-                      }
-                    }],
+var options = {  responsive: true,
                     yAxes: [{
                       gridLines: {
                         color: "black",
@@ -62,22 +28,68 @@ var options = {
                         fontColor: "black"
                       },
                       ticks: { beginAtZero: true }
-                    }],
-                title: {
-                    display: true,
-                    text: 'My Donations',
-                    fontSize: 24,
-                    fontStyle: 'bold'
-                       },
-                layout: {
-                    padding: {
-                        left: 50,
-                        right: 0,
-                        top: 0,
-                        bottom: 0
-                    }}
+                    }] };
+// var options = {
+//                responsive: true,
+//                barValueSpacing: 2,
 
-                }};
+//                legend: {
+//                    display: true,
+//                    position: 'top',
+//                    labels: {
+//                         display: true,
+//                         boxWidth: 80,
+//                         fontColor: 'black'
+//                     }
+//                   },
+
+//                 scales: {
+//                     xAxes: [{
+//                       barThickness: 25,
+//                       barPercentage: 0.5,
+//                       gridLines: {
+//                         display: false,
+//                         color: "black"
+//                       },
+//                       ticks: {
+//                         autoSkip: false,
+//                         beginAtZero: true
+//                             },
+
+//                       scaleLabel: {
+//                         display: true,
+//                         labelString: "Organization",
+//                         fontColor: "name",
+//                         fontSize: 14
+//                       }
+//                     }],
+//                     yAxes: [{
+//                       gridLines: {
+//                         color: "black",
+//                         borderDash: [1, 5],
+//                       },
+//                       scaleLabel: {
+//                         display: true,
+//                         labelString: "Dollars Donated",
+//                         fontColor: "black"
+//                       },
+//                       ticks: { beginAtZero: true }
+//                     }],
+//                 title: {
+//                     display: true,
+//                     text: 'My Donations',
+//                     fontSize: 24,
+//                     fontStyle: 'bold'
+//                        },
+//                 layout: {
+//                     padding: {
+//                         left: 50,
+//                         right: 0,
+//                         top: 0,
+//                         bottom: 0
+//                     }}
+
+//                 }};
 
 var ctx_bar = $("#userImpactBarChart").get(0).getContext("2d");
 
@@ -91,7 +103,7 @@ $.get('/user-impact-bar.json', function (data) {
     $('#barLegend').html(myBarChart.generateLegend());
 });
 
-//all users impact
+
 // var ctx_total_bar = $("#totalImpactBarChart").get(0).getContext("2d");
 
 // $.get('/total-impact-bar.json', function (data) {

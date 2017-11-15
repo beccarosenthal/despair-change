@@ -44,7 +44,7 @@ class FlaskTestsBasic(TestCase):
 
 
 class DespairChangeTestsDatabase(TestCase):
-    """Flask tests that use the database."""
+    """Flask tests that use the database while not logged in."""
 
     def setUp(self):
         """Stuff to do before every test."""
@@ -179,6 +179,14 @@ class DespairChangeTestsDatabase(TestCase):
 
         result = self.client.get("/")
         self.assertIn("Welcome to Despair Change", result.data)
+
+    def test_settings_route(self):
+        """test settings route """
+        result = self.client.get("/settings")
+        self.assertIn("listed first", result.data)
+
+    ###TO WRITE IN THIS CLASS (LOGGED IN, INTO DB)
+         #settings_response - only one rank changed, 2 and three also
 
 
 

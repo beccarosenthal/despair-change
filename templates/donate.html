@@ -23,11 +23,11 @@
 
 </form>
 <!-- TODO Create container for org with info -->
-<div id="about-{{org.name}}"><h3>About {{org.name}}</h3>
-<img alt='' width="300" height="200" src="{{org.logo_url}}" >
+<div id="about-{{org.name}}">
+    <h3>About {{org.name}}</h3>
+<a href="{{org.website_url}}" target="_blank"><img alt='' width="300" height="200" src="{{org.logo_url}}" ></a>
 <ul>
     <li><b>Mission: </b>{{org.mission_statement}}</li>
-    <li><a href="{{org.website_url}}" target="_blank">Our Website</a></li>
 </ul>
 </div>
 </div>
