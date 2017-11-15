@@ -7,29 +7,29 @@
 
 {% for org in orgs %}
 <div id="donate-to-{{org.name}}">
-<h1>Donate to {{org.name}}</h1>
-<form action="/donated" method="POST">
+    <h1>Donate to {{org.name}}</h1>
+        <form action="/donated" method="POST">
 
     <!-- Identify your business so that you can collect the payments. -->
-    <input type="hidden" name="org"
-        value="{{org.org_id}}">
+            <input type="hidden" name="org"
+                value="{{org.org_id}}">
 
     <!-- Display the payment button. -->
-    <input type="image" name="submit"
-    src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_donate_92x26.png"
-    alt="Donate to {{org.name}}">
-    <img alt="" width="1" height="1"
-    src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >
+            <input type="image" name="submit"
+                src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_donate_92x26.png"
+                alt="Donate to {{org.name}}">
+            <img alt="" width="1" height="1"
+                src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >
 
-</form>
+        </form>
 <!-- TODO Create container for org with info -->
-<div id="about-{{org.name}}">
-    <h3>About {{org.name}}</h3>
-<a href="{{org.website_url}}" target="_blank"><img alt='' width="300" height="200" src="{{org.logo_url}}" ></a>
-<ul>
-    <li><b>Mission: </b>{{org.mission_statement}}</li>
-</ul>
-</div>
+    <div id="about-{{org.name}}">
+        <h3>About {{org.name}}</h3>
+            <a href="{{org.website_url}}" target="_blank"><img alt='' width="300" height="200" src="{{org.logo_url}}" ></a>
+            <ul>
+                <li><b>Mission: </b>{{org.mission_statement}}</li>
+            </ul>
+    </div>
 </div>
 {%endfor%}
 

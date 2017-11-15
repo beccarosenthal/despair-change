@@ -37,10 +37,6 @@ class FlaskTestsBasic(TestCase):
         route = self.client.get('/login')
         self.assertIn('Email Address:', route.data)
 
-    # def test_register_route(self):
-    #     """Test register page."""
-    #     route = self.client.get('/register')
-    #     self.assertIn('Age:', route.data)
 
 
 class DespairChangeTestsDatabase(TestCase):
@@ -105,6 +101,12 @@ class DespairChangeTestsDatabase(TestCase):
 
         self.assertNotIn("donation", result.data.lower())
         self.assertIn("You need to register first!", result.data)
+
+    def test_register_route(self):
+        """Test register page."""
+        route = self.client.get('/register')
+        self.assertIn('Age:', route.data)
+
 
     def test_register_new_user_success_no_null(self):
         """Test register new User"""
@@ -180,10 +182,6 @@ class DespairChangeTestsDatabase(TestCase):
         result = self.client.get("/")
         self.assertIn("Welcome to Despair Change", result.data)
 
-    def test_settings_route(self):
-        """test settings route """
-        result = self.client.get("/settings")
-        self.assertIn("listed first", result.data)
 
     ###TO WRITE IN THIS CLASS (LOGGED IN, INTO DB)
          #settings_response - only one rank changed, 2 and three also
@@ -258,6 +256,12 @@ class DespairChangeLoggedIn(TestCase):
 
         result = self.client.get('/donate')
         self.assertIn("your despair into good", result.data)
+
+    def test_settings_route(self):
+        """test settings route """
+
+        result = self.client.get("/settings")
+        self.assertIn("listed first", result.data)
 
 
     # def test_important_page(self):

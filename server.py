@@ -34,16 +34,16 @@ client_secret = os.environ.get("PAYPAL_CLIENT_SECRET")
 def index():
     """renders homepage"""
 
+    # $ Amount of attempted donations
     total_attempted = db.session.query(func.sum(Transaction.amount)).all()
-
     total_attempted = "$" +str(total_attempted[0][0]) + "0"
 
     #Get records of successful donations from db
     total_donated = (db.session.query(func.sum(Transaction.amount),
-                                                 Transaction.org_id)
-                                 .filter(Transaction.status == "pending delivery to org")
-                                 .group_by(Transaction.org_id)
-                                 .all())
+                                               Transaction.org_id)
+                                .filter(Transaction.status == "pending delivery to org")
+                                .group_by(Transaction.org_id)
+                                .all())
 
     donations_by_org = {Organization.query.get(org_id).name: amount
                         for amount, org_id in total_donated}
@@ -85,6 +85,7 @@ def show_registration_form():
     #make sure that logged in user cannot see reg page
     if 'current_user' in session:
         return redirect('/')
+    #Get all orgs and all states from DB to put on reg form
     orgs = Organization.query.all()
     states = State.query.all()
 
@@ -107,17 +108,22 @@ def process_registration():
     fname = request.form.get('fname')
     lname = request.form.get('lname')
 
-    ##Add logic to make sure that if there is a problem with any
-    ##of the nullable things, they don't go into DB
-
+    # set nullable things to db to None if not in user submit form
     age = request.form.get('age')
     if not age:
         age = None
 
-
     zipcode = request.form.get('zipcode')
+    if not zipcode:
+        zipcode = None
+
     state = request.form.get('state')
+    if not state:
+        state = None
+
     phone = request.form.get('phone')
+    if not phone:
+        phone = None
 
     user_object = User.query.filter(User.user_email == user_email).first()
 
@@ -143,6 +149,7 @@ def process_registration():
                                rank=1)
         db.session.add(new_user_org)
         db.session.commit()
+
     #if user email existed in db and password is right, log them in
     if user_password == user_object.password:
         session['current_user'] = user_object.user_id
@@ -185,8 +192,7 @@ def login_user():
             # db.session.commit()
 
             flash("You're logged in. Welcome to Despair Change!!")
-            specific_user_id = user_object.user_id
-            session['current_user'] = specific_user_id
+            session['current_user'] = user_object.user_id
 
             #What is the specific user ID
             return redirect('/donate')
@@ -229,7 +235,6 @@ def show_user_dashboard():
     donations_by_org = query_for_donations_by_org_dict(current_user_id)
 
 
-
     #TODO use regex to make total donated and amounts look like dollar amounts
     print total_donated
     return render_template('dashboard.html',
@@ -257,6 +262,7 @@ def show_user_settings():
                            orgs=all_orgs,
                            current_faves=current_faves)
 
+
 @app.route("/adjust_settings")
 def change_user_settings():
 
@@ -271,8 +277,10 @@ def change_user_settings():
     for i in range(1, 4):
         if request.args.get("rank_" + str(i)):
             rank = request.args.get("rank_" + str(i))
+
             #do they already have a rank 1? if so, make it None, because it's getting replaced
             rank_at_i = (UserOrg.query.filter(UserOrg.user_id == user_id, UserOrg.rank == i).first())
+
             if rank_at_i:
                 rank_at_i.rank = None
             #do they already have a relationship between themselves and that org
@@ -300,15 +308,15 @@ def donation_page():
     """render page to donate"""
 
     user_id = session['current_user']
+    #get all org objects that user has designated as a favorite at any point
     fave_orgs = (Organization.query
                              .join(UserOrg, Organization.org_id == UserOrg.org_id)
                              .filter(UserOrg.user_id == user_id)
                              .order_by(UserOrg.rank)
                              .all())
 
-    print fave_orgs
-    # send over list of all orgs available
     # If user doesn't have any UserOrgs, send over the whole org list
+
     # if not fave_org_id:
     fave_org_ids = [org.org_id for org in fave_orgs]
     #SQL Alchemy syntax to get all orgs whose id are not in fave_org_ids
@@ -333,14 +341,13 @@ def process_donation():
     amount = User.query.get(user_id).default_amount
 
     #TODO Use regex to get amount to be a string format that paypal can take
-
-
     transaction = Transaction(org_id=org_id,
                               user_id=user_id,
                               payment_id="Unrequested",
                               amount=amount,
                               status="donation attempted"
                               )
+
     print "****transaction object built, prepared to be added to db"
 
     # import pdb; pdb.set_trace()
@@ -568,7 +575,6 @@ def total_impact_data():
             }
 
     return jsonify(data_dict)
-
 
 
 #Helper Functions with queries
