@@ -4,8 +4,10 @@ import datetime
 import os
 
 #third party things
+# import Bcrypt
 from flask import (Flask, render_template, redirect, request, flash,
                    session, jsonify)
+from flask.bcrypt import hashpw, gensalt, generate_password_hash, check_password_hash
 from flask_debugtoolbar import DebugToolbarExtension
 from jinja2 import StrictUndefined
 from paypalrestsdk import Payment, configure, WebProfile
@@ -106,7 +108,11 @@ def process_registration():
         return redirect('/')
 
     user_email = request.form.get('email')
+
+    #run logic of encrypting password
     user_password = request.form.get('password')
+    pw_hash = bcrypt.generate_password_hash(user_password)
+
     fname = request.form.get('fname')
     lname = request.form.get('lname')
 
@@ -132,7 +138,7 @@ def process_registration():
     #If user object with email address provided doens't exist, add to db...
     if not user_object :
         user_object = User(user_email=user_email,
-                           password=user_password,
+                           password=pw_hash,
                            fname=fname,
                            lname=lname,
                            age=age,
@@ -142,18 +148,18 @@ def process_registration():
         db.session.add(user_object)
         db.session.commit()
 
-    #now that there's a user obj, fill out their first favorite
-    org_id = request.form.get('rank_1')
-    if org_id:
-        user_id = User.query.filter(User.user_email == user_email).first()
-        new_user_org = UserOrg(user_id=user_id,
-                               org_id=org_id,
-                               rank=1)
-        db.session.add(new_user_org)
-        db.session.commit()
+        #now that there's a user obj, fill out their first favorite
+        org_id = request.form.get('rank_1')
+        if org_id:
+            user_id = User.query.filter(User.user_email == user_email).first()
+            new_user_org = UserOrg(user_id=user_id,
+                                   org_id=org_id,
+                                   rank=1)
+            db.session.add(new_user_org)
+            db.session.commit()
 
     #if user email existed in db and password is right, log them in
-    if user_password == user_object.password:
+    if pw_hash == user_object.password:
         session['current_user'] = user_object.user_id
         print session['current_user']
         #They already logged in; send them to the donate page
@@ -179,14 +185,17 @@ def login_user():
 
     #get form data
     user_email = request.form.get('email')
+    #
     user_password = request.form.get('password')
+    pw_hash = bcrypt.generate_password_hash(user_password)
+
 
     #get the user object from the email
     user_object = User.query.filter(User.user_email == user_email).first()
 
     if user_object:
     #check password against email address
-        if user_object.password == user_password:
+        if user_object.password == pw_hash:
 
             #TODO make last login work
             # #update user.last_login in database
@@ -430,6 +439,13 @@ def total_impact_data():
     return json_total_impact_bar()
 
 
+#HELPER FUNCTIONS
+############################################################################
+
+def verify_password():
+    """verify users password"""
+
+
 #Helper Functions with queries
 ##############################################################################
 
@@ -472,6 +488,8 @@ def show_all_user_donations(user_id):
     return total_donated
 
 
+
+
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
     # point that we invoke the DebugToolbarExtension
@@ -479,6 +497,7 @@ if __name__ == "__main__":
     app.jinja_env.auto_reload = app.debug  # make sure templates, etc. are not cached in debug mode
 
     connect_to_db(app)
+    bcrypt = Bcrypt(app)
 
     # Use the DebugToolbar
     # DebugToolbarExtension(app)

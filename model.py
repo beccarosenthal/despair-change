@@ -6,7 +6,8 @@ import datetime
 import os
 
 #TODO for when I want to encrypt passwords
-from bcrypt import hashpw, gensalt
+from flask.bcrypt import Bcrypt
+from bcrypt import hashpw, gensalt, generate_password_hash
 
 SAMPLE_PASSWORD = os.environ.get("SAMPLE_PASSWORD")
 BUYER_EMAIL = os.environ.get("BUYER_EMAIL")
@@ -16,7 +17,6 @@ RENT_A_SWAG = os.environ.get("RENT_A_SWAG")
 SAMPLE_PHONE = os.environ.get("SAMPLE_PHONE")
 ALT_NPS_EMAIL = os.environ.get("ALT_NPS")
 READING_CENTER = os.environ.get("READING_CENTER")
-
 
 
 # This is the connection to the PostgreSQL database; we're getting this through
@@ -59,20 +59,16 @@ class User(db.Model):
     #in case I want to reference state data through the User
     state = db.relationship("State", backref="users")
 
-    #TODO if you add referrals, do something with this
-    # referred_by = db.Column(db.Integer, nullable=True)
-
-
-
-    #I am User1.  I referred User2 and User3. User3 referred #4.
-    # User1.referrer is null, because no user referred me.
+    ##########REFERRALS EXPLANATION######################
+    #I am User1.  I referred User2 and User3. User3 referred User4.
+    #User1.referrer is null, because no user referred me.
     #User2.referrer == User1
-    # User1.referred == [User2, User3]
-    # User2.referrer = User1.
+    #User1.referred == [User2, User3]
+    #User2.referrer == User1
     #User2.referred == null
     #User3.referrer == User1
     #User3.referred == User4
-    #User1's total donation amount includes User2, User3, AND User4
+    #User1's total donation impact amount includes User2, User3, AND User4
     referred = db.relationship("User",
                                secondary="referrals",
                                primaryjoin="User.user_id==Referral.referrer_id",
@@ -82,7 +78,6 @@ class User(db.Model):
                                primaryjoin="User.user_id==Referral.referred_id",
                                secondaryjoin="User.user_id==Referral.referrer_id",
                                uselist=False)  #don't wrap this in a list--there will only be one or zero
-
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -144,8 +139,10 @@ class Transaction(db.Model):
     timestamp = db.Column(db.DateTime,
                           nullable=False,
                           default=datetime.datetime.utcnow)
-
+    #TODO add this to transactions already in db, figure out logic for how to change transaction if referred makes donation and then signs up
     via_referral = db.Column(db.Boolean, nullable=True)
+
+
     status = db.Column(db.Enum("donation attempted",
                                "payment object built",
                                "paypal payment instantiated",
@@ -489,6 +486,7 @@ if __name__ == "__main__":
     # you in a state of being able to work with the database directly.
 
     from server import app
+    bcrypt = Bcrypt(app)
     connect_to_db(app)
     # db.create_all()
     # create_example_data()
