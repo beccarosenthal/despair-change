@@ -57,7 +57,7 @@
       </td>
     </tr>
   </table>
-    <select name="rank_1">
+    <select id="rank_1" name="rank_1">
       <option value=''>Which of these organizations is your favorite?</option>
         {% for org in orgs %}
           <option value="{{org.org_id}}">{{org.name}}</option>
