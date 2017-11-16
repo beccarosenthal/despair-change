@@ -8,7 +8,6 @@ import os
 from flask import (Flask, render_template, redirect, request, flash,
                    session, jsonify)
 from flask_bcrypt import Bcrypt
-# from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_debugtoolbar import DebugToolbarExtension
 from jinja2 import StrictUndefined
 from paypalrestsdk import Payment, configure, WebProfile
@@ -112,7 +111,7 @@ def process_registration():
 
     #run logic of encrypting password
     user_password = request.form.get('password')
-    pw_hash = bcrypt.generate_password_hash(user_password, gensalt)
+    pw_hash = bcrypt.generate_password_hash(user_password, 10)
 
     fname = request.form.get('fname')
     lname = request.form.get('lname')
@@ -160,7 +159,8 @@ def process_registration():
             db.session.commit()
 
     #if user email existed in db and password is right, log them in
-    if pw_hash == user_object.password:
+
+    if pw_hash == bcrypt.check_password_hash(user_object.password, user_password):
         session['current_user'] = user_object.user_id
         print session['current_user']
         #They already logged in; send them to the donate page

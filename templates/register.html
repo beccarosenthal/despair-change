@@ -56,16 +56,15 @@
         </select>
       </td>
     </tr>
-    <tr>
-      <td>  <select name="rank_1">
-            <option value=''>Which of these organizations is your favorite?</option>
-            {% for org in orgs %}
-                <option value="{{org.org_id}}">{{org.name}}</option>
-            {% endfor %}
-          </select>
-        </td>
-    </tr>
   </table>
+    <select name="rank_1">
+      <option value=''>Which of these organizations is your favorite?</option>
+        {% for org in orgs %}
+          <option value="{{org.org_id}}">{{org.name}}</option>
+        {% endfor %}
+    </select>
+
+
 </form>
   <button type="register-button" id="submit-button" >Submit</button>
 
