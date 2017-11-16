@@ -8,7 +8,7 @@ import os
 from flask import (Flask, render_template, redirect, request, flash,
                    session, jsonify)
 from flask_bcrypt import Bcrypt
-# from flask.bcrypt import generate_password_hash, check_password_hash
+# from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_debugtoolbar import DebugToolbarExtension
 from jinja2 import StrictUndefined
 from paypalrestsdk import Payment, configure, WebProfile
@@ -112,7 +112,7 @@ def process_registration():
 
     #run logic of encrypting password
     user_password = request.form.get('password')
-    pw_hash = bcrypt.generate_password_hash(user_password)
+    pw_hash = bcrypt.generate_password_hash(user_password, gensalt)
 
     fname = request.form.get('fname')
     lname = request.form.get('lname')
@@ -136,7 +136,7 @@ def process_registration():
 
     user_object = User.query.filter(User.user_email == user_email).first()
 
-    #If user object with email address provided doens't exist, add to db...
+    #If user object with email address provided doesn't exist, add to db...
     if not user_object :
         user_object = User(user_email=user_email,
                            password=pw_hash,
@@ -184,19 +184,22 @@ def show_login_form():
 def login_user():
     """process login form, redirect to donor page when it works"""
 
+
+    ##TODO
+    # Make hashed passwords work --> let me back into my site!
     #get form data
     user_email = request.form.get('email')
-    #
-    user_password = request.form.get('password')
-    pw_hash = bcrypt.generate_password_hash(user_password)
-
 
     #get the user object from the email
     user_object = User.query.filter(User.user_email == user_email).first()
 
+    user_password = request.form.get('password')
+    valid_password = bcrypt.check_password_hash(user_object.password, user_password)
+
+
     if user_object:
     #check password against email address
-        if user_object.password == pw_hash:
+        if valid_password:
 
             #TODO make last login work
             # #update user.last_login in database

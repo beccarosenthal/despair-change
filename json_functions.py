@@ -23,6 +23,13 @@ def json_user_impact_bar(user_object):
                                  .group_by(Transaction.org_id)
                                  .all())
 
+    # list of users referred by current user
+    referred_by_user = []
+    direct_referral = user_object.referred
+    for user in direct_referral:
+        referred_by_user.append(user.referred)
+
+
 
     donations_by_org = {Organization.query.get(org_id).name: amount
                         for amount, org_id in users_donations}

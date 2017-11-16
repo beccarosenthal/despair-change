@@ -63,7 +63,6 @@ var options = {
 
                 }};
 
-
 var ctx_total_bar = $("#totalImpactBarChart").get(0).getContext("2d");
 
 $.get('/total-impact-bar.json', function (data) {
