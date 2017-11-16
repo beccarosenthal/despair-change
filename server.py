@@ -319,23 +319,25 @@ def change_user_settings():
 def donation_page():
     """render page to donate"""
 
-    user_id = session['current_user']
+    if 'current_user' in session:
+        user_id = session['current_user']
     #get all org objects that user has designated as a favorite at any point
-    fave_orgs = (Organization.query
+        fave_orgs = (Organization.query
                              .join(UserOrg, Organization.org_id == UserOrg.org_id)
                              .filter(UserOrg.user_id == user_id)
                              .order_by(UserOrg.rank)
                              .all())
 
-    # If user doesn't have any UserOrgs, send over the whole org list
 
-    # if not fave_org_id:
-    fave_org_ids = [org.org_id for org in fave_orgs]
-    #SQL Alchemy syntax to get all orgs whose id are not in fave_org_ids
-    other_orgs = Organization.query.filter(~Organization.org_id.in_(fave_org_ids)).all()
+        # if not fave_org_id:
+        fave_org_ids = [org.org_id for org in fave_orgs]
+        #SQL Alchemy syntax to get all orgs whose id are not in fave_org_ids
+        other_orgs = Organization.query.filter(~Organization.org_id.in_(fave_org_ids)).all()
 
-    #create list with fave orgs at beginning, other orgs below
-    orgs = fave_orgs + other_orgs
+        #create list with fave orgs at beginning, other orgs below
+        orgs = fave_orgs + other_orgs
+    else:
+        orgs = Organization.query.all()
 
     return render_template('donate.html', orgs=orgs)
 
@@ -343,7 +345,7 @@ def donation_page():
 @app.route('/donated', methods=['POST'])
 def process_donation():
     """FIGURE THIS OUT"""
-
+    #TODO change process donation route to account for users logged in or referred
     user_id = session['current_user']
     org_id = request.form.get('org')
 

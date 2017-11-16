@@ -247,23 +247,23 @@ class Referral(db.Model):
                         nullable=False)
 
       ######RELATIONSHIP BETWEEN REFERRER AND REFERRED#########
-    #I am User1.  I referred User2 and User3. User3 referred #4.
+    #I am User1.  I referred User2 and User3. User3 referred User4.
     # User1.referrer is null, because no user referred me.
     #User2.referrer == User1
     # User1.referred == [User2, User3]
-    # User2.referrer = User1.
+    # User2.referrer == User1.
     #User2.referred == null
     #User3.referrer == User1
     #User3.referred == User4
-    #User1's total donation amount includes User2, User3, AND User4
+    #User1's total impact amount includes User2, User3, AND User4
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        repr_string ="<Referral ref_id={id} referring={referrer_id} referred={referred_id}>"
+        repr_string ="<Referral ref_id={id} referrer={referrer} referred={referred}>"
         return repr_string.format(id=self.ref_id,
-                                  referring=self.referrer,
-                                  referred=self.referred)
+                                  referrer=self.referrer_id,
+                                  referred=self.referred_id)
 
 
 ##############################################################################
@@ -297,9 +297,11 @@ def create_example_data():
 
     user_org = example_user_org()
 
+    referral1, referral2, referral3 = example_referral()
+
 
     #add transaction after users/org has been created for referential integrity
-    db.session.add_all([transaction, user_org])
+    db.session.add_all([transaction, user_org, referral1, referral2, referral3])
     db.session.commit()
 
 
@@ -431,6 +433,16 @@ def example_user_org():
                        rank=1)
 
     return user_org
+
+def example_referral():
+    """create sample referrals"""
+
+    referral1 = Referral(referrer_id=16, referred_id=17)
+    referral2 = Referral(referrer_id=16, referred_id=22)
+    referral3 = Referral(referrer_id=22, referred_id=15)
+
+    return referral1, referral2, referral3
+
 
 def set_val_table_id():
     """Set value for the incrementing table ids after seeding database"""
