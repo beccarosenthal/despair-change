@@ -62,6 +62,28 @@ class User(db.Model):
     #TODO if you add referrals, do something with this
     # referred_by = db.Column(db.Integer, nullable=True)
 
+
+
+    #I am User1.  I referred User2 and User3. User3 referred #4.
+    # User1.referrer is null, because no user referred me.
+    #User2.referrer == User1
+    # User1.referred == [User2, User3]
+    # User2.referrer = User1.
+    #User2.referred == null
+    #User3.referrer == User1
+    #User3.referred == User4
+    #User1's total donation amount includes User2, User3, AND User4
+    referred = db.relationship("User",
+                               secondary="referrals",
+                               primaryjoin="User.user_id==Referral.referrer_id",
+                               secondaryjoin="User.user_id==Referral.referred_id")
+    referrer = db.relationship("User",
+                               secondary="referrals",
+                               primaryjoin="User.user_id==Referral.referred_id",
+                               secondaryjoin="User.user_id==Referral.referrer_id",
+                               uselist=False)  #don't wrap this in a list--there will only be one or zero
+
+
     def __repr__(self):
         """Provide helpful representation when printed."""
         repr_string = "<User user_id={id} fname={first} lname={last}>"
@@ -84,6 +106,8 @@ class Organization(db.Model):
     mission_statement = db.Column(db.Text, nullable=True)
     website_url = db.Column(db.String(200), nullable=True)
     has_chapters = db.Column(db.Boolean, nullable=True)
+    short_name = db.Column(db.String(15), nullable=True)
+
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -120,6 +144,7 @@ class Transaction(db.Model):
                           nullable=False,
                           default=datetime.datetime.utcnow)
 
+    via_referral = db.Column(db.Boolean, nullable=True)
     status = db.Column(db.Enum("donation attempted",
                                "payment object built",
                                "paypal payment instantiated",
@@ -211,6 +236,41 @@ class State(db.Model):
     # state
     # zip code
     # pass
+
+class Referral(db.Model):
+    """Table connecting referred to referring users"""
+
+    __tablename__ = "referrals"
+
+    ref_id = db.Column(db.Integer,
+                       primary_key=True,
+                       autoincrement=True)
+    referrer_id = db.Column(db.Integer,
+                        db.ForeignKey('users.user_id'),
+                        nullable=False)
+    referred_id = db.Column(db.Integer,
+                        db.ForeignKey('users.user_id'),
+                        nullable=False)
+
+      ######RELATIONSHIP BETWEEN REFERRER AND REFERRED#########
+    #I am User1.  I referred User2 and User3. User3 referred #4.
+    # User1.referrer is null, because no user referred me.
+    #User2.referrer == User1
+    # User1.referred == [User2, User3]
+    # User2.referrer = User1.
+    #User2.referred == null
+    #User3.referrer == User1
+    #User3.referred == User4
+    #User1's total donation amount includes User2, User3, AND User4
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        repr_string ="<Referral ref_id={id} referring={referrer_id} referred={referred_id}>"
+        return repr_string.format(id=self.ref_id,
+                                  referring=self.referrer,
+                                  referred=self.referred)
+
 
 ##############################################################################
 # Making Fake Data
