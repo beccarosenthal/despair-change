@@ -106,7 +106,8 @@ class Organization(db.Model):
     mission_statement = db.Column(db.Text, nullable=True)
     website_url = db.Column(db.String(200), nullable=True)
     has_chapters = db.Column(db.Boolean, nullable=True)
-    short_name = db.Column(db.String(15), nullable=True)
+    #TODO add short name (and potentially medium length name too to db)
+    # short_name = db.Column(db.String(15), nullable=True)
 
 
     def __repr__(self):
