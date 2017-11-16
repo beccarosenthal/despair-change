@@ -7,7 +7,8 @@ import os
 # import Bcrypt
 from flask import (Flask, render_template, redirect, request, flash,
                    session, jsonify)
-from flask.bcrypt import hashpw, gensalt, generate_password_hash, check_password_hash
+from flask_bcrypt import Bcrypt
+# from flask.bcrypt import generate_password_hash, check_password_hash
 from flask_debugtoolbar import DebugToolbarExtension
 from jinja2 import StrictUndefined
 from paypalrestsdk import Payment, configure, WebProfile

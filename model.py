@@ -5,10 +5,6 @@ from sqlalchemy import func
 import datetime
 import os
 
-#TODO for when I want to encrypt passwords
-from flask.bcrypt import Bcrypt
-from bcrypt import hashpw, gensalt, generate_password_hash
-
 SAMPLE_PASSWORD = os.environ.get("SAMPLE_PASSWORD")
 BUYER_EMAIL = os.environ.get("BUYER_EMAIL")
 ORG_APP_EMAIL = os.environ.get("ORG_APP_EMAIL")
@@ -486,7 +482,6 @@ if __name__ == "__main__":
     # you in a state of being able to work with the database directly.
 
     from server import app
-    bcrypt = Bcrypt(app)
     connect_to_db(app)
     # db.create_all()
     # create_example_data()
