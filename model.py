@@ -136,7 +136,7 @@ class Transaction(db.Model):
                           nullable=False,
                           default=datetime.datetime.utcnow)
     #TODO add this to transactions already in db, figure out logic for how to change transaction if referred makes donation and then signs up
-    via_referral = db.Column(db.Boolean, nullable=True)
+    # via_referral = db.Column(db.Boolean, nullable=True)
 
 
     status = db.Column(db.Enum("donation attempted",
