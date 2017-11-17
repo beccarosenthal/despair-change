@@ -494,6 +494,21 @@ def show_all_user_donations(user_id):
     return total_donated
 
 
+def get_all_referred_by_user(user_object):
+    """given user_object, returns list of users in referred chain from primary user
+
+    #HYPOTHETICAL EXAMPLE:
+    #User1 referred User2 and User3. User3 referred User4.
+
+    >>>get_all_referred_by_user(User1)
+        >>>[User2, User3, User4]
+        """
+
+    ##recursive function
+    chain = []
+    for user in user_object.referred:
+        chain += [user] + get_all_referred_by_user(user)
+    return chain
 
 
 if __name__ == "__main__":

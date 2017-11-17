@@ -55,6 +55,12 @@ class User(db.Model):
     #in case I want to reference state data through the User
     state = db.relationship("State", backref="users")
 
+##TODO uncomment line below and figure out how to query for list of user's fave orgs
+##in order
+    # user_orgs = db.relationship("User",
+    #                             secondary="user_orgs",
+    #                             primaryjoin="User.user_id==UserOrg.user_id")
+
     ##########REFERRALS EXPLANATION######################
     #I am User1.  I referred User2 and User3. User3 referred User4.
     #User1.referrer is null, because no user referred me.
@@ -232,7 +238,18 @@ class State(db.Model):
     # pass
 
 class Referral(db.Model):
-    """Table connecting referred to referring users"""
+    """Table connecting referred to referring users
+
+      ######RELATIONSHIP BETWEEN REFERRER AND REFERRED#########
+    #I am User1.  I referred User2 and User3. User3 referred User4.
+    # User1.referrer is null, because no user referred me.
+    #User2.referrer == User1
+    # User1.referred == [User2, User3]
+    # User2.referrer == User1.
+    #User2.referred == null
+    #User3.referrer == User1
+    #User3.referred == User4
+    #User1's total impact amount includes User2, User3, AND User4"""
 
     __tablename__ = "referrals"
 
@@ -246,16 +263,6 @@ class Referral(db.Model):
                         db.ForeignKey('users.user_id'),
                         nullable=False)
 
-      ######RELATIONSHIP BETWEEN REFERRER AND REFERRED#########
-    #I am User1.  I referred User2 and User3. User3 referred User4.
-    # User1.referrer is null, because no user referred me.
-    #User2.referrer == User1
-    # User1.referred == [User2, User3]
-    # User2.referrer == User1.
-    #User2.referred == null
-    #User3.referrer == User1
-    #User3.referred == User4
-    #User1's total impact amount includes User2, User3, AND User4
 
     def __repr__(self):
         """Provide helpful representation when printed."""

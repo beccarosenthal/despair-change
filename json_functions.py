@@ -4,7 +4,7 @@ from sqlalchemy import func
 from model import (User, Organization, Transaction,
                    UserOrg, State,
                    connect_to_db, db)
-# from server import get_user_object_and_current_user_id
+
 
 BACKGROUND_COLORS = ["#C72DB3", "#D9A622", "#2CA248", "#6574DA",
                      "#C72D2D", "#2DC7C0", "#FF6384", "#FEFF29", ]
@@ -24,12 +24,9 @@ def json_user_impact_bar(user_object):
                                  .all())
 
     # list of users referred by current user
-    referred_by_user = []
-    direct_referral = user_object.referred
-    for user in direct_referral:
-        referred_by_user.append(user.referred)
+    referred_by_user = get_all_referred_by_user(user_object)
 
-
+    import pdb; pdb.set_trace()
 
     donations_by_org = {Organization.query.get(org_id).name: amount
                         for amount, org_id in users_donations}
@@ -99,3 +96,21 @@ def json_total_impact_bar():
             }
 
     return jsonify(data_dict)
+
+##TODO separate out query helper functions into its own file
+#############QUERY HELPER FUNCTION########
+def get_all_referred_by_user(user_object):
+    """given user_object, returns list of users in referred chain from primary user
+
+    #HYPOTHETICAL EXAMPLE:
+    #User1 referred User2 and User3. User3 referred User4.
+
+    >>>get_all_referred_by_user(User1)
+        >>>[User2, User3, User4]
+        """
+
+    ##recursive function
+    chain = []
+    for user in user_object.referred:
+        chain += [user] + get_all_referred_by_user(user)
+    return chain
