@@ -100,7 +100,6 @@ def json_stacked_user_impact_bar(user_object):
     #                     })
 
 
-
     data_dict = {
                 "labels": org_names,
                 "datasets": [
@@ -109,14 +108,32 @@ def json_stacked_user_impact_bar(user_object):
                         "backgroundColor": BACKGROUND_COLORS[0],
                         "hoverBackgroundColor": HOVER_BACKGROUND_COLORS[1]
                     },
-
                     {   "label": ["My Footprint"],
                         "data": footprint_data,
                         "backgroundColor": HOVER_BACKGROUND_COLORS[0],
                         "hoverBackgroundColor": BACKGROUND_COLORS[1]
                     },
+
+
                     ]
             }
+    print
+    print "data dict before"
+    print data_dict
+    ##TODO figure out how to make sure that no footprint data shows up if know footprint
+    # if footprint_data:
+    #     data_dict['datasets'].append({   "label": ["My Footprint"],
+    #                     "data": footprint_data,
+    #                     "backgroundColor": HOVER_BACKGROUND_COLORS[0],
+    #                     "hoverBackgroundColor": BACKGROUND_COLORS[1]
+    #                 },)
+
+    print "footprint data"
+    print footprint_data
+    print
+    print "data_dict after"
+    print
+    print data_dict
 
     return jsonify(data_dict)
 

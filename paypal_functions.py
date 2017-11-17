@@ -50,7 +50,7 @@ def generate_payment_object(user_id, org_id):
             "address_override": 1
         },
         "flow_config": {
-            "landing_page_type": "login",
+            "landing_page_type": "login", #try billing
             "bank_txn_pending_url": "http://localhost:5000/dashboard",
 
         }
