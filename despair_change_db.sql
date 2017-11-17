@@ -293,9 +293,9 @@ ALTER TABLE ONLY users ALTER COLUMN user_id SET DEFAULT nextval('users_user_id_s
 COPY organizations (org_id, name, payee_email, logo_url, mission_statement, website_url, has_chapters) FROM stdin;
 8	Institute of Finishing Projects	beccarosenthal-facilitator@gmail.com	https://media.makeameme.org/created/how-about-getting.jpg	At the Institute of Finishing Projects, we finish proje	http://www.pawneeindiana.com/	f
 9	Rent-A-Swag	beccarosenthal-facilitator-1@gmail.com	https://ih1.redbubble.net/image.294685880.6679/flat,800x800,075,f.jpg	At Rent-A-Swag, we bring you the dopest shirts, the swankiest jackets, the slickest cardigans, the flashiest fedoras, the hottest ties, the snazziest canes and more!	http://parksandrecreation.wikia.com/wiki/Rent-A-Swag	f
-13	Alternative US National Parks Service	altnps@gmail.com	https://westernnews.media.clients.ellingtoncms.com/img/photos/2017/02/07/Resist.merge_t715.jpg?529764a1de2bdd0f74a9fb4f856b01a9d617b3e9	45 messed with the wrong set of vested park rangers.	https://twitter.com/altnatparkser?lang=en	f
-15	The Derek Zoolander Center For Kids Who Can't Read Good And Wanna Learn To Do Other Stuff Good Too	readingcenter@gmail.com	http://cdn.hexjam.com/editorial_service/bases/images/000/009/138/xlarge/zoolander-for-blog.jpg?1427992126	We teach you that there's more to life than being really, really good looking	https://dzssite.wordpress.com/	f
-16	Alt ACLU	altaclu@gmail.com	https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/American_Civil_Liberties_Union_logo.svg/1280px-American_Civil_Liberties_Union_logo.svg.png	An organization that strives to achieve all of the goals of the ACLU with none of the resources.	https://www.aclu.org/about-aclu	t
+13	Alternative US National Parks Service	altnps@gmail.com	http://bit.ly/2ySo6D7	45 messed with the wrong set of vested park rangers.	https://twitter.com/altnatparkser?lang=en	f
+15	The Derek Zoolander Center For Kids Who Can't Read Good And Wanna Learn To Do Other Stuff Good Too	readingcenter@gmail.com	http://bit.ly/2iq2LuI	We teach you that there's more to life than being really, really good looking	https://dzssite.wordpress.com/	f
+16	Alt ACLU	altaclu@gmail.com	http://bit.ly/2hMlwex	An organization that strives to achieve all of the goals of the ACLU with none of the resources.	https://www.aclu.org/about-aclu	t
 \.
 
 
@@ -313,6 +313,8 @@ SELECT pg_catalog.setval('organizations_org_id_seq', 16, true);
 COPY referrals (ref_id, referrer_id, referred_id) FROM stdin;
 1	16	17
 2	16	22
+3	22	15
+4	15	23
 \.
 
 
@@ -320,7 +322,7 @@ COPY referrals (ref_id, referrer_id, referred_id) FROM stdin;
 -- Name: referrals_ref_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('referrals_ref_id_seq', 2, true);
+SELECT pg_catalog.setval('referrals_ref_id_seq', 4, true);
 
 
 --
@@ -466,6 +468,15 @@ COPY transactions (transaction_id, org_id, user_id, payment_id, amount, "timesta
 111	16	16	PAY-62D5161183904624YLIF5U6A	1	2017-11-15 06:10:39.919817	pending delivery to org
 112	9	15	PAY-4AT21635XF1611823LIGLMVY	1	2017-11-15 21:49:03.767609	pending delivery to org
 113	16	15	PAY-8X647050L1944882JLIGLM7A	1	2017-11-15 21:49:46.598321	pending delivery to org
+114	16	23	PAY-9PP57812E4754033YLIHBALI	1	2017-11-16 22:24:43.977206	pending delivery to org
+115	16	23	PAY-30R8406069881852ULIHG5EQ	1	2017-11-17 05:07:03.392449	pending delivery to org
+116	13	23	PAY-0KF848189S7725242LIHG5RA	1	2017-11-17 05:08:16.81669	pending delivery to org
+117	13	20	PAY-6SL46698A0662293JLIHG7TI	1	2017-11-17 05:12:44.845	paypal payment instantiated
+118	9	20	PAY-63C3422285366423CLIHHAGI	1	2017-11-17 05:14:00.697669	pending delivery to org
+119	16	16	PAY-6HR25324VS620715DLIHUVCQ	1	2017-11-17 20:46:00.253287	pending delivery to org
+120	16	23	PAY-6TV32220AT4643157LIHVSXI	5	2017-11-17 21:49:11.682272	pending delivery to org
+121	16	23	PAY-2HH93817NK717992VLIHW43Q	10	2017-11-17 23:19:09.389972	pending delivery to org
+122	13	23	PAY-4VD18096PK197800XLIHW7RY	10	2017-11-17 23:24:54.777449	pending delivery to org
 \.
 
 
@@ -473,7 +484,7 @@ COPY transactions (transaction_id, org_id, user_id, payment_id, amount, "timesta
 -- Name: transactions_transaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('transactions_transaction_id_seq', 113, true);
+SELECT pg_catalog.setval('transactions_transaction_id_seq', 122, true);
 
 
 --
@@ -488,6 +499,11 @@ COPY user_orgs (user_org_id, user_id, org_id, rank) FROM stdin;
 20	22	15	1
 21	22	9	2
 22	22	8	3
+24	16	16	2
+25	16	13	3
+23	23	16	1
+28	23	9	2
+29	23	13	3
 \.
 
 
@@ -495,7 +511,7 @@ COPY user_orgs (user_org_id, user_id, org_id, rank) FROM stdin;
 -- Name: user_orgs_user_org_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('user_orgs_user_org_id_seq', 22, true);
+SELECT pg_catalog.setval('user_orgs_user_org_id_seq', 29, true);
 
 
 --
@@ -503,11 +519,13 @@ SELECT pg_catalog.setval('user_orgs_user_org_id_seq', 22, true);
 --
 
 COPY users (user_id, user_email, password, fname, lname, age, zipcode, state_code, default_amount, phone, created_at, last_login) FROM stdin;
-16	beccarosenthal-buyer@gmail.com	$2b$12$PjvpCKUPlicKTYI0JKc2weF.yysEcFBkttOu5qs2/rRPYNQZOdHXC	Glen	Coco	17	94611	CA	1	4087379192	2017-11-09 23:15:18.596606	2017-11-09 23:15:18.596611
-15	fuckingperfect@iampink.com	$2b$12$JBK0N3goBNaSYxZA2PkGV.9H5kDc2CA9rePhu2vUOrb3QQka6gkSC	Alicia	Moore	38	90210	CA	1	3108008135	2017-11-09 23:15:18.593836	2017-11-09 23:15:18.593844
-17	beccarosenthal-buyer-1@gmail.com	$2b$12$A60FUSeVYnKxKdI.lyMrNuwzfz7zrKwHQczN6.gjeCoi7pOPFOGTS	Chinandler	Bong	40	10012	NY	1	4087379192	2017-11-09 23:15:18.597031	2017-11-09 23:15:18.597036
-20	vomitfreesince93@mosbiusdesign.com	$2b$12$IPoQGSdu2rU/p8ksSabcQe/OTG7OHFU2cZBCXdAIfrbGMlam/DVD6	Ted	Mosby	52	02251	DE	1	6546546541	2017-11-10 03:47:24.575641	2017-11-10 03:47:24.575647
-22	hello@itsme.com	$2b$12$KwNMZ0wsNp/g1OCjRfil4OLfPgkmSxHIPtMvgcpPWC0.j2.UhRdFG	Adele	Atkins	28	94644	CA	1	8184898484	2017-11-15 00:24:42.617496	2017-11-15 00:24:42.617512
+16	beccarosenthal-buyer@gmail.com	$2b$10$oymYTQqFKfP2OYZaxgPrDOll96E80zQ85miBEKztTrPb44o9etqfm	Glen	Coco	17	94611	CA	1	4087379192	2017-11-09 23:15:18.596606	2017-11-09 23:15:18.596611
+15	fuckingperfect@iampink.com	$2b$10$Gn3KoZJFpVLv/DdKiHCBfuzo8vifZJ3d9oGcZTyWUNUK68BQMjFam	Alicia	Moore	38	90210	CA	1	3108008135	2017-11-09 23:15:18.593836	2017-11-09 23:15:18.593844
+17	beccarosenthal-buyer-1@gmail.com	$2b$10$CvvqL8McViaYqBlADuZQ8OSjxbtwqzvCe.8geRLrjiE0YNGMhKXOO	Chinandler	Bong	40	10012	NY	1	4087379192	2017-11-09 23:15:18.597031	2017-11-09 23:15:18.597036
+20	vomitfreesince93@mosbiusdesign.com	$2b$10$hHTf1ddsD2HxGPyr0r.28OP1tC2V2XW1HvaWZg5ZZw4JGExTkUfau	Ted	Mosby	52	02251	DE	1	6546546541	2017-11-10 03:47:24.575641	2017-11-10 03:47:24.575647
+22	hello@itsme.com	$2b$10$zTIk8Lpy7pLk64mOGdJqZ.2kPzgby81Wm0bMxcPhP3fESqV0VJdYy	Adele	Atkins	28	94644	CA	1	8184898484	2017-11-15 00:24:42.617496	2017-11-15 00:24:42.617512
+23	beccarosenthal-buyer-2@gmail.com	$2b$10$deWlU8Lx2lkrqNuDsRRwDOble9V/f8NHCuv.XRlaAz8QkO.ZdzdKi	Rebecca	Bunch	29	91723	CA	10	9175225614	2017-11-16 21:53:43.716692	2017-11-16 21:53:43.716705
+27	EMAIL_SUBJECT_TO_CHANGE	12345678	Anonymous	User	\N	\N	\N	1	\N	2017-11-17 23:39:13.883366	2017-11-17 23:39:13.883373
 \.
 
 
@@ -515,7 +533,7 @@ COPY users (user_id, user_email, password, fname, lname, age, zipcode, state_cod
 -- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('users_user_id_seq', 22, true);
+SELECT pg_catalog.setval('users_user_id_seq', 27, true);
 
 
 --

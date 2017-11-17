@@ -32,7 +32,7 @@ class User(db.Model):
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_email = db.Column(db.String(64), nullable=False)
-    password = db.Column(db.String(150), nullable=False)
+    password = db.Column(db.String(150), nullable=True)
     fname = db.Column(db.String(15), nullable=False)
     lname = db.Column(db.String(30), nullable=False)
     age = db.Column(db.Integer, nullable=True)
@@ -103,6 +103,7 @@ class Organization(db.Model):
     mission_statement = db.Column(db.Text, nullable=True)
     website_url = db.Column(db.String(200), nullable=True)
     has_chapters = db.Column(db.Boolean, nullable=True)
+
     #TODO add short name (and potentially medium length name too to db)
     # short_name = db.Column(db.String(15), nullable=True)
 
