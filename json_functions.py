@@ -75,7 +75,7 @@ def json_stacked_user_impact_bar(user_object):
         if my_donations > 0 or footprint_data > 0:
             user_data.append(my_donations)
             footprint_data.append(donation_footprint)
-            org_names.append(org.name)
+            org_names.append(org.name[:20])
 
         #TODO figure out why this errors out
         # donations[org.name]['Additional Donations'] = total_donations - my_donations - donation_footprint
@@ -106,14 +106,14 @@ def json_stacked_user_impact_bar(user_object):
                 "datasets": [
                     {   "label": ["My Donations"],
                         "data": user_data,
-                        "backgroundColor": BACKGROUND_COLORS,
-                        "hoverBackgroundColor": HOVER_BACKGROUND_COLORS
+                        "backgroundColor": BACKGROUND_COLORS[0],
+                        "hoverBackgroundColor": HOVER_BACKGROUND_COLORS[1]
                     },
 
                     {   "label": ["My Footprint"],
                         "data": footprint_data,
-                        "backgroundColor": HOVER_BACKGROUND_COLORS,
-                        "hoverBackgroundColor": BACKGROUND_COLORS
+                        "backgroundColor": HOVER_BACKGROUND_COLORS[0],
+                        "hoverBackgroundColor": BACKGROUND_COLORS[1]
                     },
                     ]
             }

@@ -88,7 +88,7 @@ var stackedOptions = {
                    labels: {
                         display: true,
                         boxWidth: 80,
-                        fontColor: '#000080'
+                        fontColor: '#000000'
                     }
                   },
                 // title: {
