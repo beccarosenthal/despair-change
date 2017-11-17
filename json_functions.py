@@ -45,19 +45,22 @@ def json_stacked_user_impact_bar(user_object):
     #Create default dict
     donations = defaultdict(dict)
 
+    user_data = [] #dictionaries with donor_category: amount pairs (my donations, donation footprint, etc)   user_data = [] #amount of money user gave per org in order of orgs
+    footprint_data = [] #amount of money footprint gave per org in order of orgs
+    org_names = [] #name of org
     for org in orgs:
         #query for sum of my donations to each org
         my_donations = (db.session.query(func.sum(Transaction.amount))
             .filter(Transaction.org_id == org.org_id,
                 Transaction.status == "pending delivery to org",
                 Transaction.user_id == user_object.user_id)
-            .all())
+            .all())[0][0]
 
         donation_footprint = (db.session.query(func.sum(Transaction.amount))
             .filter(Transaction.org_id == org.org_id,
                 Transaction.status == "pending delivery to org",
                 Transaction.user_id.in_(referred_user_ids))
-            .all())
+            .all())[0][0]
 
         # total_donations = (db.session.query(func.sum(Transaction.amount))
         #     .filter(Transaction.org_id == org.org_id,
@@ -65,8 +68,15 @@ def json_stacked_user_impact_bar(user_object):
         #     .all())
 
         #queries above return list of tuples with one item
-        donations[org.name]['My Donations'] = my_donations[0][0]
-        donations[org.name]['My Footprint'] = donation_footprint[0][0]
+        donations[org.name]['My Donations'] = my_donations
+        donations[org.name]['My Footprint'] = donation_footprint
+
+        #add org and data to the lists going into the datasets only if there's data
+        if my_donations > 0 or footprint_data > 0:
+            user_data.append(my_donations)
+            footprint_data.append(donation_footprint)
+            org_names.append(org.name)
+
         #TODO figure out why this errors out
         # donations[org.name]['Additional Donations'] = total_donations - my_donations - donation_footprint
 
@@ -75,14 +85,12 @@ def json_stacked_user_impact_bar(user_object):
         ### 3 datasets - one for user, one for referrals, one for all users
         ### so that users can interactively show/get rid of the other info
 
-    org_names = [] #name of org
+
     data = []
     datasets = []
-    user_data = [] #dictionaries with donor_category: amount pairs (my donations, donation footprint, etc)   user_data = [] #amount of money user gave per org in order of orgs
-    footprint_data = [] #amount of money footprint gave per org in order of orgs
 
     for org, donations_dict in donations.items():
-        org_names.append(org[:30])
+        # org_names.append(org[:30])
         data.append(donations_dict)
 
     # for i in range(len(data)):
@@ -97,13 +105,13 @@ def json_stacked_user_impact_bar(user_object):
                 "labels": org_names,
                 "datasets": [
                     {   "label": ["My Donations"],
-                        "data": [4, 3, 3, 2, 1],
+                        "data": user_data,
                         "backgroundColor": BACKGROUND_COLORS,
                         "hoverBackgroundColor": HOVER_BACKGROUND_COLORS
                     },
 
                     {   "label": ["My Footprint"],
-                        "data": [9, 11, 2, 1, 2],
+                        "data": footprint_data,
                         "backgroundColor": HOVER_BACKGROUND_COLORS,
                         "hoverBackgroundColor": BACKGROUND_COLORS
                     },
