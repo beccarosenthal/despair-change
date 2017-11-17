@@ -99,6 +99,7 @@ var stackedOptions = {
                 scales: {
                     xAxes: [{
                       // barThickness: 50,
+                      stacked: true,
                       barPercentage: 0.5,
                       gridLines: {
                         display: false,
@@ -117,6 +118,7 @@ var stackedOptions = {
                       }
                     }],
                     yAxes: [{
+                      stacked: true,
                       gridLines: {
                         color: "grey",
                       },
@@ -147,8 +149,8 @@ var ctx_stacked_bar = $("#stackedUserImpactBarChart").get(0).getContext("2d");
 
 $.get('/stacked-user-impact-bar.json', function (data) {
     console.log(data);
-    console.log("user impact bar function");
-    var stackedBarChart = new Chart(ctx_bar, {
+    console.log("stacked impact bar function");
+    var stackedBarChart = new Chart(ctx_stacked_bar, {
                                             type: 'bar',
                                             data: data,
                                             options: stackedOptions
