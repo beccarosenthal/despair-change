@@ -42,9 +42,19 @@
                 <option value="{{org.org_id}}">{{org.name}}</option>
             {% endfor %}
         </select>
+        <br>
+        <p><b>Default Payment Amount</b></p>
+        <p>Despair Change uses relies on micro donations from users to create a large collective impact. Your default payment amount should be an amount of money that feels negligible. Larger donations are great, but the point of Despair Change is to generate large numbers of micro-donations, not small numbers of larger donations.</p>
+        $1<input type="radio" name="default_value" value="1">
+        $2<input type="radio" name="default_value" value="2">
+        $5<input type="radio" name="default_value" value="5">
+        $10<input type="radio" name="default_value" value="10">
+        Other<input type="text" name="default_value">
+
         <input type="submit">
 
     </form>
+
 <div id="settings"></div>
 
 <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
