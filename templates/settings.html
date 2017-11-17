@@ -21,9 +21,11 @@
 
 {% endif %}
 
+<!-- TODO add checkboxes for do you want to change each setting, and if they say yes, have the change thing appear -->
+
 </div>
 <!-- TODO add Javascript to make sure that each of the ranked items are different before submission -->
-    <form id="user_settings" action="/adjust_settings" required>
+    <form id="user_settings" action="/adjust_settings">
         <select name="rank_1">
             <option value=''>#1</option>
             {% for org in orgs %}
@@ -41,19 +43,25 @@
             {% for org in orgs %}
                 <option value="{{org.org_id}}">{{org.name}}</option>
             {% endfor %}
-        </select>
-        <br>
+        </select><br>
+
         <p><b>Default Payment Amount</b></p>
         <p>Despair Change uses relies on micro donations from users to create a large collective impact. Your default payment amount should be an amount of money that feels negligible. Larger donations are great, but the point of Despair Change is to generate large numbers of micro-donations, not small numbers of larger donations.</p>
-        $1<input type="radio" name="default_value" value="1">
-        $2<input type="radio" name="default_value" value="2">
-        $5<input type="radio" name="default_value" value="5">
-        $10<input type="radio" name="default_value" value="10">
-        Other<input type="text" name="default_value">
+        <p>Your current default amount is ${{user_obj.default_amount}}0. If you would like to change it, click one of the amounts below or enter an amount.</p>
 
-        <input type="submit">
+        $1<input type="radio" name="default_amount" value="1">
+        $2<input type="radio" name="default_amount" value="2">
+        $5<input type="radio" name="default_amount" value="5">
+        $10<input type="radio" name="default_amount" value="10">
+        $20<input type="radio" name="default_amount" value="20">
+
+    <input type="submit">
+        <!-- TODO Add javacsript to make sure that this is a number -->
+        <!-- Other<input type="text" name="default_value"> -->
 
     </form>
+
+    <br>
 
 <div id="settings"></div>
 

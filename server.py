@@ -285,12 +285,19 @@ def change_user_settings():
     print "we're here!"
 
     user_id = session['current_user']
+    user_obj = User.query.get(user_id)
     ##Get the info for what org_id users designated for which rank
     rank_1 = request.args.get("rank_1")
     rank_2 = request.args.get("rank_2")
-    rank_3= request.args.get("rank_3")
+    rank_3 = request.args.get("rank_3")
+
+    print "rank 1, 2, and 3"
+    print rank_1, rank_2, rank_3
+    print
+
 
     for i in range(1, 4):
+
         if request.args.get("rank_" + str(i)):
             rank = request.args.get("rank_" + str(i))
 
@@ -311,8 +318,19 @@ def change_user_settings():
                                        rank=i)
                 db.session.add(new_user_org)
 
-        db.session.commit()
 
+    new_default_amount = request.args.get("default_amount")
+    print "new_default_amount:", new_default_amount
+
+    print "check datatypes on default amount old and new"
+    import pdb; pdb.set_trace()
+
+    if new_default_amount:
+        user_obj.default_amount = int(new_default_amount)
+
+    db.session.commit()
+    print "make sure user_org and default amount changed in db"
+    import pdb; pdb.set_trace()
 
     return redirect("/dashboard")
 
