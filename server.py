@@ -16,7 +16,8 @@ from sqlalchemy import func
 
 #import from my files
 from json_functions import (json_user_impact_bar,
-                            json_total_impact_bar)
+                            json_total_impact_bar,
+                            json_stacked_user_impact_bar)
 from model import (User, Organization, Transaction,
                    UserOrg, State,
                    connect_to_db, db)
@@ -427,6 +428,16 @@ def cancel_payment():
     return redirect('/')
 #Routes about Data vis
 ##############################################################################
+@app.route('/stacked-user-impact-bar.json')
+def stacked_user_impact_data():
+    """Return bar chart data about user impact."""
+
+    user_object, current_user_id = get_user_object_and_current_user_id()
+
+    data_dict = json_stacked_user_impact_bar(user_object)
+    return data_dict
+
+
 @app.route('/user-impact-bar.json')
 def user_impact_data():
     """Return bar chart data about user impact."""
@@ -494,21 +505,7 @@ def show_all_user_donations(user_id):
     return total_donated
 
 
-def get_all_referred_by_user(user_object):
-    """given user_object, returns list of users in referred chain from primary user
 
-    #HYPOTHETICAL EXAMPLE:
-    #User1 referred User2 and User3. User3 referred User4.
-
-    >>>get_all_referred_by_user(User1)
-        >>>[User2, User3, User4]
-        """
-
-    ##recursive function
-    chain = []
-    for user in user_object.referred:
-        chain += [user] + get_all_referred_by_user(user)
-    return chain
 
 
 if __name__ == "__main__":
