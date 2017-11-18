@@ -242,11 +242,6 @@ def show_user_dashboard():
                                .filter(Transaction.user_id == current_user_id)
                                .first())
 
-    # donations = {}
-    # for amount, org_id in total_donated_by_org:
-    #     org_name = Organization.query.get(org_id).name
-    #     donations[org_name] = amount
-
     #Create dictionary with key value pairs of {org: amt donated by user}
     donations_by_org = query_for_donations_by_org_dict(current_user_id)
 
@@ -377,12 +372,7 @@ def process_donation():
     amount = User.query.get(user_id).default_amount
 
     #TODO Use regex to get amount to be a string format that paypal can take
-    transaction = Transaction(org_id=org_id,
-                              user_id=user_id,
-                              payment_id="Unrequested",
-                              amount=amount,
-                              status="donation attempted"
-                              )
+    # transaction =
 
     print "****transaction object built, prepared to be added to db"
 

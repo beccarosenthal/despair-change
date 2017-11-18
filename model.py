@@ -143,8 +143,15 @@ class Transaction(db.Model):
                           nullable=False,
                           default=datetime.datetime.utcnow)
     #TODO add this to transactions already in db, figure out logic for how to change transaction if referred makes donation and then signs up
-    # via_referral = db.Column(db.Boolean, nullable=True)
+    # via_referral = db.Column(db.Boolean,
+                             # nullable=True,
+                             # default=False)
+    #TODO figure out if I can make
+    # referrer_email = db.Column(db.String,
+    #                      db.ForeignKey('users.user_email'),
+    #                      nullable=True)
 
+    ##TODO: Change status of all pending delivery to org transactions to delivered to org
 
     status = db.Column(db.Enum("donation attempted",
                                "payment object built",

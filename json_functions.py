@@ -151,23 +151,17 @@ def json_user_impact_bar(user_object):
             donations_by_org[org_name] = (donations_by_org.get(org_name, 0) +
                                           transaction.amount)
 
-
     orgs = [] #name of org
     data = [] #amount of money
 
     for org, amount in donations_by_org.items():
         orgs.append(org[:30])
         data.append(amount)
-    #####TODO Add datasets to correspond with the referrals and total donations
-    ###and make those labels different on stacked
-        ### 3 datasets - one for user, one for referrals, one for all users
-        ### so that users can interactively show/get rid of the other info
-
 
     data_dict = {
                 "labels": orgs,
                 "datasets": [
-                    {   "label": ["My Donations"],
+                    {   "label": "My Donations",
                         "data": data,
                         "backgroundColor": BACKGROUND_COLORS,
                         "hoverBackgroundColor": HOVER_BACKGROUND_COLORS
