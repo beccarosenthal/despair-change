@@ -35,6 +35,7 @@ var options = {
                         display: true,
                         labelString: "Organization",
                         fontColor: "black",
+
                         // fontSize: 14
                       }
                     }],

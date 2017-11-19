@@ -226,7 +226,6 @@ class DespairChangeLoggedIn(TestCase):
         db.session.close()
         db.drop_all()
 
-    ##currently errors out because no org obj being passed through
     def test_donate_while_logged_in(self):
         """Test donate page."""
         route = self.client.get('/donate')

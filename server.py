@@ -372,7 +372,12 @@ def process_donation():
     amount = User.query.get(user_id).default_amount
 
     #TODO Use regex to get amount to be a string format that paypal can take
-    # transaction =
+    transaction = Transaction(org_id=org_id,
+                              user_id=user_id,
+                              payment_id="Unrequested",
+                              amount=amount,
+                              status="donation attempted"
+                              )
 
     print "****transaction object built, prepared to be added to db"
 
