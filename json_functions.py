@@ -54,23 +54,16 @@ def json_stacked_user_impact_bar(user_object):
         #query for sum of my donations to each org
         print "org:", org
 
-        print
         my_donations = (db.session.query(func.sum(Transaction.amount))
             .filter(Transaction.org_id == org.org_id,
                 Transaction.status == "pending delivery to org",
                 Transaction.user_id == user_object.user_id)
             .all())[0][0]
-        print "************"
-        print "my donations"
-        print my_donations
         donation_footprint = (db.session.query(func.sum(Transaction.amount))
             .filter(Transaction.org_id == org.org_id,
                 Transaction.status == "pending delivery to org",
                 Transaction.user_id.in_(referred_user_ids))
             .all())[0][0]
-        print "************"
-        print "data footprint"
-        print donation_footprint
         # total_donations = (db.session.query(func.sum(Transaction.amount))
         #     .filter(Transaction.org_id == org.org_id,
         #         Transaction.status == "pending delivery to org")
@@ -97,6 +90,8 @@ def json_stacked_user_impact_bar(user_object):
 
     data = []
     datasets = []
+    print footprint_data
+    print "footprint_data"
 
     for org, donations_dict in donations.items():
         # org_names.append(org[:30])
@@ -132,11 +127,12 @@ def json_stacked_user_impact_bar(user_object):
     print
     print "data dict before"
     print data_dict
-    foot_print_data_bool = False
+
 
     for item in footprint_data:
         if item != None:
-            data_dict.append(footprint_dataset)
+            data_dict["datasets"] += footprint_dataset
+            break
 
     ##TODO figure out how to make sure that no footprint data shows up if know footprint
     # if footprint_data:
