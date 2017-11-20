@@ -472,8 +472,6 @@ def total_impact_data():
 #HELPER FUNCTIONS
 ############################################################################
 
-def verify_password():
-    """verify users password"""
 
 
 #Helper Functions with queries
