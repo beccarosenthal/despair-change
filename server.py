@@ -245,13 +245,16 @@ def show_user_dashboard():
     #Create dictionary with key value pairs of {org: amt donated by user}
     donations_by_org = query_for_donations_by_org_dict(current_user_id)
 
+    #Get info about user_org with rank #1 to generate referral url
+    fave_org = get_current_faves(user_object)[0]
 
     #TODO use regex to make total donated and amounts look like dollar amounts
     print total_donated
     return render_template('dashboard.html',
                            user=user_object,
                            total_donated=total_donated[0],
-                           donations_by_org=donations_by_org)
+                           donations_by_org=donations_by_org,
+                           fave_org=fave_org)
 
 @app.route("/settings")
 def show_user_settings():
@@ -261,8 +264,10 @@ def show_user_settings():
 
     all_orgs = Organization.query.all()
 
-    ##Get list of current user_orgs
+    ##Get current favorite org for user
     current_faves = get_current_faves(user_obj)
+    for fave in current_faves:
+        print fave.org_id, fave.rank
 
     ##If you have a current #1, it is ___. Would you like to change it? What would you like to be your 2 /3 spots
 
@@ -400,6 +405,22 @@ def process_donation():
 
 
 #   Figure this part out
+
+@app.route('/donated/referred', methods=['GET'])
+def do_referred_payment():
+    """do the thing for payments with referrals"""
+
+    print "in donated/referred"
+    org_id = request.args.get("org_id")
+    referrer_id = request.args.get("referrer_id")
+
+    print org_id, "org id from url"
+    print referrer_id, "referrer id from url"
+
+    import pdb; pdb.set_trace()
+    return redirect("/login")
+
+
 @app.route('/process', methods=['GET'])
 def process_payment():
     """processes payment"""
