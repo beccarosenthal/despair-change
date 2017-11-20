@@ -142,10 +142,10 @@ class Transaction(db.Model):
     timestamp = db.Column(db.DateTime,
                           nullable=False,
                           default=datetime.datetime.utcnow)
-    #TODO add this to transactions already in db, figure out logic for how to change transaction if referred makes donation and then signs up
+    # #TODO add this to transactions already in db, figure out logic for how to change transaction if referred makes donation and then signs up
     # via_referral = db.Column(db.Boolean,
-                             # nullable=True,
-                             # default=False)
+    #                          nullable=True,
+    #                          default=False)
     #TODO figure out if I can make
     # referrer_email = db.Column(db.String,
     #                      db.ForeignKey('users.user_email'),

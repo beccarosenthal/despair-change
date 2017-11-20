@@ -21,7 +21,8 @@ from json_functions import (json_user_impact_bar,
 from model import (User, Organization, Transaction,
                    UserOrg, State,
                    connect_to_db, db)
-from paypal_functions import generate_payment_object, api, execute_payment
+from paypal_functions import (generate_payment_object, api, execute_payment,
+                              generate_payment_object_referral)
 
 
 app = Flask(__name__)
@@ -380,10 +381,6 @@ def process_donation():
 
     print "****transaction object built, added to db"
 
-    # import pdb; pdb.set_trace()
-
-
-
     #generate the payment object using information from the database
     redirect_url, payment_object = generate_payment_object(user_id,
                                                            org_id)
@@ -411,13 +408,26 @@ def do_referred_payment():
     print org_id, "org id from url"
     print referrer_id, "referrer id from url"
 
+    user_id = User.query.filter(User.fname == "Anonymous").one().user_id
+    print user_id, "user_id"
+
     #add referrer_id to the session so we can add the Referral
     session['referrer_id'] = referrer_id
 
-    transaction = create_transaction_object(USER, org_id)
+    transaction = create_transaction_object(user_id, org_id)
 
-    import pdb; pdb.set_trace()
-    return redirect("/login")
+    #generate the payment object using information from the database
+    redirect_url, payment_object = generate_payment_object_referral(user_id,
+                                                                    org_id)
+
+    #update transaction object in the database to add paypal's ID
+    transaction.payment_id = payment_object.id
+    transaction.status = "paypal payment instantiated"
+
+    # import pdb; pdb.set_trace()
+    db.session.commit()
+
+    return redirect(redirect_url)
 
 
 @app.route('/process', methods=['GET'])
@@ -449,7 +459,32 @@ def process_payment():
         transaction.status = "pending delivery to org"
         db.session.commit()
 
-    return redirect('/dashboard')
+    if 'referrer_id' not in session:
+        return redirect('/dashboard')
+
+    else:
+        process_referral(payment, Transaction)
+
+
+
+
+    #if it's a non referral payment, redirect to dashboard
+
+def process_referral(paypal_payment, transaction):
+    """process referral payment"""
+
+    payment_dict = paypal_payment.to_dict()
+
+    import pdb; pdb.set_trace()
+
+
+    #         new user would be created pulling info out of paypal payment object
+    #     transaction in DB gets updated with new user_id
+    #     referral object in db gets created with user ids
+    # clear session at the end
+    # successful payment url would be login/referral, which would be for users that have
+
+    #if it's a non referral payment, redirect to dashboard
 
 
 @app.route('/cancel')
@@ -535,6 +570,20 @@ def query_for_donations_by_org_dict(user_id):
                         for amount, org_id in users_donations}
 
     return donations_by_org
+
+#TODO figure out how to make this function work if tons of users are using the site at same time
+    # so include a user ID
+def get_current_transaction(user_obj):
+    """get most recent transaction in database"""
+
+    current_transaction = (Transaction.query
+                                      .filter(Transaction.user_id == user_obj.user_id)
+                                      .order_by(Transaction.transaction_id)
+                                      .all()[-1])
+
+    return current_transaction
+
+
 
 #not sure if this works or not...
 def show_all_user_donations(user_id):
