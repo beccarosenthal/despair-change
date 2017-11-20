@@ -376,19 +376,13 @@ def process_donation():
     amount = User.query.get(user_id).default_amount
 
     #TODO Use regex to get amount to be a string format that paypal can take
-    transaction = Transaction(org_id=org_id,
-                              user_id=user_id,
-                              payment_id="Unrequested",
-                              amount=amount,
-                              status="donation attempted"
-                              )
+    transaction = create_transaction_object(user_id, org_id, amount)
 
-    print "****transaction object built, prepared to be added to db"
+    print "****transaction object built, added to db"
 
     # import pdb; pdb.set_trace()
 
-    db.session.add(transaction)
-    db.session.commit()
+
 
     #generate the payment object using information from the database
     redirect_url, payment_object = generate_payment_object(user_id,
@@ -416,6 +410,11 @@ def do_referred_payment():
 
     print org_id, "org id from url"
     print referrer_id, "referrer id from url"
+
+    #add referrer_id to the session so we can add the Referral
+    session['referrer_id'] = referrer_id
+
+    transaction = create_transaction_object(USER, org_id)
 
     import pdb; pdb.set_trace()
     return redirect("/login")
@@ -491,9 +490,21 @@ def total_impact_data():
 
 #HELPER FUNCTIONS
 ############################################################################
+def create_transaction_object(user_id, org_id, amount=1.0):
+    """create Transaction object for both referral and non referral transactions"""
 
+    transaction = Transaction(org_id=org_id,
+                              user_id=user_id,
+                              payment_id="Unrequested",
+                              amount=amount,
+                              status="donation attempted"
+                              )
 
+    db.session.add(transaction)
+    db.session.commit()
 
+    print "Transaction added to db"
+    return transaction
 #Helper Functions with queries
 ##############################################################################
 
