@@ -260,10 +260,9 @@ def show_user_settings():
     user_obj = User.query.filter(User.user_id == session['current_user']).first()
 
     all_orgs = Organization.query.all()
-    current_faves = (UserOrg.query
-                            .filter(UserOrg.user_id == user_obj.user_id)
-                            .order_by(UserOrg.rank)
-                            .all())
+
+    ##Get list of current user_orgs
+    current_faves = get_current_faves(user_obj)
 
     ##If you have a current #1, it is ___. Would you like to change it? What would you like to be your 2 /3 spots
 
@@ -516,7 +515,14 @@ def show_all_user_donations(user_id):
     return total_donated
 
 
+def get_current_faves(user_obj):
+    """takes user_id, returns list of users favorite orgs ordered by rank"""
+    current_faves = (UserOrg.query
+                            .filter(UserOrg.user_id == user_obj.user_id)
+                            .order_by(UserOrg.rank)
+                            .all())
 
+    return current_faves
 
 
 if __name__ == "__main__":

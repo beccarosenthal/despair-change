@@ -8,12 +8,8 @@
 <h2>Head on over to the <a href="/donate">donate</a> page to start making an impact!</h2>
 {% else  %}
 <h2>Check out your impact</h2>
+<p>If you want to increase your footprint, send your friends this link and get them start making microdonations to your favorite organization today!</p>
 
-<!-- Bar Chart -->
-<div class="user-impact-bar">
-  <canvas id="userImpactBarChart" ></canvas>
-  <div id="barLegend" class="chart-legend"></div>
-<div>
 <h3>stacked bar chart</h3>
 <div class="stacked-user-impact-bar">
   <canvas id="stackedUserImpactBarChart" ></canvas>
@@ -45,6 +41,11 @@
     </ul>
     {% endfor %}
 
+<!-- Bar Chart -->
+<div class="user-impact-bar">
+  <canvas id="userImpactBarChart" ></canvas>
+  <div id="barLegend" class="chart-legend"></div>
+<div>
 
 <script type="text/javascript" src="static/js/dashboardCharts.js"> </script>
 {% endblock %}
