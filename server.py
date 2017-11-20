@@ -361,7 +361,7 @@ def donation_page():
 
 @app.route('/donated', methods=['POST'])
 def process_donation():
-    """FIGURE THIS OUT"""
+    """handle user pressing the donate button"""
     #TODO change process donation route to account for users logged in or referred
     user_id = session['current_user']
     org_id = request.form.get('org')
