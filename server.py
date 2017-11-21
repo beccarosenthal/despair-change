@@ -16,6 +16,7 @@ from sqlalchemy import func
 
 
 #import from my files
+from helper_functions import get_current_transaction
 from json_functions import (json_user_impact_bar,
                             json_total_impact_bar,
                             json_stacked_user_impact_bar)
@@ -409,7 +410,8 @@ def do_referred_payment():
     """do the thing for payments with referrals"""
 
     #FOR TROUBLESHOOTING PURPOSES, LOG OUT whoever is in the session
-    del session['current_user']
+    if 'current_user' in session:
+        del session['current_user']
 
     print "in donated/referred"
     org_id = request.args.get("org_id")
@@ -478,35 +480,33 @@ def process_payment():
 
     else:
         process_referral(payment, Transaction)
+        return redirect('/login')
 
 
 def process_referral(paypal_payment, transaction):
     """process referral payment and change database accordingly"""
 
+    print "in process referral"
+
     payment_dict = paypal_payment.to_dict()
 
     payer_info = payment_dict['payer']['payer_info']
 
-    email = payer_info['email']
+    email = payer_info.get('email')
 
     #If no Transactions have been made with that email address, add that user to the DB
     if not User.query.filter(User.user_email == email).first():
 
-        fname = payer_info['first_name']
-        lname = payer_info['last_name']
-        phone = payer_info['phone']
-
-        if not phone:
-            phone = None
-
+        fname = payer_info.get('first_name')
+        lname = payer_info.get('last_name')
+        phone = payer_info.get('phone')
         user_password = os.environ.get("SAMPLE_PASSWORD")
         pw_hash = bcrypt.generate_password_hash(user_password, 10)
 
         referred_user = User(user_email=email,
                              password=pw_hash,
                              fname=fname,
-                             lname=lname,
-                             phone=None)
+                             lname=lname)
 
         db.session.add(referred_user)
         db.session.commit()
@@ -519,16 +519,26 @@ def process_referral(paypal_payment, transaction):
 
     # Create a referral record in the database
     referrer_id = int(session['referrer_id'])
-    referral = Referral(referrer_id=referrer_id,
-                        referred_id=referred_obj.user_id)
+    referrals = Referral.query.all()
 
-    db.session.add(referral)
-    db.session.commit()
+    #FIGURE OUT LOGIC FOR PREVENTING A REFERALL RECORD FOR GOING IN DB IF IT'S ALREADY BEEN ESTABLISHED
+    referral_already_happened = False
+    for referral in referrals:
+        if referral.referrer_id == referrer_id and referral.referred_id == referred_obj.user_id:
+            referral_already_happened = True
+
+    if referral_already_happened == False:
+        referral = Referral(referrer_id=referrer_id,
+                            referred_id=referred_obj.user_id)
+
+        db.session.add(referral)
+        db.session.commit()
 
     del session['referrer_id']
 
     flash("Welcome to Despair Change. Change your password, and you can start making an even bigger impact!")
-    return redirect('/login')
+    #FIXME this wants to process the paypal url, not the process thing
+
 
 
     #         new user would be created pulling info out of paypal payment object
@@ -623,19 +633,6 @@ def query_for_donations_by_org_dict(user_id):
                         for amount, org_id in users_donations}
 
     return donations_by_org
-
-#TODO figure out how to make this function work if tons of users are using the site at same time
-    # so include a user ID
-def get_current_transaction(user_obj):
-    """get most recent transaction in database"""
-
-    current_transaction = (Transaction.query
-                                      .filter(Transaction.user_id == user_obj.user_id)
-                                      .order_by(Transaction.transaction_id)
-                                      .all()[-1])
-
-    return current_transaction
-
 
 
 #not sure if this works or not...

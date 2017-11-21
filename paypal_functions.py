@@ -66,7 +66,6 @@ def generate_payment_object_referral(anonymous_user_id, org_id):
 
     web_profile = create_web_profile(org_obj)
 
-
     #Generate Payment Object
     payment = Payment({
         "intent": "sale",
@@ -123,7 +122,6 @@ def generate_payment_object_referral(anonymous_user_id, org_id):
             print "link.method == redirect"
             redirect_url = str(link.href)
             print "payment has been created successfully."
-            import pdb; pdb.set_trace()
 
             return redirect_url, payment
 
