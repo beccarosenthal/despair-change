@@ -482,7 +482,7 @@ def process_payment():
         return redirect('/dashboard')
 
     else:
-        process_referral(payment, Transaction)
+        process_referral(payment, transaction)
         return redirect('/')
 
 
@@ -497,13 +497,16 @@ def process_referral(paypal_payment, transaction):
 
     email = payer_info.get('email')
 
+    #Get the user object for the user who made the payment (whether they knowingly signed up or not)
+    referred_obj = User.query.filter(User.user_email == email).first()
+
     #If no Transactions have been made with that email address, add that user to the DB
-    if not User.query.filter(User.user_email == email).first():
+    if not referred_obj:
 
         fname = payer_info.get('first_name')
         lname = payer_info.get('last_name')
         phone = payer_info.get('phone')
-        user_password = os.environ.get("SAMPLE_PASSWORD")
+        user_password = os.environ.get("DEFAULT_PASSWORD")
         pw_hash = bcrypt.generate_password_hash(user_password, 10)
 
         referred_user = User(user_email=email,
@@ -514,25 +517,20 @@ def process_referral(paypal_payment, transaction):
         db.session.add(referred_user)
         db.session.commit()
 
-    #Get the user object for the user who made the payment (whether they knowingly signed up or not)
-    referred_obj = User.query.filter(User.user_email == email).one()
-
-
+        ##TODO FIGURE OUT IF REFERRED USER HERE WOULD BE WHAT THE BELOW QUERY IS
+        referred_obj = User.query.filter(User.user_email == email).one()
 
     #change the transaction's user_id so that it belongs to the person who made it
     transaction.user_id = referred_obj.user_id
+    db.session.commit()
 
     # Create a referral record in the database
     referrer_id = int(session['referrer_id'])
     referrals = Referral.query.all()
 
-    #FIGURE OUT LOGIC FOR PREVENTING A REFERALL RECORD FOR GOING IN DB IF IT'S ALREADY BEEN ESTABLISHED
-    referral_already_happened = False
-    for referral in referrals:
-        if referral.referrer_id == referrer_id and referral.referred_id == referred_obj.user_id:
-            referral_already_happened = True
+    #If the referred user doesn't already have a referrer in the database, add it
+    if not referred_obj.referrer:
 
-    if referral_already_happened == False:
         referral = Referral(referrer_id=referrer_id,
                             referred_id=referred_obj.user_id)
 
@@ -543,17 +541,6 @@ def process_referral(paypal_payment, transaction):
 
     flash("Welcome to Despair Change. Change your password, and you can start making an even bigger impact!")
     #FIXME this wants to process the paypal url, not the process thing
-
-
-
-    #         new user would be created pulling info out of paypal payment object
-    #     transaction in DB gets updated with new user_id
-    #     referral object in db gets created with user ids
-    # clear session at the end
-    # successful payment url would be login/referral, which would be for users that have
-
-    #if it's a non referral payment, redirect to dashboard
-
 
 @app.route('/cancel')
 def cancel_payment():
