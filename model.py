@@ -54,6 +54,8 @@ class User(db.Model):
 
     #in case I want to reference state data through the User
     state = db.relationship("State", backref="users")
+    #if they became a user via referral and haven't registered, this is false, otherwise True
+    # has_registered = db.Column(db.Boolean, nullable=True, default=True)
 
 ##TODO uncomment line below and figure out how to query for list of user's fave orgs
 ##in order
@@ -142,7 +144,11 @@ class Transaction(db.Model):
     timestamp = db.Column(db.DateTime,
                           nullable=False,
                           default=datetime.datetime.utcnow)
-    # #TODO add this to transactions already in db, figure out logic for how to change transaction if referred makes donation and then signs up
+    # # #TODO add this to transactions already in db, figure out logic for how to change transaction if referred makes donation and then signs up
+    # referrer_id = db.Column(db.Integer,
+    #                         db.ForeignKey('users.user_id'),
+    #                         nullable=True)
+
     # via_referral = db.Column(db.Boolean,
     #                          nullable=True,
     #                          default=False)
@@ -167,10 +173,20 @@ class Transaction(db.Model):
 
     ##DEFINING RELATIONSHIPS
 
+    # referrer = db.relationship("User",
+    #                        backref=db.backref("referred_transactions",
+    #                                           order_by=timestamp),
+    #                        foreign_keys=[referrer_id])
+
+
+
     # Define relationship to user (self.user = User object)
     user = db.relationship("User",
                            backref=db.backref("transactions",
-                                              order_by=timestamp))
+                                              order_by=timestamp),
+                           foreign_keys=[user_id])
+
+
 
     # Define relationship to Org (self.org = Org object)
     org = db.relationship("Organization",

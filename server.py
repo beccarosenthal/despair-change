@@ -423,14 +423,12 @@ def do_referred_payment():
     print org_id, "org id from url"
     print referrer_id, "referrer id from url"
 
+    #TODO Instead of doing the whole thing with an anonymous user, instanciate new user right here
     user_id = User.query.filter(User.fname == "Anonymous").one().user_id
     print user_id, "user_id"
 
     #add referrer_id to the session so we can add the Referral
     session['referrer_id'] = int(referrer_id)
-
-    print "figure out what referrer_id is in the session"
-    import pdb; pdb.set_trace()
 
     transaction = create_transaction_object(user_id, org_id)
 
@@ -509,16 +507,13 @@ def process_referral(paypal_payment, transaction):
         user_password = os.environ.get("DEFAULT_PASSWORD")
         pw_hash = bcrypt.generate_password_hash(user_password, 10)
 
-        referred_user = User(user_email=email,
+        referred_obj = User(user_email=email,
                              password=pw_hash,
                              fname=fname,
                              lname=lname)
 
-        db.session.add(referred_user)
+        db.session.add(referred_obj)
         db.session.commit()
-
-        ##TODO FIGURE OUT IF REFERRED USER HERE WOULD BE WHAT THE BELOW QUERY IS
-        referred_obj = User.query.filter(User.user_email == email).one()
 
     #change the transaction's user_id so that it belongs to the person who made it
     transaction.user_id = referred_obj.user_id

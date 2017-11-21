@@ -10,7 +10,7 @@ var options = {
                    labels: {
                         display: true,
                         boxWidth: 80,
-                        fontColor: '#000080'
+                        fontColor: '#000000'
                     }
                   },
                 // title: {
@@ -50,7 +50,7 @@ var options = {
                       },
                       ticks: {
                         beginAtZero: true,
-                        stepSize: 1,
+                        stepSize: 5,
                         callback: function(value, index, values) {
                           return value.toLocaleString("en-US",{style:"currency",
                                                              currency:"USD"});
@@ -130,7 +130,7 @@ var stackedOptions = {
                       },
                       ticks: {
                         beginAtZero: true,
-                        stepSize: 1,
+                        stepSize: 5,
                         callback: function(value, index, values) {
                           return value.toLocaleString("en-US",{style:"currency",
                                                              currency:"USD"});
