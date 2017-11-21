@@ -18,3 +18,5 @@ def get_current_transaction(user_obj):
                                       .all()[-1])
 
     return current_transaction
+
+
