@@ -11,7 +11,6 @@ from model import (User, Organization, Transaction,
                    connect_to_db, db)
 
 
-
 client_id = os.environ.get("PAYPAL_CLIENT_ID")
 client_secret = os.environ.get("PAYPAL_CLIENT_SECRET")
 
@@ -121,7 +120,10 @@ def generate_payment_object_referral(anonymous_user_id, org_id):
         for link in payment.links:
           if link.method == "REDIRECT":
             # Capture redirect url
+            print "link.method == redirect"
             redirect_url = str(link.href)
+            print "payment has been created successfully."
+            import pdb; pdb.set_trace()
 
             return redirect_url, payment
 
@@ -129,6 +131,7 @@ def generate_payment_object_referral(anonymous_user_id, org_id):
     else:
         print("Error while creating payment:")
         current_transaction.status = "payment failed"
+        db.session.commit()
         print(payment.error)
 
         #TODO Update Transaction status

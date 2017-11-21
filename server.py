@@ -2,6 +2,7 @@
 #python standard libraries
 import datetime
 import os
+import random
 
 #third party things
 # import Bcrypt
@@ -19,7 +20,7 @@ from json_functions import (json_user_impact_bar,
                             json_total_impact_bar,
                             json_stacked_user_impact_bar)
 from model import (User, Organization, Transaction,
-                   UserOrg, State,
+                   UserOrg, Referral, State,
                    connect_to_db, db)
 from paypal_functions import (generate_payment_object, api, execute_payment,
                               generate_payment_object_referral)
@@ -30,6 +31,7 @@ app.secret_key = 'werewolf-bar-mitzvah'
 
 client_id = os.environ.get("PAYPAL_CLIENT_ID")
 client_secret = os.environ.get("PAYPAL_CLIENT_SECRET")
+
 
 
 # General templates
@@ -247,7 +249,12 @@ def show_user_dashboard():
     donations_by_org = query_for_donations_by_org_dict(current_user_id)
 
     #Get info about user_org with rank #1 to generate referral url
-    fave_org = get_current_faves(user_object)[0]
+    fave_orgs = get_current_faves(user_object)
+    if fave_orgs:
+        fave_org = fave_orgs[0]
+    #if they don't have a #1, whatever they gave to last time
+    else:
+        fave_org = random.choice(Organization.query.all())
 
     #TODO use regex to make total donated and amounts look like dollar amounts
     print total_donated
@@ -401,6 +408,9 @@ def process_donation():
 def do_referred_payment():
     """do the thing for payments with referrals"""
 
+    #FOR TROUBLESHOOTING PURPOSES, LOG OUT whoever is in the session
+    del session['current_user']
+
     print "in donated/referred"
     org_id = request.args.get("org_id")
     referrer_id = request.args.get("referrer_id")
@@ -412,7 +422,10 @@ def do_referred_payment():
     print user_id, "user_id"
 
     #add referrer_id to the session so we can add the Referral
-    session['referrer_id'] = referrer_id
+    session['referrer_id'] = int(referrer_id)
+
+    print "figure out what referrer_id is in the session"
+    import pdb; pdb.set_trace()
 
     transaction = create_transaction_object(user_id, org_id)
 
@@ -459,6 +472,7 @@ def process_payment():
         transaction.status = "pending delivery to org"
         db.session.commit()
 
+    #if it's not a referral payment, go to the user dashboard
     if 'referrer_id' not in session:
         return redirect('/dashboard')
 
@@ -466,16 +480,55 @@ def process_payment():
         process_referral(payment, Transaction)
 
 
-
-
-    #if it's a non referral payment, redirect to dashboard
-
 def process_referral(paypal_payment, transaction):
-    """process referral payment"""
+    """process referral payment and change database accordingly"""
 
     payment_dict = paypal_payment.to_dict()
 
-    import pdb; pdb.set_trace()
+    payer_info = payment_dict['payer']['payer_info']
+
+    email = payer_info['email']
+
+    #If no Transactions have been made with that email address, add that user to the DB
+    if not User.query.filter(User.user_email == email).first():
+
+        fname = payer_info['first_name']
+        lname = payer_info['last_name']
+        phone = payer_info['phone']
+
+        if not phone:
+            phone = None
+
+        user_password = os.environ.get("SAMPLE_PASSWORD")
+        pw_hash = bcrypt.generate_password_hash(user_password, 10)
+
+        referred_user = User(user_email=email,
+                             password=pw_hash,
+                             fname=fname,
+                             lname=lname,
+                             phone=None)
+
+        db.session.add(referred_user)
+        db.session.commit()
+
+    #Get the user object for the user who made the payment (whether they knowingly signed up or not)
+    referred_obj = User.query.filter(User.user_email == email).one()
+
+    #change the transaction's user_id so that it belongs to the person who made it
+    transaction.user_id = referred_obj.user_id
+
+    # Create a referral record in the database
+    referrer_id = int(session['referrer_id'])
+    referral = Referral(referrer_id=referrer_id,
+                        referred_id=referred_obj.user_id)
+
+    db.session.add(referral)
+    db.session.commit()
+
+    del session['referrer_id']
+
+    flash("Welcome to Despair Change. Change your password, and you can start making an even bigger impact!")
+    return redirect('/login')
 
 
     #         new user would be created pulling info out of paypal payment object
@@ -598,6 +651,7 @@ def show_all_user_donations(user_id):
 
 def get_current_faves(user_obj):
     """takes user_id, returns list of users favorite orgs ordered by rank"""
+
     current_faves = (UserOrg.query
                             .filter(UserOrg.user_id == user_obj.user_id)
                             .order_by(UserOrg.rank)

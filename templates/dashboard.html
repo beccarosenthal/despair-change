@@ -8,9 +8,10 @@
 <h2>Head on over to the <a href="/donate">donate</a> page to start making an impact!</h2>
 {% else  %}
 <h2>Check out your impact</h2>
+{% if user.user_org %}
 <p>If you want to increase your footprint, tell your friends to click
-  <a href="/donated/referred?org_id={{fave_org.org_id}}&referrer_id={{fave_org.user_id}}">this link</a> to make a $1 donation to {{fave_org.org.name}} today!</p>
-
+  <a href="/donated/referred?org_id={{fave_org.org_id}}&referrer_id={{user.user_id}}" target="_blank">this link</a> to make a $1 donation to {{fave_org.name}} today!</p>
+{% endif %}
 <h3>stacked bar chart</h3>
 <div class="stacked-user-impact-bar">
   <canvas id="stackedUserImpactBarChart" ></canvas>
