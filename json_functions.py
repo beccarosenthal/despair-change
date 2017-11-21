@@ -43,66 +43,49 @@ def json_stacked_user_impact_bar(user_object):
 
     #get list of user_ids to make querying for sum of donations easier
     referred_user_ids = [user.user_id for user in referred_by_user]
-
-    #Create default dict
-    donations = defaultdict(dict)
+    print "ids of referred users: ", referred_user_ids
 
     user_data = [] #dictionaries with donor_category: amount pairs (my donations, donation footprint, etc)   user_data = [] #amount of money user gave per org in order of orgs
     footprint_data = [] #amount of money footprint gave per org in order of orgs
     org_names = [] #name of org
+    print "*********ORG NAMES************"
+    print org_names
     for org in orgs:
+        print "current org in loop:", org
+        print "*********ORG NAMES************"
+        print org_names
         #query for sum of my donations to each org
-        print "org:", org
 
         my_donations = (db.session.query(func.sum(Transaction.amount))
             .filter(Transaction.org_id == org.org_id,
                 Transaction.status == "pending delivery to org",
                 Transaction.user_id == user_object.user_id)
             .all())[0][0]
-        donation_footprint = (db.session.query(func.sum(Transaction.amount))
-            .filter(Transaction.org_id == org.org_id,
-                Transaction.status == "pending delivery to org",
-                Transaction.user_id.in_(referred_user_ids))
-            .all())[0][0]
+        if referred_user_ids:
+            donation_footprint = (db.session.query(func.sum(Transaction.amount))
+                .filter(Transaction.org_id == org.org_id,
+                    Transaction.status == "pending delivery to org",
+                    Transaction.user_id.in_(referred_user_ids))
+                .all())[0][0]
+        else:
+            donation_footprint = 0
         # total_donations = (db.session.query(func.sum(Transaction.amount))
         #     .filter(Transaction.org_id == org.org_id,
         #         Transaction.status == "pending delivery to org")
         #     .all())
 
-        # #queries above return list of tuples with one item
-        # donations[org.name]['My Donations'] = my_donations
-        # donations[org.name]['My Footprint'] = donation_footprint
-
         #add org and data to the lists going into the datasets only if there's data
-        if my_donations > 0 or footprint_data > 0:
+        if my_donations > 0 or donation_footprint > 0:
             user_data.append(my_donations)
             footprint_data.append(donation_footprint)
             org_names.append(org.name[:20])
-
+        print "my donations:", my_donations
+        print "my footprint data", footprint_data
         #TODO figure out why this errors out
         # donations[org.name]['Additional Donations'] = total_donations - my_donations - donation_footprint
 
-    #####TODO Add datasets to correspond with the referrals and total donations
-    ###and make those labels different on stacked
-        ### 3 datasets - one for user, one for referrals, one for all users
-        ### so that users can interactively show/get rid of the other info
-
-
     data = []
     datasets = []
-    print footprint_data
-    print "footprint_data"
-
-    for org, donations_dict in donations.items():
-        # org_names.append(org[:30])
-        data.append(donations_dict)
-
-    # for i in range(len(data)):
-    #     datasets.append({
-    #                     "label": data.keys[i],
-    #                     "data": data,
-    #                     })
-
 
     data_dict = {
                 "labels": org_names,
@@ -112,9 +95,6 @@ def json_stacked_user_impact_bar(user_object):
                         "backgroundColor": BACKGROUND_COLORS[0],
                         "hoverBackgroundColor": HOVER_BACKGROUND_COLORS[1]
                     },
-
-
-
                     ]
             }
 
@@ -129,10 +109,8 @@ def json_stacked_user_impact_bar(user_object):
     print data_dict
 
 
-    for item in footprint_data:
-        if item != None:
-            data_dict["datasets"] += footprint_dataset
-            break
+    if referred_user_ids:
+        data_dict["datasets"] += footprint_dataset
 
     ##TODO figure out how to make sure that no footprint data shows up if know footprint
     # if footprint_data:

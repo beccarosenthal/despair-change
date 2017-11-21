@@ -480,7 +480,7 @@ def process_payment():
 
     else:
         process_referral(payment, Transaction)
-        return redirect('/login')
+        return redirect('/')
 
 
 def process_referral(paypal_payment, transaction):
