@@ -251,14 +251,17 @@ def show_user_dashboard():
 
     #Get info about user_org with rank #1 to generate referral url
     fave_orgs = get_current_faves(user_object)
+    print "fave_orgs in show user dashboard fn ", fave_orgs
     if fave_orgs:
+        print "inside the if statement"
         fave_org = fave_orgs[0]
+
     #if they don't have a #1, whatever they gave to last time
     else:
         fave_org = random.choice(Organization.query.all())
 
     #TODO use regex to make total donated and amounts look like dollar amounts
-    print total_donated
+    print donations_by_org
     return render_template('dashboard.html',
                            user=user_object,
                            total_donated=total_donated[0],
@@ -514,6 +517,8 @@ def process_referral(paypal_payment, transaction):
     #Get the user object for the user who made the payment (whether they knowingly signed up or not)
     referred_obj = User.query.filter(User.user_email == email).one()
 
+
+
     #change the transaction's user_id so that it belongs to the person who made it
     transaction.user_id = referred_obj.user_id
 
@@ -649,11 +654,13 @@ def show_all_user_donations(user_id):
 def get_current_faves(user_obj):
     """takes user_id, returns list of users favorite orgs ordered by rank"""
 
+    print user_obj
     current_faves = (UserOrg.query
                             .filter(UserOrg.user_id == user_obj.user_id)
                             .order_by(UserOrg.rank)
                             .all())
-
+    print "current faves in get current faves function"
+    print current_faves
     return current_faves
 
 

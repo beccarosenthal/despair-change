@@ -48,12 +48,9 @@ def json_stacked_user_impact_bar(user_object):
     user_data = [] #dictionaries with donor_category: amount pairs (my donations, donation footprint, etc)   user_data = [] #amount of money user gave per org in order of orgs
     footprint_data = [] #amount of money footprint gave per org in order of orgs
     org_names = [] #name of org
-    print "*********ORG NAMES************"
+
     print org_names
     for org in orgs:
-        print "current org in loop:", org
-        print "*********ORG NAMES************"
-        print org_names
         #query for sum of my donations to each org
 
         my_donations = (db.session.query(func.sum(Transaction.amount))
@@ -79,10 +76,6 @@ def json_stacked_user_impact_bar(user_object):
             user_data.append(my_donations)
             footprint_data.append(donation_footprint)
             org_names.append(org.name[:20])
-        print "my donations:", my_donations
-        print "my footprint data", footprint_data
-        #TODO figure out why this errors out
-        # donations[org.name]['Additional Donations'] = total_donations - my_donations - donation_footprint
 
     data = []
     datasets = []
