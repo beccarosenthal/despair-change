@@ -43,8 +43,10 @@ def do_this_before_each_request():
     if 'current_user' in session:
         user_obj = User.query.get(session['current_user'])
         g.user = user_obj
+        g.orgs = user_obj.get_ranked_orgs()
     #decide if g.orgs is an else thing or not
-    g.orgs = Organization.query.all()
+    else:
+        g.orgs = Organization.query.all()
 
 
 @app.route('/')

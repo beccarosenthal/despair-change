@@ -2,16 +2,9 @@
 {% block title %} Donate {% endblock %}
 {% block content %}
 
-  <!-- <title>Bootstrap Example</title> -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 
-
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#donationModal" data-whatever="@mdo">Make a Donation!</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#donationModal" >Make a Donation!</button>
 
 <div class="modal fade bs-example-modal-lg" id="donationModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -19,10 +12,16 @@
       <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
   <div class="carousel-inner">
     <div class="item active">
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="container">
+        <div class="modal-header">
         <h3>Donate to {{orgs[0].name}}</h3>
+      </div>
+            <div class="modal-body">
         <a href="{{orgs[0].website_url}}" target="_blank">
           <img alt='' width="300" height="200" src="{{orgs[0].logo_url}}" ></a><br>
-            <b>Mission: </b>{{orgs[0].mission_statement}}
+            <p><b>Mission: </b>{{orgs[0].mission_statement}}</p>
+          </div>
 
         <h4>Change donation amount <input type='text'></h4>
         <!-- Paypal button -->
@@ -38,17 +37,24 @@
                 alt="Donate to {{orgs[0].name}}">
             <img alt="" width="1" height="1"
                 src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >
-
         </form>
+      </div>
+
     </div>
   <!-- Wrapper for slides -->
     {% for org in orgs[1:] %}
 
     <div class="item">
-        <h3>Donate to {{org.name}}</h3>
-        <a href="{{org.website_url}}" target="_blank">
+      <div class="container">
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <div class="modal-header">
+          <h3>Donate to {{org.name}}</h3>
+        </div>
+        <div class="modal-body">
+          <a href="{{org.website_url}}" target="_blank">
           <img alt='' width="300" height="200" src="{{org.logo_url}}" ></a><br>
-            <b>Mission: </b>{{org.mission_statement}}
+            <p><b>Mission: </b>{{org.mission_statement}}</p>
+          </div>
 
         <h4>Change donation amount <input type='text'></h4>
         <!-- Paypal button -->
@@ -66,7 +72,9 @@
                 src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >
 
         </form>
+
     </div>
+  </div>
     {% endfor %}
   </div>
         <!-- Controls -->

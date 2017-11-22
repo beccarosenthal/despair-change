@@ -50,7 +50,8 @@
       {% endif %}
 
 
-        <li><a href="/donate">Donate</a></li>
+        <li><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#donationModal" >Make a Donation!</button>
+        </li>
         <li><a href="/buttons">Push Buttons</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About Our Partners<span class="caret"></span></a>
@@ -119,6 +120,106 @@
         {{ message }}
   <hr>
     {% endfor %}
+
+
+<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#donationModal" >Make a Donation!</button> -->
+
+<div class="modal fade bs-example-modal-lg" id="donationModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+  <div class="carousel-inner">
+    <div class="item active">
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="container">
+        <div class="modal-header">
+        <h3>Donate to {{g.orgs[0].name}}</h3>
+      </div>
+            <div class="modal-body">
+        <a href="{{g.orgs[0].website_url}}" target="_blank">
+          <img alt='' width="300" height="200" src="{{g.orgs[0].logo_url}}" ></a><br>
+            <p><b>Mission: </b>{{g.orgs[0].mission_statement}}</p>
+          </div>
+
+        <h4>Change donation amount <input type='text'></h4>
+        <!-- Paypal button -->
+        <form action="/donated" method="POST">
+
+    <!-- Identify your business so that you can collect the payments. -->
+            <input type="hidden" name="org"
+                value="{{g.orgs[0].org_id}}">
+
+    <!-- Display the payment button. -->
+            <input type="image" name="submit"
+                src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_donate_92x26.png"
+                alt="Donate to {{g.orgs[0].name}}">
+            <img alt="" width="1" height="1"
+                src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >
+        </form>
+      </div>
+
+    </div>
+  <!-- Wrapper for slides -->
+    {% for org in g.orgs[1:] %}
+
+    <div class="item">
+      <div class="container">
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <div class="modal-header">
+          <h3>Donate to {{org.name}}</h3>
+        </div>
+        <div class="modal-body">
+          <a href="{{org.website_url}}" target="_blank">
+          <img alt='' width="300" height="200" src="{{org.logo_url}}" ></a><br>
+            <p><b>Mission: </b>{{org.mission_statement}}</p>
+          </div>
+
+        <h4>Change donation amount <input type='text'></h4>
+        <!-- Paypal button -->
+        <form action="/donated" method="POST">
+
+    <!-- Identify your business so that you can collect the payments. -->
+            <input type="hidden" name="org"
+                value="{{org.org_id}}">
+
+    <!-- Display the payment button. -->
+            <input type="image" name="submit"
+                src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_donate_92x26.png"
+                alt="Donate to {{org.name}}">
+            <img alt="" width="1" height="1"
+                src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >
+
+        </form>
+
+    </div>
+  </div>
+    {% endfor %}
+  </div>
+        <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+$('#donationModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  console.log(recipient)
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  console.log("i'm here...")});
+
+</script>
+
 
 
 <!--<script type="text/javascript">   let clipboard = new Clipboard('.copy-button'); </script> -->
