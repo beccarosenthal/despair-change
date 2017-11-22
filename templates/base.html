@@ -4,6 +4,7 @@
   <title>{% block title %}THIS IS MY TITLE {% endblock %}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
     <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
 
     <script src="https://www.paypalobjects.com/api/checkout.js"></script>
@@ -110,9 +111,7 @@
     {% endfor %}
 
 
-<script type="text/javascript">
-  let clipboard = new Clipboard('.copy-button');
-</script>
+<!--<script type="text/javascript">   let clipboard = new Clipboard('.copy-button'); </script> -->
     {% block content %} put your content here {% endblock %}
 
 

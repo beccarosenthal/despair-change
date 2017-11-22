@@ -76,9 +76,9 @@ class User(db.Model):
                                secondaryjoin="User.user_id==Referral.referrer_id",
                                uselist=False)  #don't wrap this in a list--there will only be one or zero
 
-    def referral_link(self):
-      """Generate a referral link for user; if not, return False"""
-      pass
+    # def referral_link(self):
+    #   """Generate a referral link for user; if not, return False"""
+    #   pass
 
 #     def user_orgs()
 
