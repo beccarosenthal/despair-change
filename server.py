@@ -41,8 +41,10 @@ client_secret = os.environ.get("PAYPAL_CLIENT_SECRET")
 @app.before_request
 def do_this_before_each_request():
     if 'current_user' in session:
-        g.user = User.query.get(session['current_user'])
-    # g.orgs = Orgs.query.all()
+        user_obj = User.query.get(session['current_user'])
+        g.user = user_obj
+    #decide if g.orgs is an else thing or not
+    g.orgs = Organization.query.all()
 
 
 @app.route('/')

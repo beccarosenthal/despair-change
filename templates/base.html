@@ -36,9 +36,26 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
+      {% if 'current_user' in session %}
         <li><a href="/dashboard">{{ g.user.fname }}</a></li>
+      {% endif %}
         <li><a href="/donate">Donate</a></li>
         <li><a href="/buttons">Push Buttons</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About Our Partners<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            {% if 'current_user' in session:%}
+              {% for org in g.user.get_ranked_orgs() %}
+            <li><a href="{{org.website_url}}" target="_blank">{{org.name}}</a></li>
+            {% endfor %}
+            {% else %}
+              {% for org in g.orgs %}
+            <li><a href="{{org.website_url}}" target="_blank">{{org.name}}</a></li>
+
+            {% endfor %}
+            {% endif%}
+          </ul>
+        </li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Settings <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -58,6 +75,8 @@
       <form class="navbar-form navbar-left">
         <button id="ref-link-button" type="submit" class="btn btn-default ref-link-button">Increase Your Footprint</button>
       </form>
+      {% endif %}
+      {% if 'current_user' in session %}
       <p class="navbar-text navbar-right">Signed in as {{ g.user.fname }}</a></p>
 
       {% endif %}

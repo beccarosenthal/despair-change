@@ -94,7 +94,7 @@ class User(db.Model):
         orgs = [user_org.org for user_org in ranked_orgs]
 
         #TODO
-        #there is a better way to get the remaining orgs than this. What is it?
+        #there is a better way to get the remaining orgs than this. What is it? also, this is where that weird error message is coming from
         org_ids = [org.org_id for org in orgs]
         other_orgs = Organization.query.filter(~Organization.org_id.in_(org_ids)).all()
         ranked_orgs = orgs + other_orgs
