@@ -22,7 +22,7 @@
           <img alt='' width="300" height="200" src="{{orgs[0].logo_url}}" ></a><br>
             <p><b>Mission: </b>{{orgs[0].mission_statement}}</p>
           </div>
-
+          <div class="modal-footer">
         <h4>Change donation amount <input type='text'></h4>
         <!-- Paypal button -->
         <form action="/donated" method="POST">
@@ -38,6 +38,7 @@
             <img alt="" width="1" height="1"
                 src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >
         </form>
+      </div>
       </div>
 
     </div>
@@ -55,7 +56,7 @@
           <img alt='' width="300" height="200" src="{{org.logo_url}}" ></a><br>
             <p><b>Mission: </b>{{org.mission_statement}}</p>
           </div>
-
+          <div class="modal-footer">
         <h4>Change donation amount <input type='text'></h4>
         <!-- Paypal button -->
         <form action="/donated" method="POST">
@@ -70,8 +71,8 @@
                 alt="Donate to {{org.name}}">
             <img alt="" width="1" height="1"
                 src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >
-
         </form>
+              </div>
 
     </div>
   </div>
