@@ -4,23 +4,18 @@
 
 <iframe src="https://giphy.com/embed/cxKnnxcQWzwZO" width="480" height="245" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
 
-<h2>Hey {{user_obj.fname}}!</h2>
+<h2>Hey {{g.user.fname}}!</h2>
 <p>Let's switch it up a bit</p>
 
 <div id="user-org-info"><p>Which org would you like to have listed first on your donate page?</p>
-{% if current_faves %}
     You have chosen for your top organizations to be:
     <ol>
-        {% for fave in current_faves %}
-        <li>{{fave.org.name}}</li>
+        {% for fave in g.user.get_ranked_orgs()[0:3] %}
+        <li>{{fave.name}}</li>
         {% endfor %}
     </ol>
     <!-- <form id="new-user-orgs" class="settings-box"></form> -->
     <b>Would you like to choose different favorites?</b>
-{% else%}
-    <p>Which organizations would you like to appear on the top of your donations page? You can choose up to three.</p>
-
-{% endif %}
 
 <!-- TODO add checkboxes for do you want to change each setting, and if they say yes, have the change thing appear -->
 
@@ -29,26 +24,26 @@
     <form id="user_settings" action="/adjust_settings">
         <select name="rank_1">
             <option value=''>#1</option>
-            {% for org in orgs %}
+            {% for org in g.user.get_ranked_orgs() %}
                 <option value="{{org.org_id}}">{{org.name}}</option>
             {% endfor %}
         </select>
         <select name="rank_2">
             <option value=''>#2</option>
-            {% for org in orgs %}
+            {% for org in g.user.get_ranked_orgs() %}
                 <option value="{{org.org_id}}">{{org.name}}</option>
             {% endfor %}
         </select>
         <select name="rank_3">
             <option value=''>#3</option>
-            {% for org in orgs %}
+            {% for org in g.user.get_ranked_orgs() %}
                 <option value="{{org.org_id}}">{{org.name}}</option>
             {% endfor %}
         </select><br>
 
         <p><b>Default Payment Amount</b></p>
         <p>Despair Change uses relies on micro donations from users to create a large collective impact. Your default payment amount should be an amount of money that feels negligible. Larger donations are great, but the point of Despair Change is to generate large numbers of micro-donations, not small numbers of larger donations.</p>
-        <p>Your current default amount is ${{user_obj.default_amount}}0. If you would like to change it, click one of the amounts below or enter an amount.</p>
+        <p>Your current default amount is ${{g.user.default_amount}}0. If you would like to change it, click one of the amounts below or enter an amount.</p>
 
         $1 <input type="radio" name="default_amount" value="1">
         $2 <input type="radio" name="default_amount" value="2">
