@@ -76,10 +76,6 @@ class User(db.Model):
                                secondaryjoin="User.user_id==Referral.referrer_id",
                                uselist=False)  #don't wrap this in a list--there will only be one or zero
 
-    def referral_link(self):
-        """Generate a referral link for user; if not, return False"""
-
-        pass
 
 #     def user_orgs()
 
@@ -100,6 +96,17 @@ class User(db.Model):
         other_orgs = Organization.query.filter(~Organization.org_id.in_(org_ids)).all()
         ranked_orgs = orgs + other_orgs
         return ranked_orgs
+
+    def referral_link(self):
+        """Generate a referral link for user; if not, return False"""
+        #for now, my domain is local host; if this changes, so too will this method
+        domain = "localhost:5000"
+
+        url_string = "/donated/referred?org_id={org}&referrer_id={user}"
+        org_id = self.get_ranked_orgs()[0].org_id
+        return domain + url_string.format(org=org_id, user=self.user_id)
+
+
 
     def __repr__(self):
         """Provide helpful representation when printed."""

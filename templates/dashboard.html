@@ -10,7 +10,7 @@
 <h2>Check out your impact</h2>
 {% if user.user_org %}
 <p>If you want to increase your footprint, tell your friends to click
-  <a href="{{session['referral_link']}}" target="_blank">this link</a> to make a $1 donation to {{fave_org.org.name}} today!</p>
+  <a href="{{g.user.referral_link()}}" target="_blank">this link</a> to make a $1 donation to {{fave_org.org.name}} today!</p>
 {% endif %}
 
 <h3>stacked bar chart</h3>
