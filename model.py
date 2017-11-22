@@ -102,11 +102,12 @@ class User(db.Model):
 
     def __repr__(self):
         """Provide helpful representation when printed."""
-        repr_string = "<User user_id={id} fname={first} lname={last}>"
+        repr_string = "<User user_id={id} fname={first} lname={last} email={email}>"
 
         return repr_string.format(id=self.user_id,
                                   first=self.fname,
-                                  last=self.lname)
+                                  last=self.lname,
+                                  email=self.user_email)
 
 
 class Organization(db.Model):
