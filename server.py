@@ -655,6 +655,7 @@ def put_referral_link_in_session(user_object):
         org_id = fave.org_id
         referrer = user_object.user_id
         session['referral_link'] = url_string.format(org=org_id, user=referrer)
+        print "referral link", url_string.format(org=org_id, user=referrer)
         return url_string.format(org=org_id, user=referrer)
 
 
