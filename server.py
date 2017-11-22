@@ -167,7 +167,7 @@ def process_registration():
 
     if pw_hash == bcrypt.check_password_hash(user_object.password, user_password):
         session['current_user'] = user_object.user_id
-        print session['current_user']
+        put_referral_link_in_session(user_obj)
         #They already logged in; send them to the donate page
         return redirect('/donate')
 
@@ -189,9 +189,6 @@ def show_login_form():
 def login_user():
     """process login form, redirect to donor page when it works"""
 
-
-    ##TODO
-    # Make hashed passwords work --> let me back into my site!
     #get form data
     user_email = request.form.get('email')
 
@@ -200,7 +197,6 @@ def login_user():
 
     user_password = request.form.get('password')
     valid_password = bcrypt.check_password_hash(user_object.password, user_password)
-
 
     if user_object:
     #check password against email address
@@ -213,6 +209,8 @@ def login_user():
 
             flash("You're logged in. Welcome to Despair Change!!")
             session['current_user'] = user_object.user_id
+            put_referral_link_in_session(user_object)
+
 
             #What is the specific user ID
             return redirect('/donate')
@@ -230,7 +228,7 @@ def login_user():
 def logout_user():
     """logs out user by deleting the current user from the session"""
 
-    del session['current_user']
+    session.clear()
     flash('Successfully Logged Out')
     return redirect ('/')
 
@@ -435,7 +433,6 @@ def do_referred_payment():
     #generate the payment object using information from the database
     redirect_url, payment_object = generate_payment_object_referral(user_id,
                                                                     org_id)
-
     #update transaction object in the database to add paypal's ID
     transaction.payment_id = payment_object.id
     transaction.status = "paypal payment instantiated"
@@ -644,6 +641,22 @@ def get_current_faves(user_obj):
     print "current faves in get current faves function"
     print current_faves
     return current_faves
+
+def put_referral_link_in_session(user_object):
+
+    url_string = "/donated/referred?org_id={org}&referrer_id={user}"
+    if not 'current_user' in session:
+        return
+
+    ##if the logged in user has current faves, stick it in the session
+    current_faves = get_current_faves(user_object)
+    if current_faves:
+        fave = current_faves[0]
+        org_id = fave.org_id
+        referrer = user_object.user_id
+        session['referral_link'] = url_string.format(org=org_id, user=referrer)
+        return url_string.format(org=org_id, user=referrer)
+
 
 
 if __name__ == "__main__":

@@ -4,17 +4,75 @@
   <title>{% block title %}THIS IS MY TITLE {% endblock %}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
+
     <script src="https://www.paypalobjects.com/api/checkout.js"></script>
     <script src=
       "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.js">
     </script>
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-<script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <!-- to allow users to copy to clipboard -->
+  <script src="dist/clipboard.min.js"></script>
 </head>
 
 
 <body>
+
+  <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Despair Change</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+        <li><a href="/donate">Donate</a></li>
+        <li><a href="/buttons">Push Buttons</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Settings <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Change Password</a></li>
+            <li><a href="#">Change Favorite Org</a></li>
+            <li><a href="#">Change Default Amount</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% if 'referral_link' in session %}
+      <form class="navbar-form navbar-left">
+        <button id="ref-link-button" type="submit" class="btn btn-default ref-link-button">Increase Your Footprint</button>
+      </form>
+      {% endif %}
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/about ">About Despair Change</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
     <!-- This is the nav bar -->
     <a href='/'>Home | </a>
 
@@ -22,21 +80,27 @@
         <a href='/register'>Register | </a>
         <a href='/login'>Log In | </a>
     {% else %}
+
         <a href='/logout'>Log Out | </a>
         <a href='/dashboard'>Profile | </a>
         <a href='/settings'>Settings | </a>
 
+        <!-- TODO Figure out how to make a referral link show up from org_id and referrer id in base.html https://clipboardjs.com/-->
+        <!-- <input id="referral-link" value=> -->
     {% endif %}
 
     <a href='/donate'>Donate | </a>
     <a href='/buttons'>Push Buttons | </a>
-    <a href='/about'>About Despair Change |</a>
   <hr>
     {% for message in get_flashed_messages() %}
         {{ message }}
   <hr>
     {% endfor %}
 
+
+<script type="text/javascript">
+  let clipboard = new Clipboard('.copy-button');
+</script>
     {% block content %} put your content here {% endblock %}
 
 
