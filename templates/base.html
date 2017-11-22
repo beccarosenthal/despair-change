@@ -14,6 +14,7 @@
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="static/base.js"></script>
   <!--
   <script src="dist/clipboard.min.js"></script> -->
 </head>
@@ -144,7 +145,9 @@
         <!-- Paypal button -->
         <center><form action="/donated" method="POST">
 
-        Change donation amount <input type='text' name="donation_amount" >
+        {% if 'current_user' in session %}
+        Donation amount <input type='text' name="donation_amount" id="adjust_amount" placeholder="${{g.user.default_amount}}0" maxlength="4" size="4">
+        {% endif %}
     <!-- Identify your business so that you can collect the payments. -->
             <input type="hidden" name="org"
                 value="{{g.orgs[0].org_id}}">
@@ -178,8 +181,9 @@
         <!-- Paypal button -->
 
         <center><form action="/donated" method="POST">
-
-        Change donation amount <input type='text' name="donation_amount" >
+        {% if 'current_user' in session %}
+        Donation amount <input type='text' name="donation_amount" id="adjust_amount" placeholder="${{g.user.default_amount}}0" maxlength="4" size="4">
+        {% endif %}
     <!-- Identify your business so that you can collect the payments. -->
             <input type="hidden" name="org"
                 value="{{org.org_id}}">
@@ -191,7 +195,8 @@
             <img alt="" width="1" height="1"
                 src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >
 
-        </form></center>
+        </form>
+      </center>
       </div>
     <!-- </div> -->
   </div>
@@ -210,17 +215,6 @@
 </div>
 
 
-<script type="text/javascript">
-$('#donationModal').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget) // Button that triggered the modal
-  var recipient = button.data('whatever') // Extract info from data-* attributes
-  console.log(recipient)
-  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-  var modal = $(this)
-  console.log("i'm here...")});
-
-</script>
 
 
 <!--<script type="text/javascript">   let clipboard = new Clipboard('.copy-button'); </script> -->
