@@ -25,15 +25,16 @@ var options = {
                         color: "grey"
                       },
                       ticks: {
-                        autoSkip: false,
-                        beginAtZero: true
+                        autoSkip: true,
+                        beginAtZero: true,
+
                             },
 
                       scaleLabel: {
                         display: true,
                         labelString: "Organization",
                         fontColor: "black",
-                        // fontSize: 14
+                        // padding: 14
                       }
                     }],
                     yAxes: [{
@@ -47,7 +48,7 @@ var options = {
                       },
                       ticks: {
                         beginAtZero: true,
-                        stepSize: 1,
+                        stepSize: 5,
                         callback: function(value, index, values) {
                           return value.toLocaleString("en-US",{style:"currency",
                                                              currency:"USD"});
@@ -69,7 +70,7 @@ $.get('/total-impact-bar.json', function (data) {
     console.log(data);
     console.log("total bar function");
     var totalBarChart = new Chart(ctx_total_bar, {
-                                            type: 'bar',
+                                            type: 'horizontalBar',
                                             data: data,
                                             options: options
                                           });
