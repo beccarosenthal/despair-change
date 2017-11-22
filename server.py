@@ -205,10 +205,10 @@ def login_user():
     user_object = User.query.filter(User.user_email == user_email).first()
 
     user_password = request.form.get('password')
-    valid_password = bcrypt.check_password_hash(user_object.password, user_password)
 
     if user_object:
-    #check password against email address
+        #check password against email address
+        valid_password = bcrypt.check_password_hash(user_object.password, user_password)
         if valid_password:
 
             #TODO make last login work
@@ -373,8 +373,7 @@ def process_donation():
     #TODO change process donation route to account for users logged in or referred
     if "current_user" in session:
         user_id = session['current_user']
-    else:
-        user_id = User.query.filter(User.fname == "Anonymous").first()
+
     org_id = request.form.get('org')
     amount = request.form.get('donation_amount')
 
@@ -382,9 +381,10 @@ def process_donation():
     print "org_id=", org_id
     if not amount:
         amount = User.query.get(user_id).default_amount
+    print "check what amount is"
     import pdb; pdb.set_trace()
     #TODO Use regex to get amount to be a string format that paypal can take
-    transaction = create_transaction_object(user_id, org_id, amount)
+    transaction = create_transaction_object(user_id, org_id, float(amount))
 
     print "****transaction object built, added to db"
 

@@ -175,8 +175,11 @@ def generate_payment_object(user_id, org_id):
         "transactions": [{
             "amount": {
                 #amount must be a string to be processed by paypal
-                "total": str(user_obj.default_amount) + "0",
-                "currency": "USD"
+                "total": str(current_transaction.amount) + "0",
+                "currency": "USD",
+                "details": {
+                    "subtotal": str(current_transaction.amount) + "0",
+                }
                 },
             "description": "Donation to " + org_obj.name,
 
