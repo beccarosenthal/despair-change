@@ -371,14 +371,18 @@ def donation_page():
 def process_donation():
     """handle user pressing the donate button"""
     #TODO change process donation route to account for users logged in or referred
-    user_id = session['current_user']
+    if "current_user" in session:
+        user_id = session['current_user']
+    else:
+        user_id = User.query.filter(User.fname == "Anonymous").first()
     org_id = request.form.get('org')
+    amount = request.form.get('donation_amount')
 
     print "user_id=", user_id
     print "org_id=", org_id
-
-    amount = User.query.get(user_id).default_amount
-
+    if not amount:
+        amount = User.query.get(user_id).default_amount
+    import pdb; pdb.set_trace()
     #TODO Use regex to get amount to be a string format that paypal can take
     transaction = create_transaction_object(user_id, org_id, amount)
 
@@ -411,6 +415,9 @@ def do_referred_payment():
     print "in donated/referred"
     org_id = request.args.get("org_id")
     referrer_id = request.args.get("referrer_id")
+    #FIXME referrer 27 is the anonymous user
+    if not referrer_id:
+        referrer_id = 27
 
     print org_id, "org id from url"
     print referrer_id, "referrer id from url"
@@ -436,7 +443,13 @@ def do_referred_payment():
 
     return redirect(redirect_url)
 
+@app.route('/donated/register', methods=['POST'])
+def process_payment_new_user():
+    """handle payment for visitor to the site without referral or account"""
+    amount = request.form.get('donation_amount')
+    print amount
 
+    import pdb; pdb.set_trace()
 @app.route('/process', methods=['GET'])
 def process_payment():
     """processes payment"""

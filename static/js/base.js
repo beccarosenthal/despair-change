@@ -11,3 +11,6 @@ $('#donationModal').on('show.bs.modal', function (event) {
   var modal = $(this)
   console.log("i'm here...")});
 
+$('.carousel').carousel({
+  interval: 2000
+})

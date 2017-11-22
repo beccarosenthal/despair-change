@@ -95,7 +95,7 @@
 <div class="modal fade bs-example-modal-lg" id="donationModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="false">
   <div class="carousel-inner">
     <div class="item active">
       <!-- <div class="container"> -->
@@ -110,10 +110,13 @@
           </div>
           <div class="modal-footer">
         <!-- Paypal button -->
-        <center><form action="/donated" method="POST">
-
         {% if 'current_user' in session %}
-        Donation amount <input type='text' name="donation_amount" id="adjust_amount" value="${{g.user.default_amount}}0" maxlength="4" size="4">
+          <center><form action="/donated" method="POST">
+
+          Donation amount <input type='text' name="donation_amount" id="adjust_amount" placeholder="${{g.user.default_amount}}0" maxlength="4" size="4">
+        {% else %}
+          <center><form action="/donated/register" method="POST">
+          Donation amount <input type='text' name="donation_amount" id="adjust_amount" placeholder="$1.00" maxlength="4" size="4">
         {% endif %}
     <!-- Identify your business so that you can collect the payments. -->
             <input type="hidden" name="org"
@@ -147,9 +150,12 @@
 
         <!-- Paypal button -->
 
-        <center><form action="/donated" method="POST">
         {% if 'current_user' in session %}
-        Donation amount <input type='text' name="donation_amount" id="adjust_amount" value="${{g.user.default_amount}}0" maxlength="4" size="4">
+        <center><form action="/donated" method="POST">
+          Donation amount <input type='text' name="donation_amount" id="adjust_amount" value="${{g.user.default_amount}}0" maxlength="4" size="4">
+        {% else %}
+          <center><form action="/donated/register" method="POST">
+          Donation amount <input type='text' name="donation_amount" id="adjust_amount" placeholder="$1.00" maxlength="4" size="4">
         {% endif %}
     <!-- Identify your business so that you can collect the payments. -->
             <input type="hidden" name="org"
