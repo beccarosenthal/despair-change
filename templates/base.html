@@ -14,8 +14,8 @@
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <!-- to allow users to copy to clipboard -->
-  <script src="dist/clipboard.min.js"></script>
+  <!--
+  <script src="dist/clipboard.min.js"></script> -->
 </head>
 
 
@@ -38,8 +38,18 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
       {% if 'current_user' in session %}
-        <li><a href="/dashboard">{{ g.user.fname }}</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ g.user.fname }} <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/settings">Adjust Settings</a></li>
+            <li><a href="/dashboard">See My Impact</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+        </li>
       {% endif %}
+
+
         <li><a href="/donate">Donate</a></li>
         <li><a href="/buttons">Push Buttons</a></li>
         <li class="dropdown">

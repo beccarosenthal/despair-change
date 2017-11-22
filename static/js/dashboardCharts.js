@@ -152,11 +152,30 @@ $.get('/stacked-user-impact-bar.json', function (data) {
     console.log(data);
     console.log("stacked impact bar function");
     var stackedBarChart = new Chart(ctx_stacked_bar, {
-                                            type: 'bar',
+                                            type: 'horizontalBar',
                                             data: data,
                                             options: stackedOptions
                                           });
     $('#stackedBarLegend').html(stackedBarChart.generateLegend());
 });
 
+
+// To play with stuff live in console
+let renderChart = ()=> {
+  let testData = {'labels': ['Institute of Finishi',
+  'Rent-A-Swag', 'Alternative US Natio',
+  'The Derek Zoolander ',
+   'Alt ACLU'],
+   'datasets': [{'hoverBackgroundColor': '#FF6384',
+   'data': [4.0, 5.0, 2.0, 3.0, 4.0], 'backgroundColor': '#C72DB3',
+   'label': ['My Donations']}, {'hoverBackgroundColor': '#D9A622',
+   'data': [9.0, 12.0, 13.0, 2.0, 20.0], 'backgroundColor': '#2DC7C0',
+   'label': ['My Footprint']}]}
+
+  let barChart = new Chart(ctx_stacked_bar, {
+                                            type: 'bar',
+                                            data: testData,
+                                            options: stackedOptions
+                                          });
+    $('#totalBarLegend').html(barChart.generateLegend());};
 
