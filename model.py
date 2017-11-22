@@ -54,14 +54,7 @@ class User(db.Model):
 
     #in case I want to reference state data through the User
     state = db.relationship("State", backref="users")
-    #if they became a user via referral and haven't registered, this is false, otherwise True
-    # has_registered = db.Column(db.Boolean, nullable=True, default=True)
 
-##TODO uncomment line below and figure out how to query for list of user's fave orgs
-##in order
-    # user_orgs = db.relationship("User",
-    #                             secondary="user_orgs",
-    #                             primaryjoin="User.user_id==UserOrg.user_id")
 
     ##########REFERRALS EXPLANATION######################
     #I am User1.  I referred User2 and User3. User3 referred User4.
@@ -83,6 +76,30 @@ class User(db.Model):
                                secondaryjoin="User.user_id==Referral.referrer_id",
                                uselist=False)  #don't wrap this in a list--there will only be one or zero
 
+    def referral_link(self):
+      """Generate a referral link for user; if not, return False"""
+      pass
+
+#     def user_orgs()
+
+# #TODO uncomment line below and figure out how to query for list of user's fave orgs
+# #in order
+#     user_orgs = db.relationship("User",
+#     #                             secondary="user_orgs",
+#     #                             primaryjoin="User.user_id==UserOrg.user_id")
+    def get_ranked_orgs(self):
+        """get list of users ranked orgs; if not, return list of all orgs"""
+
+        ranked_orgs = self.user_org
+        orgs = [user_org.org for user_org in ranked_orgs]
+
+        #TODO
+        #there is a better way to get the remaining orgs than this. What is it?
+        org_ids = [org.org_id for org in orgs]
+        other_orgs = Organization.query.filter(~Organization.org_id.in_(org_ids)).all()
+        ranked_orgs = orgs + other_orgs
+        return ranked_orgs
+
     def __repr__(self):
         """Provide helpful representation when printed."""
         repr_string = "<User user_id={id} fname={first} lname={last}>"
@@ -90,7 +107,6 @@ class User(db.Model):
         return repr_string.format(id=self.user_id,
                                   first=self.fname,
                                   last=self.lname)
-
 
 
 class Organization(db.Model):

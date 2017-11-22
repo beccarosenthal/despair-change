@@ -359,20 +359,8 @@ def donation_page():
     if 'current_user' in session:
         user_id = session['current_user']
     #get all org objects that user has designated as a favorite at any point
-        fave_orgs = (Organization.query
-                             .join(UserOrg, Organization.org_id == UserOrg.org_id)
-                             .filter(UserOrg.user_id == user_id)
-                             .order_by(UserOrg.rank)
-                             .all())
+        orgs = User.query.get(user_id).get_ranked_orgs()
 
-
-        # if not fave_org_id:
-        fave_org_ids = [org.org_id for org in fave_orgs]
-        #SQL Alchemy syntax to get all orgs whose id are not in fave_org_ids
-        other_orgs = Organization.query.filter(~Organization.org_id.in_(fave_org_ids)).all()
-
-        #create list with fave orgs at beginning, other orgs below
-        orgs = fave_orgs + other_orgs
     else:
         orgs = Organization.query.all()
 
