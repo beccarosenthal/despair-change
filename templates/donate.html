@@ -4,23 +4,22 @@
 
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#donationModal" data-whatever="@mdo">Make a Donation!</button>
 
-...more buttons...
-
 <div class="modal fade" id="donationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
   <div class="modal-dialog" role="document">
     {% for org in orgs %}
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="exampleModalLabel">Donate to {{org.name}}</h4>
+        <h3 class="modal-title" id="exampleModalLabel">Donate to {{org.name}}</h3>
       </div>
       <div class="modal-body">
-        <h3>About {{org.name}}</h3>
+        <!-- <h3>About {{org.name}}</h3> -->
             <a href="{{org.website_url}}" target="_blank"><img alt='' width="300" height="200" src="{{org.logo_url}}" ></a><br>
             <b>Mission: </b>{{org.mission_statement}}
 
       </div>
       <div class="modal-footer">
+        <h4>Change donation amount <input type='text'></h4>
         <!-- Paypal button -->
         <form action="/donated" method="POST">
 
@@ -42,36 +41,36 @@
   </div>
 </div>
 <script type="text/javascript">
-$('#exampleModal').on('show.bs.modal', function (event) {
+$('#donationModal').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
   var recipient = button.data('whatever') // Extract info from data-* attributes
+  console.log(recipient)
   // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
   // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
   var modal = $(this)
-  modal.find('.modal-title').text('New message to ' + recipient)
-  modal.find('.modal-body input').val(recipient)
-})
+  console.log("i'm here...")
+
 </script>
 
-{% for org in orgs %}
+<!--{% for org in orgs %}
 <div id="donate-to-{{org.name}}">
     <h4>Donate to {{org.name}}</h4>
-        <form action="/donated" method="POST">
+        <form action="/donated" method="POST"> -->
 
     <!-- Identify your business so that you can collect the payments. -->
-            <input type="hidden" name="org"
+<!--             <input type="hidden" name="org"
                 value="{{org.org_id}}">
-
+ -->
     <!-- Display the payment button. -->
-            <input type="image" name="submit"
+<!--             <input type="image" name="submit"
                 src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_donate_92x26.png"
                 alt="Donate to {{org.name}}">
             <img alt="" width="1" height="1"
                 src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >
 
         </form>
-<!-- TODO Create container for org with info -->
-    <div id="about-{{org.name}}">
+ --><!-- TODO Create container for org with info -->
+<!--     <div id="about-{{org.name}}">
         <h3>About {{org.name}}</h3>
             <a href="{{org.website_url}}" target="_blank"><img alt='' width="300" height="200" src="{{org.logo_url}}" ></a>
             <ul>
@@ -80,7 +79,7 @@ $('#exampleModal').on('show.bs.modal', function (event) {
     </div>
 </div>
 {%endfor%}
-
+ -->
 <h3>What are you waiting for? Turn your despair into good now!</h3>
 
 <iframe src="https://giphy.com/embed/VTxmwaCEwSlZm" width="480" height="198" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p>

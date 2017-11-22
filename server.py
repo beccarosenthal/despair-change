@@ -7,7 +7,7 @@ import random
 #third party things
 # import Bcrypt
 from flask import (Flask, render_template, redirect, request, flash,
-                   session, jsonify)
+                   session, jsonify, g)
 from flask_bcrypt import Bcrypt
 from flask_debugtoolbar import DebugToolbarExtension
 from jinja2 import StrictUndefined
@@ -37,6 +37,12 @@ client_secret = os.environ.get("PAYPAL_CLIENT_SECRET")
 
 # General templates
 ###############################################################################
+#to put object in g
+@app.before_request
+def do_this_before_each_request():
+    if 'current_user' in session:
+        g.user = User.query.get(session['current_user'])
+    # g.orgs = Orgs.query.all()
 
 
 @app.route('/')
