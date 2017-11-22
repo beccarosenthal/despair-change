@@ -83,24 +83,7 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-    <!-- This is the nav bar -->
-    <a href='/'>Home | </a>
 
-    {% if 'current_user' not in session %}
-        <a href='/register'>Register | </a>
-        <a href='/login'>Log In | </a>
-    {% else %}
-
-        <a href='/dashboard'>Profile | </a>
-        <a href='/settings'>Settings | </a>
-
-        <!-- TODO Figure out how to make a referral link show up from org_id and referrer id in base.html https://clipboardjs.com/-->
-        <!-- <input id="referral-link" value=> -->
-    {% endif %}
-
-    <a href='/donate'>Donate | </a>
-    <a href='/buttons'>Push Buttons | </a>
-  <hr>
     {% for message in get_flashed_messages() %}
         {{ message }}
   <hr>
