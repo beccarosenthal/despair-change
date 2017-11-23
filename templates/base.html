@@ -112,8 +112,7 @@
         <!-- Paypal button -->
         {% if 'current_user' in session %}
           <center><form action="/donated" method="POST">
-
-          Donation amount <input type='text' name="donation_amount" id="adjust_amount" placeholder="${{g.user.default_amount}}0" maxlength="4" size="4">
+            Donation amount <input type='text' name="donation_amount" id="adjust_amount" placeholder="${{g.user.default_amount}}0" maxlength="4" size="4">
         {% else %}
           <center><form action="/donated/register" method="POST">
           Donation amount <input type='text' name="donation_amount" id="adjust_amount" placeholder="$1.00" maxlength="4" size="4">
@@ -152,7 +151,7 @@
 
         {% if 'current_user' in session %}
         <center><form action="/donated" method="POST">
-          Donation amount <input type='text' name="donation_amount" id="adjust_amount" value="${{g.user.default_amount}}0" maxlength="4" size="4">
+          Donation amount <input type='text' name="donation_amount" id="adjust_amount" placeholder="${{g.user.default_amount}}0" maxlength="4" size="4">
         {% else %}
           <center><form action="/donated/register" method="POST">
           Donation amount <input type='text' name="donation_amount" id="adjust_amount" placeholder="$1.00" maxlength="4" size="4">

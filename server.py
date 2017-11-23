@@ -381,11 +381,11 @@ def process_donation():
     print "org_id=", org_id
     if not amount:
         amount = User.query.get(user_id).default_amount
-    print "check what amount is"
+    print "check what amount, orgs are"
     import pdb; pdb.set_trace()
     #TODO Use regex to get amount to be a string format that paypal can take
     transaction = create_transaction_object(user_id, org_id, float(amount))
-
+    import pdb; pdb.set_trace()
     print "****transaction object built, added to db"
 
     #generate the payment object using information from the database
