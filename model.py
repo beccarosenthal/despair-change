@@ -105,8 +105,22 @@ class User(db.Model):
         url_string = "/donated/referred?org_id={org}&referrer_id={user}"
         org_id = self.get_ranked_orgs()[0].org_id
         return domain + url_string.format(org=org_id, user=self.user_id)
+        #TODO Make this work
+    # def get_referred_chain(self):
+    #     """returns list of referred users and all people who have been referred by those users
+    #      from self
 
+    #     #HYPOTHETICAL EXAMPLE:
+    #     #User1 referred User2 and User3. User3 referred User4.
 
+    #     >>>get_all_referred_by_user(User1)
+    #     >>>[User2, User3, User4]
+    #     """
+    #     ##recursive function
+    #     chain = []
+    #     for user in self.referred:
+    #         chain += [user] + self.get_referred_chain()
+    #     return chain
 
     def __repr__(self):
         """Provide helpful representation when printed."""
