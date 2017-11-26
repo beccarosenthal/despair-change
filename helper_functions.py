@@ -4,7 +4,7 @@ from flask import Flask, redirect, request, session, jsonify
 from sqlalchemy import func
 
 from model import (User, Organization, Transaction,
-                   UserOrg, State,
+                   UserOrg, State, Referral,
                    connect_to_db, db)
 
 

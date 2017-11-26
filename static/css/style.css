@@ -1,3 +1,13 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+#content {
+  padding-bottom: 50px;
+}
+#footer .navbar{
+  position: absolute;
+}
 body {
   padding: 2em;
   /*text-align: center;*/
@@ -5,6 +15,8 @@ body {
 
 h1 {
   margin-bottom: 1em;
+  font-size: 65px;
+  color: #2d3033;
 },
 
 select {
@@ -14,16 +26,15 @@ select {
   left: 10px;
 },
 
+.paypal-login-btn {
 
+    padding-bottom: 30px;
+},
 
 p {
     font-size: 14px;
     line-height: 22.4px;
     color: #6c7279;
-}
-h1 {
-    font-size: 65px;
-    color: #2d3033;
 }
 h2 {
     font-size: 40px;
@@ -45,6 +56,7 @@ h5 {
     text-transform: uppercase;
     font-weight: 700;
 }
+
 .btn {
     border: 1px solid rgba(0, 0, 0, 0.75);
     margin-top: 20px;

@@ -231,6 +231,15 @@ def login_user():
         return redirect('/register')
 
 
+@app.route('/login/paypal')
+def login_with_paypal():
+    """log users in via paypal oauth"""
+
+    import pdb; pdb.set_trace()
+    # token = request.args.get()
+
+    return redirect("/")
+
 @app.route('/logout')
 def logout_user():
     """logs out user by deleting the current user from the session"""
@@ -261,7 +270,7 @@ def show_user_dashboard():
         print "inside the if statement"
         fave_org = fave_orgs[0]
 
-    #if they don't have a #1, whatever they gave to last time
+    #if they don't have a #1, random org
     else:
         fave_org = random.choice(Organization.query.all())
 
@@ -282,9 +291,7 @@ def show_user_settings():
     all_orgs = Organization.query.all()
 
     ##Get current favorite org for user
-    current_faves = get_current_faves(user_obj)
-    for fave in current_faves:
-        print fave.org_id, fave.rank
+    current_faves = user_obj.get_ranked_orgs()
 
     ##If you have a current #1, it is ___. Would you like to change it? What would you like to be your 2 /3 spots
 
@@ -345,7 +352,7 @@ def change_user_settings():
 
     db.session.commit()
     print "make sure user_org and default amount changed in db"
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
     return redirect("/dashboard")
 
@@ -383,6 +390,7 @@ def process_donation():
         amount = User.query.get(user_id).default_amount
     print "check what amount, orgs are"
     import pdb; pdb.set_trace()
+
     #TODO Use regex to get amount to be a string format that paypal can take
     transaction = create_transaction_object(user_id, org_id, float(amount))
     import pdb; pdb.set_trace()
@@ -415,14 +423,13 @@ def do_referred_payment():
     print "in donated/referred"
     org_id = request.args.get("org_id")
     referrer_id = request.args.get("referrer_id")
-    #FIXME referrer 27 is the anonymous user
+    #FIXME referrer 27 is the anonymous user.
     if not referrer_id:
         referrer_id = 27
 
     print org_id, "org id from url"
     print referrer_id, "referrer id from url"
 
-    #TODO Instead of doing the whole thing with an anonymous user, instanciate new user right here
     user_id = User.query.filter(User.fname == "Anonymous").one().user_id
     print user_id, "user_id"
 
@@ -446,10 +453,15 @@ def do_referred_payment():
 @app.route('/donated/register', methods=['POST'])
 def process_payment_new_user():
     """handle payment for visitor to the site without referral or account"""
-    amount = request.form.get('donation_amount')
-    print amount
 
-    import pdb; pdb.set_trace()
+    org_id = request.form.get('org')
+    amount = request.form.get('donation_amount')
+
+
+
+
+
+
 @app.route('/process', methods=['GET'])
 def process_payment():
     """processes payment"""

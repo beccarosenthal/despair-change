@@ -143,8 +143,8 @@ def generate_payment_object(user_id, org_id):
     #from/for the database
     print "****in generate_payment_object function***"
     print
-    user_obj = User.query.filter(User.user_id == user_id).one()
-    org_obj = Organization.query.filter(Organization.org_id == org_id).one()
+    user_obj = User.query.get(user_id)
+    org_obj = Organization.query.get(org_id)
 
     current_transaction = get_current_transaction(user_obj)
 
