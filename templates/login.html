@@ -7,20 +7,21 @@
 <iframe src="https://giphy.com/embed/kMM3vtBEgSsLu" width="480" height="259" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
 
 <div class="paypal-login-btn">
-  <span id='lippButton'></span>
-  <script src='https://www.paypalobjects.com/js/external/api.js'></script>
-  <script>
-  paypal.use( ['login'], function (login) {
-    login.render ({
-      "appid":"AZTfJ9tiYPtvaKPgdW8CRw-2z0nRfTQDbUsaYkIVdQJLX5MkOp6ld7J7XeQc8_V-UrEZSBM0hw_8An7M",
-      "authend":"sandbox",
-      "scopes":"openid",
-      "containerid":"lippButton",
-      "locale":"en-us",
-      "returnurl":"http://localhost:5000/login/paypal"
-    });
+<span id='lippButton'></span>
+<script src='https://www.paypalobjects.com/js/external/api.js'></script>
+<script>
+paypal.use( ['login'], function (login) {
+  login.render ({
+    "appid":"AZTfJ9tiYPtvaKPgdW8CRw-2z0nRfTQDbUsaYkIVdQJLX5MkOp6ld7J7XeQc8_V-UrEZSBM0hw_8An7M",
+    "authend":"sandbox",
+    "scopes":"openid",
+    "containerid":"lippButton",
+    "locale":"en-us",
+    "returnurl":"https://beccarosenthal.auth0.com/login/callback"
   });
-  </script>
+  console.log("rendered whatever")
+});
+</script>
 
 </div>
 

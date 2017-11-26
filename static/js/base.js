@@ -1,5 +1,6 @@
 "use strict";
 
+
 // To make the modal window pop up
 
 $('#donationModal').on('show.bs.modal', function (event) {

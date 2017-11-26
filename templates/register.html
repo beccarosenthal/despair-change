@@ -18,8 +18,9 @@ paypal.use( ['login'], function (login) {
   login.render ({
     "appid":"AZTfJ9tiYPtvaKPgdW8CRw-2z0nRfTQDbUsaYkIVdQJLX5MkOp6ld7J7XeQc8_V-UrEZSBM0hw_8An7M",
     "authend":"sandbox",
-    "scopes":"openid",
+    "scopes":"openid email",
     "containerid":"lippButton",
+    "text": "Login with Paypal to use Despair Change"
     "locale":"en-us",
     "returnurl":"http://localhost:5000/login/paypal"
   });

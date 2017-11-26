@@ -235,8 +235,11 @@ def login_user():
 def login_with_paypal():
     """log users in via paypal oauth"""
 
+    token = request.args.get('code')
+    scope = request.args.get('scope')
+    "dir token"
     import pdb; pdb.set_trace()
-    # token = request.args.get()
+    # session['current_user'] = 27
 
     return redirect("/")
 
