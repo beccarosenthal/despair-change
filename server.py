@@ -105,6 +105,13 @@ def show_button_options():
 
     return render_template('buttons.html', org=org)
 
+@app.route('/welcome')
+def show_welcome_page():
+    """shows welcome page that donors who are not registered members get redirected to after donations"""
+
+    if 'transaction' in session:
+        transaction = Transaction.query.get(session['transaction'])
+    return render_template('welcome.html', transaction=transaction)
 
 # Registration and login logic functions
 ###############################################################################
@@ -552,12 +559,16 @@ def process_payment():
     if 'referrer_id' not in session:
         if transaction.user.fname == "first_name":
             process_non_user_donation(payment, transaction)
+            session['transaction'] = transaction.transaction_id
+            return redirect('/welcome')
         #TODO :write welcome route that is for people who got referred or donated without joining
         return redirect('/') #redirect('/welcome')
 
     else:
         process_referral(payment, transaction)
-        return redirect('/')
+        session['transaction'] = transaction.transaction_id
+        return redirect('/welcome')
+
 
 def process_non_user_donation(paypal_payment, transaction):
     """process donation from non-user, change db accordingly"""
@@ -584,7 +595,6 @@ def process_non_user_donation(paypal_payment, transaction):
 
     db.session.commit()
     print "user_obj after being committed", user_obj
-
 
 
 def process_referral(paypal_payment, transaction):
@@ -640,6 +650,7 @@ def process_referral(paypal_payment, transaction):
 
     flash("Welcome to Despair Change. Change your password, and you can start making an even bigger impact!")
     #FIXME this wants to process the paypal url, not the process thing
+
 
 @app.route('/cancel')
 def cancel_payment():
