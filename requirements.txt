@@ -1,6 +1,8 @@
 asn1crypto==0.23.0
+auth0-python==3.1.4
 bcrypt==3.1.4
 blinker==1.4
+boto==2.0
 braintree==3.38.0
 certifi==2017.7.27.1
 cffi==1.11.2
@@ -22,6 +24,7 @@ Jinja2==2.9.6
 MarkupSafe==1.0
 paypalrestsdk==1.13.1
 pkg-resources==0.0.0
+postman==0.6.0
 psycopg2==2.7.3.2
 pycparser==2.18
 pyflakes==1.6.0

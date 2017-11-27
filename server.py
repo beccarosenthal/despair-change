@@ -5,7 +5,8 @@ import os
 import random
 
 #third party things
-# import Bcrypt
+#for O Auth
+from auth0.v3.authentication import GetToken
 from flask import (Flask, render_template, redirect, request, flash,
                    session, jsonify, g)
 from flask_bcrypt import Bcrypt
@@ -30,10 +31,20 @@ from paypal_functions import (generate_payment_object, api, execute_payment,
 app = Flask(__name__)
 app.secret_key = 'werewolf-bar-mitzvah'
 
+#paypal app keys
 client_id = os.environ.get("PAYPAL_CLIENT_ID")
 client_secret = os.environ.get("PAYPAL_CLIENT_SECRET")
 
+#Auth0 app keys
 
+# domain = os.environ.get('AUTH0_DOMAIN')
+# non_interactive_client_id = 'exampleid'
+# non_interactive_client_secret = 'examplesecret'
+
+# get_token = GetToken(domain)
+# token = get_token.client_credentials(non_interactive_client_id,
+# non_interactive_client_secret, 'https://myaccount.auth0.com/api/v2/')
+# mgmt_api_token = token['access_token']
 
 # General templates
 ###############################################################################
@@ -243,6 +254,7 @@ def login_with_paypal():
 
     return redirect("/")
 
+
 @app.route('/logout')
 def logout_user():
     """logs out user by deleting the current user from the session"""
@@ -343,7 +355,6 @@ def change_user_settings():
                                        rank=i)
                 db.session.add(new_user_org)
 
-
     new_default_amount = request.args.get("default_amount")
     print "new_default_amount:", new_default_amount
 
@@ -401,7 +412,7 @@ def process_donation():
 
     #generate the payment object using information from the database
     redirect_url, payment_object = generate_payment_object(user_id,
-                                                           org_id)
+                                                           org_id, transaction)
 
     #update transaction object in the database to add paypal's ID
     transaction.payment_id = payment_object.id
@@ -457,12 +468,55 @@ def do_referred_payment():
 def process_payment_new_user():
     """handle payment for visitor to the site without referral or account"""
 
+    print "***********"
+    print "in donated/register"
+    print "************"
+    print
+
+    email = request.form.get('email')
     org_id = request.form.get('org')
     amount = request.form.get('donation_amount')
+    if not amount:
+        amount = 1.0
 
+    #If that person is already
+    user_obj = User.query.filter(User.user_email == email).first()
 
+    if not user_obj:
+        fname = "first_name"
+        lname = "last_name"
+        password = os.environ.get("DEFAULT_PASSWORD")
+        print "what is password"
+        import pdb; pdb.set_trace()
+        pw_hash = bcrypt.generate_password_hash(password, 10)
 
+        user_obj = User(user_email=email,
+                        password=pw_hash,
+                        fname=fname,
+                        lname=lname)
 
+        db.session.add(user_obj)
+        db.session.commit()
+    print
+    print "user_obj: ", user_obj
+
+    transaction = create_transaction_object(user_obj.user_id, org_id, float(amount))
+
+    #generate the payment object using information from the database
+    redirect_url, payment_object = generate_payment_object(user_obj.user_id,
+                                                           org_id, transaction)
+
+    import pdb; pdb.set_trace()
+    #update transaction object in the database to add paypal's ID
+    transaction.payment_id = payment_object.id
+    transaction.status = "paypal payment instantiated"
+
+    # import pdb; pdb.set_trace()
+    db.session.commit()
+
+    return redirect(redirect_url)
+    flash("you got the donated/register link")
+    return redirect('/')
 
 
 @app.route('/process', methods=['GET'])
@@ -496,11 +550,41 @@ def process_payment():
 
     #if it's not a referral payment, go to the user dashboard
     if 'referrer_id' not in session:
-        return redirect('/dashboard')
+        if transaction.user.fname == "first_name":
+            process_non_user_donation(payment, transaction)
+        #TODO :write welcome route that is for people who got referred or donated without joining
+        return redirect('/') #redirect('/welcome')
 
     else:
         process_referral(payment, transaction)
         return redirect('/')
+
+def process_non_user_donation(paypal_payment, transaction):
+    """process donation from non-user, change db accordingly"""
+
+    print "in process non user donation"
+
+    payment_dict = paypal_payment.to_dict()
+
+    payer_info = payment_dict['payer']['payer_info']
+
+    email = payer_info.get('email')
+
+    fname = payer_info.get('first_name')
+    lname = payer_info.get('last_name')
+    phone = payer_info.get('phone')
+
+    #Update the information on the new user
+    user_id = transaction.user.user_id
+    user_obj = User.query.get(user_id)
+
+    user_obj.fname = fname
+    user_obj.lname = lname
+    user_obj.phone = phone
+
+    db.session.commit()
+    print "user_obj after being committed", user_obj
+
 
 
 def process_referral(paypal_payment, transaction):
@@ -529,7 +613,8 @@ def process_referral(paypal_payment, transaction):
         referred_obj = User(user_email=email,
                              password=pw_hash,
                              fname=fname,
-                             lname=lname)
+                             lname=lname,
+                             phone=phone)
 
         db.session.add(referred_obj)
         db.session.commit()

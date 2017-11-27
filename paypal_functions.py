@@ -23,7 +23,7 @@ api = configure({"mode": "sandbox",
 
 def create_web_profile(org_obj):
     """create web profile"""
-
+    print "in create_web_profile"
     # Name needs to be unique so just generating a random one
     wpn = ''.join(random.choice(string.ascii_uppercase) for i in range(12))
     web_profile = WebProfile({
@@ -40,19 +40,29 @@ def create_web_profile(org_obj):
         },
         "flow_config": {
             "landing_page_type": "login", #try billing
-            "bank_txn_pending_url": "http://localhost:5000/dashboard",
+            "bank_txn_pending_url": "http://localhost:5000/",
 
         }
         })
+
+    print "webprofile, before creation"
+    print web_profile
+    import pdb; pdb.set_trace()
+
     if web_profile.create():
         print("Web Profile[%s] created successfully" % (web_profile.id))
     else:
         print(web_profile.error)
 
+    print
+    print web_profile
+    print "web_profile after .create"
+    import pdb; pdb.set_trace()
+
     return web_profile
 
 
-def generate_payment_object_referral(anonymous_user_id, org_id):
+def generate_payment_object_referral(anonymous_user_id, org_id, current_transaction):
     """generate the payment object for referral"""
 
 
@@ -65,6 +75,8 @@ def generate_payment_object_referral(anonymous_user_id, org_id):
     current_transaction = get_current_transaction(user_obj)
 
     web_profile = create_web_profile(org_obj)
+    print "back in generate payment fn"
+    import pdb; pdb.set_trace()
 
     #Generate Payment Object
     payment = Payment({
@@ -136,7 +148,7 @@ def generate_payment_object_referral(anonymous_user_id, org_id):
         return("this didn't work", payment)
 
 # Create payment object
-def generate_payment_object(user_id, org_id):
+def generate_payment_object(user_id, org_id, current_transaction):
     """generate payment object"""
 
     #TODO Write queries that will get info about the payer, payee, and transaction
@@ -146,9 +158,12 @@ def generate_payment_object(user_id, org_id):
     user_obj = User.query.get(user_id)
     org_obj = Organization.query.get(org_id)
 
-    current_transaction = get_current_transaction(user_obj)
+    # current_transaction = get_current_transaction(user_obj)
+    #TODO figure out how to make payer information optional with if statement
 
     web_profile = create_web_profile(org_obj)
+    print "back in generate payment fn"
+    import pdb; pdb.set_trace()
 
     #Generate Payment Object
     payment = Payment({

@@ -27,8 +27,11 @@ var options = {
                         color: "grey"
                       },
                       ticks: {
-                        autoSkip: false,
-                        beginAtZero: true
+                        autoSkip: true,
+                        beginAtZero: true,
+                        callback: function(value, index, values) {
+                          return value.toLocaleString("en-US",{style:"currency",
+                                                              currency:"USD"});
                             },
 
                       scaleLabel: {
@@ -38,25 +41,25 @@ var options = {
 
                         // fontSize: 14
                       }
-                    }],
-                    yAxes: [{
-                      gridLines: {
-                        color: "grey",
-                      },
-                      scaleLabel: {
-                        display: true,
-                        labelString: "Dollars Donated",
-                        fontColor: "black"
-                      },
-                      ticks: {
-                        beginAtZero: true,
-                        stepSize: 5,
-                        callback: function(value, index, values) {
-                          return value.toLocaleString("en-US",{style:"currency",
-                                                             currency:"USD"});
-                        }
-                    }
-                  }],
+                    }}],
+                  //   yAxes: [{
+                  //     gridLines: {
+                  //       color: "grey",
+                  //     },
+                  //     scaleLabel: {
+                  //       display: true,
+                  //       labelString: "Dollars Donated",
+                  //       fontColor: "black"
+                  //     },
+                  //     ticks: {
+                  //       beginAtZero: true,
+                  //       stepSize: 5,
+                  //       // callback: function(value, index, values) {
+                  //       //   return value.toLocaleString("en-US",{style:"currency",
+                  //       //                                      currency:"USD"});
+                  //       }
+                  //   // }
+                  // }],
                 title: {
                     display: true,
                     text: 'My Donations',
@@ -107,8 +110,11 @@ var stackedOptions = {
                         color: "grey"
                       },
                       ticks: {
-                        autoSkip: false,
-                        beginAtZero: true
+                        autoSkip: true,
+                        beginAtZero: true,
+                        callback: function(value, index, values) {
+                          return value.toLocaleString("en-US",{style:"currency",
+                                                              currency:"USD"});
                             },
 
                       scaleLabel: {
@@ -117,7 +123,7 @@ var stackedOptions = {
                         fontColor: "black",
                         // fontSize: 14
                       }
-                    }],
+                    }}],
                     yAxes: [{
                       stacked: true,
                       gridLines: {
@@ -138,10 +144,11 @@ var stackedOptions = {
                     }
                   }],
                 title: {
-                    display: true,
-                    text: 'My Donations',
+                    display: false,
+                    text: 'I\'m the Title',
                     fontSize: 24,
-                    fontStyle: 'bold'
+                    fontStyle: 'bold',
+
                        },
 
                 }};
