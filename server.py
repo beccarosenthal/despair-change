@@ -109,8 +109,12 @@ def show_button_options():
 def show_welcome_page():
     """shows welcome page that donors who are not registered members get redirected to after donations"""
 
-    if 'transaction' in session:
-        transaction = Transaction.query.get(session['transaction'])
+    if 'transaction' not in session:
+        return redirect('/')
+    #get the user who just logged in
+    transaction = Transaction.query.get(session['transaction'])
+    del session['transaction']
+
     return render_template('welcome.html', transaction=transaction)
 
 # Registration and login logic functions
@@ -461,7 +465,7 @@ def do_referred_payment():
 
     #generate the payment object using information from the database
     redirect_url, payment_object = generate_payment_object_referral(user_id,
-                                                                    org_id)
+                                                                    org_id, transaction)
     #update transaction object in the database to add paypal's ID
     transaction.payment_id = payment_object.id
     transaction.status = "paypal payment instantiated"
