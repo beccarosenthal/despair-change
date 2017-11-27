@@ -98,7 +98,7 @@ def index():
 @app.route('/about')
 def show_about_page():
     """renders about Despair Change page"""
-
+    session['transaction'] = 162
     return render_template('about.html')
 
 
@@ -115,9 +115,13 @@ def show_welcome_page():
     """shows welcome page that donors who are not registered members get redirected to after donations"""
 
     if 'transaction' not in session:
-        return redirect('/')
+        #for testing purposes...
+        session['transaction'] = 176
+        # return redirect('/')
+
     #get the user who just logged in
     transaction = Transaction.query.get(session['transaction'])
+    session['transaction'] = transaction.transaction_id
     del session['transaction']
 
     return render_template('welcome.html', transaction=transaction)
@@ -270,6 +274,16 @@ def login_with_paypal():
 
     return redirect("/")
 
+@app.route('/setup_password', methods=["POST"])
+def setup_password():
+    """allow users who have donated via referral or regular non-user donation to set their password"""
+
+    print "in setup password"
+    password = request.form.get("confirm_pass")
+    email = request.form.get("user_email")
+
+    user = User.query.filter(User.user_email == email).one()
+    import pdb; pdb.set_trace()
 
 @app.route('/logout')
 def logout_user():
@@ -621,7 +635,7 @@ def process_referral(paypal_payment, transaction):
     referred_obj = User.query.filter(User.user_email == email).first()
 
     #If no Transactions have been made with that email address, add that user to the DB
-    if not referred_obj:
+    if not referred_obj or referred_obj.fname == "Anonymous":
 
         fname = payer_info.get('first_name')
         lname = payer_info.get('last_name')
@@ -630,17 +644,13 @@ def process_referral(paypal_payment, transaction):
         pw_hash = bcrypt.generate_password_hash(user_password, 10)
 
         referred_obj = User(user_email=email,
-                             password=pw_hash,
-                             fname=fname,
-                             lname=lname,
-                             phone=phone)
+                            password=pw_hash,
+                            fname=fname,
+                            lname=lname,
+                            phone=phone)
 
         db.session.add(referred_obj)
         db.session.commit()
-
-    #change the transaction's user_id so that it belongs to the person who made it
-    transaction.user_id = referred_obj.user_id
-    db.session.commit()
 
     # Create a referral record in the database
     referrer_id = int(session['referrer_id'])
@@ -654,6 +664,10 @@ def process_referral(paypal_payment, transaction):
 
         db.session.add(referral)
         db.session.commit()
+
+    #change the transaction's user_id so that it belongs to the person who made it
+    transaction.user_id = referred_obj.user_id
+    db.session.commit()
 
     del session['referrer_id']
 
