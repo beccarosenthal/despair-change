@@ -13,7 +13,7 @@ from flask_bcrypt import Bcrypt
 from flask_debugtoolbar import DebugToolbarExtension
 from jinja2 import StrictUndefined
 from paypalrestsdk import Payment, configure, WebProfile
-from sqlalchemy import func
+from sqlalchemy import func, desc
 
 
 #import from my files
@@ -84,10 +84,15 @@ def index():
 
     print donations_by_org
     print total_amount
+
+    #Query for all transaction objects
+    transactions = Transaction.query.order_by(desc(Transaction.timestamp)).all()
+
     return render_template('homepage.html',
                            donations_by_org=donations_by_org,
                            total_amount=total_amount,
-                           amount_attempted=total_attempted)
+                           amount_attempted=total_attempted,
+                           transactions=transactions)
 
 
 @app.route('/about')
