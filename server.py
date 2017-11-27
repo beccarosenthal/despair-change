@@ -110,14 +110,15 @@ def show_button_options():
 
     return render_template('buttons.html', org=org)
 
+
 @app.route('/welcome')
 def show_welcome_page():
     """shows welcome page that donors who are not registered members get redirected to after donations"""
 
     if 'transaction' not in session:
         #for testing purposes...
-        session['transaction'] = 176
-        # return redirect('/')
+        # session['transaction'] = 176
+        return redirect('/')
 
     #get the user who just logged in
     transaction = Transaction.query.get(session['transaction'])
@@ -280,10 +281,16 @@ def setup_password():
 
     print "in setup password"
     password = request.form.get("confirm_pass")
-    email = request.form.get("user_email")
+    pw_hash = bcrypt.generate_password_hash(password, 10)
 
+    email = request.form.get("user_email")
     user = User.query.filter(User.user_email == email).one()
-    import pdb; pdb.set_trace()
+    user.password = pw_hash
+    db.session.commit()
+
+    session['current_user'] = user.user_id
+    return redirect("/dashboard")
+
 
 @app.route('/logout')
 def logout_user():
@@ -517,7 +524,6 @@ def process_payment_new_user():
         lname = "last_name"
         password = os.environ.get("DEFAULT_PASSWORD")
         print "what is password"
-        import pdb; pdb.set_trace()
         pw_hash = bcrypt.generate_password_hash(password, 10)
 
         user_obj = User(user_email=email,

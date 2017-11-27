@@ -37,7 +37,6 @@ def json_stacked_user_impact_bar(user_object):
     #TODO figure out how to make list of orgs only org user has donated to
     orgs = Organization.query.all()
 
-
     #list of all users referred by me
     referred_by_user = get_all_referred_by_user(user_object)
 
