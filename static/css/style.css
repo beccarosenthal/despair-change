@@ -1,90 +1,690 @@
-html {
-  position: relative;
-  min-height: 100%;
+
+.modal-footer {
+    border-top: none;
 }
-#content {
-  padding-bottom: 50px;
+
+.modal {
+    overflow-y: auto;
 }
-#footer .navbar{
-  position: fixed;
+
+#navbar {
+    background-color: #9b8f93;
+    border: none;
+    color: #f6efd6;
+    opacity: .95;
 }
+
+
+#navbar a {
+    color: #f6efd6;
+}
+
+#navbar a:hover {
+    color: #702822;
+}
+
+/* red 702822*/
+
+/* forms */
+
+.form-validation-error {
+    color: red;
+}
+
+label.validation-error {
+    color: red;
+    font-weight: normal;
+    font-style: italic;
+}
+
+input.validation-error {
+    border-color: red;
+}
+
+/* base.html */
+
+#everything-else {
+    padding-top: 50px;
+}
+
+.close {
+    margin-top: -2px;
+}
+
+#dob-picker {
+    background-color: white;
+}
+
+#reg-to-login-msg {
+    text-align: left;
+}
+
+/* home.html */
+
+#homepage-title {
+    text-align: center;
+    font-size: 2em;
+}
+
+#homepage-image {
+    text-align: center;
+}
+
+
 body {
-  padding: 2em;
-  /*text-align: center;*/
-},
+    overflow-y: auto;
+    background-color: #f6efd6;
+    font-family: 'Waiting for the Sunrise';
+    font-size: 18px;
+}
 
-h1 {
-  margin-bottom: 1em;
-  font-size: 65px;
-  color: #2d3033;
-},
+#homepage-bg-img {
+  /* Set rules to fill background */
+  min-height: 100%;
+  min-width: 300px;
 
-select {
-  display: none;
+  /* Set up proportionate scaling */
+  width: 100%;
+  height: auto;
+
+  /* Set up positioning */
   position: absolute;
-  top: 10px;
-  left: 10px;
-},
+  top: -15px;
+  left: 0;
+}
 
-.paypal-login-btn {
+#log-bg-img {
+  /* Set rules to fill background */
+  min-height: 100%;
+  min-width: 300px;
 
-    padding-bottom: 30px;
-},
+  /* Set up proportionate scaling */
+  width: 100%;
+  height: auto;
 
-p {
-    font-size: 14px;
-    line-height: 22.4px;
-    color: #6c7279;
+  /* Set up positioning */
+  position: absolute;
+  top: -15px;
+  left: 0;
 }
-h2 {
-    font-size: 40px;
-    color: #2d3033;
+
+/* log.html create-a-workout modal */
+
+#log-owner-name {
+    text-align: center;
+    font-size: 2.5em;
+    margin-top: 45px;
+    font-weight: bold;
+    color: #f6efd6;
 }
-h3 {
-    font-size: 28px;
-    color: #2d3033;
-    font-weight: 300;
+
+#log-HOCR-counter {
+    text-align: center;
+    font-size: 1.5em;
+    font-style: italic;
+    color: #702822;
 }
-h4 {
-    font-size: 22px;
-    color: #2d3033;
-    font-weight: 400;
+
+#log-buttons {
+    text-align: center;
+    margin-top: 15px;
+
 }
-h5 {
-    font-size: 14px;
-    color: #2d3033;
-    text-transform: uppercase;
+
+.log-button-outline {
+    position: absolute;
+    height: 82%;
+    top: 22%;
+}
+
+#log-caw-button-outline {
+    width: 13.2%;
+    left: 33%;
+}
+
+#log-ar-button-outline {
+    width: 18.6%;
+    left: 48.3%;
+}
+
+.log-button-text {
+    text-align: center;
+    background-color: transparent;
+    color: #702822;
+    color: #f6efd6;
+    font-size: 1.2em;
+    font-weight: bold;
+    border: none;
+    z-index: 2;
+    position: relative;
+}
+
+.log-button-text:hover {
+    background-color: #f6efd6;
+    color: #702822;
+}
+
+#create-a-workout-button {
+    margin-right: 25px
+}
+
+#log-page-divider {
+    width: 80%;
+    margin-left: 9%;
+    margin-top: .5%;
+}
+
+#recent-workouts-table {
+    width: 95%;
+    margin-left: 35px;
+    margin-top: -10px;
+}
+
+#recent-workouts-table td {
+    border: none;
+    padding-left: 11px;
+    font-size: 1.1em;
+    color: #f6efd6;
+}
+
+#recent-workouts-table a {
+    color: #702822;
+    font-style: italic;
+}
+
+#log-table-title {
+    text-align: center;
+    font-size: 1.75em;
+    border-bottom: none;
+    color: #f6efd6;
+}
+
+#log-table-title-underline {
+    position: absolute;
+    left: 41.5%;
+    top: 138%;
+    width: 18%;
+}
+
+#log-table-col-titles {
+    /*text-decoration: underline;*/
+    font-size: 1.25em;
+    color: #702822;
+    color: #f6efd6;
+}
+
+#log-table-cols-underline {
+    position: absolute;
+    left: 11.5%;
+    top: 198%;
+    width: 76%;
+    height: 3%;
+}
+
+#log-table-col-titles th {
+    border-bottom: none;
+    border-top: none;
+    padding-bottom: 0;
+    font-weight: normal;
+    font-size: 1.1em
+}
+
+.hidden-modal-data {
+    display: none;
+}
+
+.caw-piece-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+
+.caw-piece-table input {
+    width: 100%; /* make the inputs fit in their cells */
+    border-bottom: 1px black;
+    border-style: none none solid none;
+}
+
+th.caw-ordinal {
+    width: 7%;
+}
+
+.caw-zone {
+    width: 7%;
+}
+
+.caw-dist-time {
+    width: 13%;
+}
+
+.caw-rest {
+    width: 7%;
+}
+
+.caw-splits {
+    width: 15%;
+}
+
+.caw-notes {
+    width: 44%;
+}
+
+.caw-delete {
+    width: 7%;
+}
+
+input.caw-ordinal {
+    text-align: center;
+    border: none;
+}
+
+input.caw-dist-time {
+    text-align: right;
+}
+
+.caw-split-td {
+    position: relative;
+}
+
+input.caw-split-length {
+    text-align: right;
+    position: absolute;
+    right: 8px;
+    width: 70%;
+}
+
+input.caw-split-bool {
+    width: initial;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+.caw-table-footer {
+    text-align: center;
+}
+
+.table > tfoot > tr > td.caw-repeat-row {
+    /*border-top: 2px solid;*/
+    padding-top: 15px;
+}
+
+input.caw-repeat {
+    width: 3%;
+    text-align: center;
+}
+
+.caw-repeat-go-button {
+    margin-left: 5px;
+}
+
+.table > tfoot > tr > td.caw-table-buttons {
+    border-top: none;
+    padding-top: 15px;
+}
+
+
+/* log.html add-results modal */
+
+#ar-choose-workout {
+    margin-bottom: 15px;
+}
+
+.ar-chooser-row {
+    margin-top: 15px;
+}
+
+.ar-workout-choice {
+    width: 75%;
+    display: inline-block;
+    margin-right: 18px;
+    margin-left: 30px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-size: .75em;
+    height: inherit;
+    padding: 0 10px;
+    background-color: transparent;
+    border-color: #702822;
+    color: #702822;
     font-weight: 700;
 }
 
-.btn {
-    border: 1px solid rgba(0, 0, 0, 0.75);
-    margin-top: 20px;
-    color: #2a2a2a;
-    font-size: 12px;
-    font-weight: 400;
-    letter-spacing: 1px;
-    border-radius: 0px;
-    padding: 1.5% 3%;
+#ar-choose-workout .ar-wd-footer-button {
+    font-size: .75em;
+    line-height: normal;
+    border-width: 1px;
+    margin-top: 3px;
+    padding: 1px 11px;
+}
+
+#ar-add-results-form input {
+    width: 100%; /* make the inputs fit in their cells */
+}
+
+.ar-field {
+    border-bottom: 1px #702822;
+    border-style: none none solid none;
+    color: #3c3a79;
+}
+
+#add-results-modal a {
+    color: #8080aa;
+}
+
+#add-results-modal .ar-wd-other-data input {
+    width: 20%;
+    text-align: center;
+}
+
+.fixed-textarea {
+    resize: none;
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    font-size: inherit;
+    color: #3c3a79;
+}
+
+.fixed-textarea[readonly] {
+    background-color: transparent;
+    cursor: default;
+}
+
+input[readonly], input.wd-field[disabled] {
+    cursor: default;
+}
+
+
+.ar-wd-ordinal-col {
+    width: 5%;
+}
+
+.ar-wd-label-col {
+    width: 17%;
+}
+
+.ar-wd-dist-time-col {
+    width: 12%;
+}
+
+.ar-split-col {
+    width: 12%;
+}
+
+.ar-sr-col {
+    width: 7%;
+}
+
+.ar-watts-col {
+    width: 15%;
+}
+
+.ar-hr-col {
+    width: 10%;
+}
+
+.ar-splits-col {
+    width: 12%;
+}
+
+.ar-skipped-col {
+    width: 0;
+}
+
+/*.ar-skipped-col input {
+    margin: auto;
+}*/
+
+.ar-wd-ordinal{
+    text-align: right;
+    border: none;
+}
+
+.ar-wd-label {
+    border: none;
+}
+
+.ar-wd-dist-time,
+.ar-hr,
+.ar-watts,
+.ar-split,
+.ar-sr,
+.ar-add-splits {
+    text-align: center;
+}
+
+.modal-margins {
+    padding: 10px;
+}
+
+body .close {
+    /*margin-top: -19px;
+    margin-right: -10px;*/
+    position: absolute;
+    left: 97%;
+    top: 14px;
+}
+
+.modal-title {
+    font-size: 1.75em;
+    font-weight: bold;
+    text-decoration: underline;
+    line-height: .8;
+    margin-left: -10px;
+    margin-top: -10px;
+}
+
+.ar-wd-modal-header {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.ar-wd-modal-body {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.ar-wd-header-info {
+    font-size: 1.25em;
+    /*color: #737373;*/
+    line-height: 1;
+}
+
+.ar-wd-date {
+    margin-left: 15px;
+    width: 35%;
+}
+
+#ar-date {
+    text-align: center;
+    width: 28%;
+}
+
+#ar-chooser-header-directions {
+    margin-left: 15px;
+}
+
+.ar-wd-time-of-day {
+    width: 15%;
+    text-align: center;
+}
+
+#ar-time-of-day {
+    width: 25%;
+    margin-left: 40px;
+}
+
+.ar-wd-total-distance {
+    float: right;
+    margin-right: 15px;
+}
+
+.ar-wd-section-heading {
+    font-size: 1.5em;
+    font-weight: bold;
     display: inline-block;
-    text-transform: uppercase;
-}
-.btn:hover, .btn:focus {
-    background-color: #2a2a2a;
-    color: #fff;
-}
-.btn-large {
-    padding: 15px 40px;
+    vertical-align: top;
+    text-decoration: underline;
 }
 
-.navbar {
-      margin-bottom: 0;
-      border-radius: 0;
+.ar-wd-phase-info {
+    font-size: 1em;
+    /*color: #737373;*/
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 13px;
+    padding-left: 10px;
 }
 
-    /* Add a gray background color and some padding to the footer */
-footer {
-      background-color: #f2f2f2;
-      padding: 25px;
-      /*padding-top: 60px;*/
-    }
+.ar-wd-section {
+    padding-top: 18px;
+    padding-bottom: 18px;
+    border-bottom: 2px solid #3c3a79;
+    border-bottom: 2px solid #702822;
+}
+
+.ar-wd-other-data {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.ar-wd-piece-table {
+    table-layout: fixed;
+    margin-top: 25px;
+    margin-left: 10px;
+    width: 70%;
+}
+
+.ar-piece-table {
+
+}
+
+.wd-piece-table {
+
+}
+
+.ar-wd-piece-table > thead > tr > th {
+    text-align: center;
+    padding: 0;
+    line-height: 1;
+    border-bottom: 2px solid #3c3a79;
+    border-bottom: 2px solid #702822;
+    font-weight: inherit;
+}
+
+.ar-wd-piece-table th.ar-wd-blank-cell {
+    border-bottom: none;
+}
+
+.ar-wd-piece-table > tbody > tr > td {
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+#workout-details-modal input {
+    border: none;
+}
+
+#workout-details-modal table input {
+    width: 100%; /* make the inputs fit in their cells */
+}
+
+.paper-bg {
+    background-image: url("/static/img/linedpaper.jpg");
+}
+
+.paper-bg input,
+.paper-bg textarea.fixed-textarea {
+    background-color: transparent;
+
+
+}
+
+.paper-bg tbody > tr > td {
+    border-top: none;
+}
+
+#add-results-modal,
+#workout-details-modal {
+    font-family: 'Waiting for the Sunrise';
+    font-size: 25px;
+    color: #3c3a79;
+    color: #702822;
+}
+
+#create-a-workout-modal {
+    font-size: 25px;
+    color: #702822;
+}
+
+#caw-overall-description input[type=text] {
+    border-color: #702822;
+    color: #702822;
+}
+
+#caw-overall-description label {
+    font-size: .8em;
+}
+
+#create-a-workout-modal h3 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: -15px;
+}
+
+#create-a-workout-modal th {
+    text-align: center;
+}
+
+#create-a-workout-modal .modal-footer input,
+#create-a-workout-modal button {
+    background-color: transparent;
+    color: #702822;
+    border-color: #702822;
+    font-size: .75em;
+}
+
+#create-a-workout-modal small {
+    font-size: 1.25em;
+}
+
+.ar-wd-footer-button {
+    color: #3c3a79;
+    color: #702822;
+    border: solid #702822;
+    padding: 0 10px;
+    border-width: 2px;
+    background-color: transparent;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.ar-wd-footer-button:hover {
+    background-color: transparent;
+    opacity: .7;
+    border-color: #702822;
+    padding: 1px 11px;
+    border-width: 1px;
+    color: #702822;
+}
+
+#add-results-modal .modal-footer,
+#workout-details-modal .modal-footer {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+#workout-details-modal a {
+    pointer-events: none;
+    cursor: default;
+    color: #702822;
+}
+
+.wd-skipped {
+    display: none;
+}
+
+/*splits entries on wd modal which are -
+pointer-events: none;
+ cursor: default;*/

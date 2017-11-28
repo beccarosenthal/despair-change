@@ -10,7 +10,7 @@
 <h2>Check out your impact</h2>
 {% if user.user_org %}
 <p>If you want to increase your footprint, tell your friends to click
-  <a href="{{g.user.referral_link()}}" target="_blank">this link</a> to make a $1 donation to {{fave_org.org.name}} today!</p>
+  <a href="{{g.user.referral_link()}}" target="_blank">this link</a> to make a $1 donation to {{g.user.get_ranked_orgs()[0]}} today!</p>
 {% endif %}
 
 <h3>stacked bar chart</h3>
@@ -18,6 +18,38 @@
   <canvas id="stackedUserImpactBarChart" ></canvas>
   <div id="stackedBarLegend" class="chart-legend"></div>
 <div>
+
+
+<h3>Your Impact by Organization</h3>
+<div class="container">
+  <h2>Filterable Table</h2>
+  <p>Type something in the input field to search the table for first names, last names or emails:</p>
+  <input class="form-control" id="myInput" type="text" placeholder="Search..">
+<div class="container">
+  <h2></h2>
+  <p>Figure out a more aesthetically pleasing way to display this</p>
+  <table id="footprintTable" class="table table-hover table-responsive table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>Organization</th>
+        <th>Donor</th>
+        <th>Amount Donated</th>
+        <th>Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for transaction in footprint_transactions %}
+      <tr>
+        <td>{{transaction.org.name}}</td>
+        <td>{{transaction.user.fname}}</td>
+        <td>${{transaction.amount}}0</td>
+        <td>{{transaction.timestamp|datetimeformat("%m/%d/%y")}}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
 
     <p>You've attempted to donate ${{total_donated}}0 so far</p>
     <p>Thanks to technical difficulties, the reality on the ground is slightly different.</p>
@@ -51,4 +83,15 @@
 <div>
 
 <script type="text/javascript" src="static/js/dashboardCharts.js"> </script>
+
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#footprintTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
 {% endblock %}

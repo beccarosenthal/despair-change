@@ -21,7 +21,8 @@ from helper_functions import get_current_transaction
 from json_functions import (json_user_impact_bar,
                             json_total_impact_bar,
                             json_stacked_user_impact_bar,
-                            json_total_donations_line)
+                            json_total_donations_line,
+                            get_all_referred_by_user)
 
 from model import (User, Organization, Transaction,
                    UserOrg, Referral, State,
@@ -315,7 +316,7 @@ def logout_user():
 def show_user_dashboard():
     """show user dashboard"""
 
-    user_object, current_user_id = get_user_object_and_current_user_id()
+    user_obj, current_user_id = get_user_object_and_current_user_id()
 
     #get total amount of money user has attempted to donate
     total_donated = (db.session.query(func.sum(Transaction.amount))
@@ -326,7 +327,7 @@ def show_user_dashboard():
     donations_by_org = query_for_donations_by_org_dict(current_user_id)
 
     #Get info about user_org with rank #1 to generate referral url
-    fave_orgs = get_current_faves(user_object)
+    fave_orgs = user_obj.get_ranked_orgs()
     print "fave_orgs in show user dashboard fn ", fave_orgs
     if fave_orgs:
         print "inside the if statement"
@@ -336,13 +337,19 @@ def show_user_dashboard():
     else:
         fave_org = random.choice(Organization.query.all())
 
+    #get list of all users included in footprint
+    user_and_footprint_objs = [user_obj] + get_all_referred_by_user(user_obj)
+    footprint_transactions = []
+    for user in user_and_footprint_objs:
+        footprint_transactions.extend(user.transactions)
     #TODO use regex to make total donated and amounts look like dollar amounts
     print donations_by_org
     return render_template('dashboard.html',
-                           user=user_object,
+                           user=user_obj,
                            total_donated=total_donated[0],
                            donations_by_org=donations_by_org,
-                           fave_org=fave_org)
+                           fave_org=fave_org,
+                           footprint_transactions=footprint_transactions)
 
 @app.route("/settings")
 def show_user_settings():
