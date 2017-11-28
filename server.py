@@ -37,6 +37,12 @@ app.secret_key = 'werewolf-bar-mitzvah'
 client_id = os.environ.get("PAYPAL_CLIENT_ID")
 client_secret = os.environ.get("PAYPAL_CLIENT_SECRET")
 
+
+#jinja datetime formatting
+@app.template_filter()
+def datetimeformat(value, format='%H:%M / %d-%m-%Y'):
+    """Custom Jinja filter to format dates consistently."""
+    return value.strftime(format)
 #Auth0 app keys
 
 # domain = os.environ.get('AUTH0_DOMAIN')
@@ -60,6 +66,8 @@ def do_this_before_each_request():
     #decide if g.orgs is an else thing or not
     else:
         g.orgs = Organization.query.all()
+
+
 
 
 @app.route('/')

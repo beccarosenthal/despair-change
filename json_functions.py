@@ -44,13 +44,13 @@ def json_stacked_user_impact_bar(user_object):
 
     #get list of user_ids to make querying for sum of donations easier
     referred_user_ids = [user.user_id for user in referred_by_user]
-    print "ids of referred users: ", referred_user_ids
+    # print "ids of referred users: ", referred_user_ids
 
     user_data = [] #dictionaries with donor_category: amount pairs (my donations, donation footprint, etc)   user_data = [] #amount of money user gave per org in order of orgs
     footprint_data = [] #amount of money footprint gave per org in order of orgs
     org_names = [] #name of org
 
-    print org_names
+    # print org_names
     for org in orgs:
         #query for sum of my donations to each org
 
@@ -98,9 +98,9 @@ def json_stacked_user_impact_bar(user_object):
                         "backgroundColor": HOVER_BACKGROUND_COLORS[0],
                         "hoverBackgroundColor": BACKGROUND_COLORS[1]
                     },
-    print
-    print "data dict before"
-    print data_dict
+    # print
+    # print "data dict before"
+    # print data_dict
 
     if referred_user_ids:
         data_dict["datasets"] += footprint_dataset
@@ -113,12 +113,12 @@ def json_stacked_user_impact_bar(user_object):
     #                     "hoverBackgroundColor": BACKGROUND_COLORS[1]
     #                 },)
 
-    print "footprint data"
-    print footprint_data
-    print
-    print "data_dict after"
-    print
-    print data_dict
+    # print "footprint data"
+    # print footprint_data
+    # print
+    # print "data_dict after"
+    # print
+    # print data_dict
 
     return jsonify(data_dict)
 
@@ -201,12 +201,11 @@ def json_total_impact_bar():
 def json_total_donations_line():
     """generate data for line chart of donations over time"""
 
-    #FILTERS BY Date is 27th
-    # transactions = db.session.query(Transaction).filter(extract('day', Transaction.timestamp) == 27).all()
-    transactions = Transaction.query.order_by(Transaction.
-                                              timestamp).all()
+    # Transactions in order of most recent to oldest
+    # transactions = db.session.query(Transaction).group_by(Transaction.timestamp.day).all()
+    transactions = transactions.reverse()
 
-    print transactions, "transactions ordered by timestamp"
+
     transactions = db.session.query(Transaction).group_by(extract('day', Transaction.timestamp)).all()
                                                       #               ('year', Transaction.timestamp)==year,
                                                       # extract('month', Transaction.timestamp)==month,

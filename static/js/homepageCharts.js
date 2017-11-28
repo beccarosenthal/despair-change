@@ -84,9 +84,9 @@ $.get('/total-impact-bar.json', function (data) {
 
 var ctx = document.getElementById("datetimeTotalLineChart").getContext('2d');
 
-$.get('/total-impact-bar.json', function (data) {
+$.get('/donation-over-time-line.json', function (data) {
     console.log(data);
-    console.log("line bar function");
+    console.log("line  function");
     var totalLineChart = new Chart(ctx, {
                                             type: 'line',
                                             data: data,

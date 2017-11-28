@@ -144,6 +144,8 @@ class Organization(db.Model):
     mission_statement = db.Column(db.Text, nullable=True)
     website_url = db.Column(db.String(200), nullable=True)
     has_chapters = db.Column(db.Boolean, nullable=True)
+    twitter_url = db.Column(db.String(200), nullable=True)
+    short_name = db.Column(db.String(30), nullable=False)
 
     #todo write way to query with timestamp included
     def amount_raised(self, start_date=None, end_date=None):
