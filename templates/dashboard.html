@@ -10,8 +10,13 @@
 <h2>Check out your impact</h2>
 {% if user.user_org %}
 <p>If you want to increase your footprint, tell your friends to click
-  <a href="{{g.user.referral_link()}}" target="_blank">this link</a> to make a $1 donation to {{g.user.get_ranked_orgs()[0]}} today!</p>
+  <input type="hidden" value="{{g.user.referral_link()}}" id="referralLink">
+<button onclick="copyReferralLink()">here</button>
+to make a $1 donation to {{g.user.get_ranked_orgs()[0].name}} today!</p>
 {% endif %}
+
+
+
 
 <h3>stacked bar chart</h3>
 <div class="stacked-user-impact-bar">
@@ -93,5 +98,14 @@ $(document).ready(function(){
     });
   });
 });
+</script>
+
+<script>
+function copyReferralLink() {
+  var copyText = document.getElementById("referralLink");
+  copyText.select();
+  document.execCommand("Copy");
+  alert("Copied the text: " + copyText.value);
+}
 </script>
 {% endblock %}
