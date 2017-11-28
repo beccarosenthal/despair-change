@@ -1,6 +1,7 @@
 html {
   position: relative;
   min-height: 100%;
+
 }
 #content {
   padding-bottom: 50px;
@@ -10,6 +11,7 @@ html {
 }
 body {
   padding: 2em;
+    background-color: #EFF7FF;
   /*text-align: center;*/
 },
 

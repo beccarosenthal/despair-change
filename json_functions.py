@@ -1,6 +1,8 @@
+from datetime import datetime
+
 from collections import defaultdict
 from flask import Flask, redirect, request, session, jsonify
-from sqlalchemy import func
+from sqlalchemy import func, extract, Date
 
 from model import (User, Organization, Transaction,
                    UserOrg, State, Referral,
@@ -100,7 +102,6 @@ def json_stacked_user_impact_bar(user_object):
     print "data dict before"
     print data_dict
 
-
     if referred_user_ids:
         data_dict["datasets"] += footprint_dataset
 
@@ -196,6 +197,24 @@ def json_total_impact_bar():
 
 ##TODO separate out query helper functions into its own file
 #############QUERY HELPER FUNCTION########
+
+def json_total_donations_line():
+    """generate data for line chart of donations over time"""
+
+    #FILTERS BY Date is 27th
+    # transactions = db.session.query(Transaction).filter(extract('day', Transaction.timestamp) == 27).all()
+    transactions = Transaction.query.order_by(Transaction.
+                                              timestamp).all()
+
+    print transactions, "transactions ordered by timestamp"
+    transactions = db.session.query(Transaction).group_by(extract('day', Transaction.timestamp)).all()
+                                                      #               ('year', Transaction.timestamp)==year,
+                                                      # extract('month', Transaction.timestamp)==month,
+                                                      # extract('day', Transaction.timestamp)==day).all()
+
+    return jsonify(data_dict)
+
+
 
 def get_all_referred_by_user(user_object):
     """given user_object, returns list of users in referred chain from primary user

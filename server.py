@@ -20,7 +20,9 @@ from sqlalchemy import func, desc
 from helper_functions import get_current_transaction
 from json_functions import (json_user_impact_bar,
                             json_total_impact_bar,
-                            json_stacked_user_impact_bar)
+                            json_stacked_user_impact_bar,
+                            json_total_donations_line)
+
 from model import (User, Organization, Transaction,
                    UserOrg, Referral, State,
                    connect_to_db, db)
@@ -727,10 +729,13 @@ def total_impact_data():
 
     return json_total_impact_bar()
 
+
 @app.route('/donations-over-time-line.json')
 def timestamp_line_data():
     """return line chart data about times of donations by all users"""
-    pass
+
+    return json_total_donations_line()
+
 #HELPER FUNCTIONS
 ############################################################################
 def create_transaction_object(user_id, org_id, amount=1.0):

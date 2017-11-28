@@ -1,0 +1,69 @@
+
+{% extends 'base.html' %}
+{% block title %} {{ org.name }} {% endblock %}
+{% block content %}
+
+  <br><br><h2>{{org.name}}</h2>
+
+
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">Mission: {{org.mission_statement}}</div>
+    <div class="panel-body">
+        <a href="{{org.website_url}}" target="_blank">
+        <img alt='' width="300" height="200" src="{{org.logo_url}}" ></a><br>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="container">
+  <table class="table table-hover table-responsive table-striped">
+    <thead>
+      <tr>
+        <th>Organization</th>
+        <th>Amount Donated</th>
+        <th>Number of Donors</th>
+        <th>Number of Donations</th>
+        <th>Average Donation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a href="/org/{{org.org_id}}">{{org.name}}</td></a>
+        <td>${{org.amount_raised()}}0</td>
+        <td>{{org.num_unique_donors()}}</td>
+        <td>{{org.num_transactions()}}</td>
+        <td>{{org.average_donation()}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>Donations</h3>
+<div class="container">
+  <table class="table table-hover table-responsive table-striped">
+    <thead>
+      <tr>
+        <th>Amount</th>
+        <th>Donor</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for transaction in org.transactions%}
+      <tr>
+        <td>${{transaction.amount}}0</td>
+        <td>{{transaction.user.fname}}</td>
+        <td>{{transaction.timestamp}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+
+<h2>TODO: add a chart showing all donations to org</h2>
+{% endblock %}
