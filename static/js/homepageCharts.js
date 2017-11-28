@@ -22,10 +22,10 @@ var options = {
                     {
                //        // barThickness: 50,
                //        barPercentage: 0.5,
-               //        gridLines: {
-               //          display: false,
-               //          color: "grey"
-               //        },
+                      gridLines: {
+                        display: false,
+                        color: "grey"
+                      },
                       ticks: {
                //          autoSkip: true,
                         beginAtZero: true,
@@ -81,3 +81,19 @@ $.get('/total-impact-bar.json', function (data) {
                                           });
     $('#totalBarLegend').html(totalBarChart.generateLegend());
 });
+
+var ctx = document.getElementById("datetimeTotalLineChart").getContext('2d');
+
+$.get('/total-impact-bar.json', function (data) {
+    console.log(data);
+    console.log("line bar function");
+    var totalLineChart = new Chart(ctx, {
+                                            type: 'line',
+                                            data: data,
+                                            options: options
+                                          });
+    $('#totalLineLegend').html(totalLineChart.generateLegend());
+});
+
+
+

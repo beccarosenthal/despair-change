@@ -189,6 +189,7 @@ class Organization(db.Model):
         """get average donation amount"""
 
         average = self.amount_raised()/float(len(self.transactions))
+        average = '${:,.2f}'.format(average)
         return average
 
 

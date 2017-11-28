@@ -721,14 +721,16 @@ def user_impact_data():
     return data_dict
 
 
-#TODO - this
 @app.route('/total-impact-bar.json')
 def total_impact_data():
     """return bar chart data about collective impact of all users"""
 
     return json_total_impact_bar()
 
-
+@app.route('/donations-over-time-line.json')
+def timestamp_line_data():
+    """return line chart data about times of donations by all users"""
+    pass
 #HELPER FUNCTIONS
 ############################################################################
 def create_transaction_object(user_id, org_id, amount=1.0):

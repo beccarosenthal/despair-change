@@ -14,15 +14,15 @@
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="static/js/base.js"></script>
-    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <script type="text/javascript" src="/static/js/base.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
   <!--
   <script src="dist/clipboard.min.js"></script> -->
 </head>
 
 <body>
 
-  <nav class="navbar navbar-default">
+  <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -47,11 +47,11 @@
           <ul class="dropdown-menu">
             {% if 'current_user' in session:%}
               {% for org in g.user.get_ranked_orgs() %}
-            <li><a href="{{org.website_url}}" target="_blank">{{org.name}}</a></li>
+            <li><a href="/org/{{org.user_id}}" target="_blank">{{org.name}}</a></li>
               {% endfor %}
             {% else %}
               {% for org in g.orgs %}
-            <li><a href="{{org.website_url}}" target="_blank">{{org.name}}</a></li>
+            <li><a href="/org/{{org.user_id}}" target="_blank">{{org.name}}</a></li>
               {% endfor %}
             {% endif%}
           </ul>
@@ -211,7 +211,7 @@
 
 <!--<script type="text/javascript">   let clipboard = new Clipboard('.copy-button'); </script> -->
 <!-- Footer -->
-<div class="container-fluid footer navbar-fixed-bottom">
+<div class="navbar container-fluid footer navbar-fixed-bottom">
 <footer class="container-fluid bg-4 text-center">
   <p>Despair Change is in no way affiliated with PayPal. Though if they want to wave service fees, I would not complain.</p>
 </footer>
