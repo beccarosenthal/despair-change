@@ -145,8 +145,51 @@ class Organization(db.Model):
     website_url = db.Column(db.String(200), nullable=True)
     has_chapters = db.Column(db.Boolean, nullable=True)
 
-    #TODO add short name (and potentially medium length name too to db)
-    # short_name = db.Column(db.String(15), nullable=True)
+    #todo write way to query with timestamp included
+    def amount_raised(self, start_date=None, end_date=None):
+        """calculate amount of money raised by particular org"""
+        total = 0
+        for transaction in self.transactions:
+            total += transaction.amount
+
+        return total
+
+        #or
+
+        # total = (db.session.query(
+        #     db.func.sum(Transaction.amount)
+        #            .filter(Transaction.org_id == self.org_id))
+        #            .one()[0])
+    def num_transactions(self):
+        """get number of donations"""
+
+        return len(self.transactions)
+
+    def num_unique_donors(self):
+      """get number of unique donors"""
+
+      num_users = len(db.session.query(Transaction.user_id).filter(Transaction.org_id == self.org_id).all())
+      return num_users
+
+    def unique_donors(self):
+        """get details of donations sorted by donors"""
+
+        #gets tuple of (user_Id, $ donated to org, # donations by org)
+        donations_by_user = (db.session.query(
+            Transaction.user_id,
+            db.func.sum(Transaction.amount),
+            db.func.count(Transaction.transaction_id))
+                                       .filter(Transaction.org_id == self.org_id)
+                                       .group_by(Transaction.user_id)
+                                       .all())
+
+        return donations_by_user
+
+    def average_donation(self):
+        """get average donation amount"""
+
+        average = self.amount_raised()/float(len(self.transactions))
+        return average
 
 
     def __repr__(self):
@@ -183,6 +226,12 @@ class Transaction(db.Model):
     timestamp = db.Column(db.DateTime,
                           nullable=False,
                           default=datetime.datetime.utcnow)
+
+    def get_transactions_by_org(org_id):
+
+        pass
+
+
     # # #TODO add this to transactions already in db, figure out logic for how to change transaction if referred makes donation and then signs up
     # referrer_id = db.Column(db.Integer,
     #                         db.ForeignKey('users.user_id'),

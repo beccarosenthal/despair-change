@@ -11,6 +11,36 @@
 <div class="total-impact-bar">
   <canvas id="totalImpactBarChart" ></canvas>
   <div id="totalBarLegend" class="chart-legend"></div>
+
+
+<h3>Impact by Organization</h3>
+<div class="container">
+  <h2></h2>
+  <p>Figure out a more aesthetically pleasing way to display this</p>
+  <table class="table table-hover table-responsive table-striped">
+    <thead>
+      <tr>
+        <th>Organization</th>
+        <th>Amount Donated</th>
+        <th>Number of Donors</th>
+        <th>Number of Donations</th>
+        <th>Average Donation</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for org in g.orgs %}
+      <tr>
+        <td>{{org.name}}</td>
+        <td>${{org.amount_raised()}}0</td>
+        <td>{{org.num_unique_donors()}}</td>
+        <td>{{org.num_transactions()}}</td>
+        <td>{{org.average_donation()}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
 <div>
 <p>It's working! Well intending and completely real users just like you have attempted to donate {{amount_attempted}} so far. Seriously. {{amount_attempted}}!! </p>
     <p>Thanks to technical difficulties, though, the reality on the ground is slightly different.
@@ -20,8 +50,10 @@
     {% endfor %}
     <br>
     <br>
-
 </div>
+
+
+
 <h3>Donations</h3>
 <div class="container">
   <h2></h2>

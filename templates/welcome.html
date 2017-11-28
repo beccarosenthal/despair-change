@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block title %}WELCOME{% endblock %}
+{% block content %}
+
+
+<div id="welcome">
+<h1>Welcome to Despair Change, where we turn collective despair into positive change</h1></div>
+<h3>You made your first donation already--a ${{transaction.amount}}0 donation to {{transaction.org.name}}. Set up a password to see your impact and to refer your friends to start turning their despair into positive change!</h3>
+
+<!-- TODO MAKE A FORM HERE TO CHANGE PASSWORD -->
+
+<p data-placement="top" data-toggle="tooltip" title="Edit" data-original-title="Edit">
+    <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" data-backdrop="static" data-keyboard="false">
+        <span class="glyphicon glyphicon-pencil"> Join Us!</span>
+    </button>
+</p>
+
+<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Change Your Detail</h4>
+            </div>
+            <!--/.modal-header-->
+
+            <div class="modal-body">
+                <form method="post" id="updateForm" action="/setup_password">
+                    <input type="hidden" name="userID" value="{{transaction.user.fname}}">
+                    <div class="form-group">
+                        <label for="user_email">Your Email Address :</label>
+                        <input class="form-control" type="text" name="user_email" id="user_email" value="{{transaction.user.user_email}}">
+                    </div>
+
+                    <h4><u><strong>Set Password</strong></u></h4>
+<!--                     <div class="form-group" id="currentPass-group">
+                        <label for="current_pass">Current Password :</label>
+                        <input class="form-control" type="password" name="current_pass" id="current_pass">
+                    </div> -->
+
+                    <div class="form-group">
+                        <label for="new_pass">New Password :</label>
+                        <input class="form-control" type="password" name="new_pass" id="new_pass">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm_pass">Confirm Password :</label>
+                        <input class="form-control" type="password" name="confirm_pass" id="confirm_pass">
+                    </div>
+
+                    <div class="modal-footer">
+                        <!-- <input type="submit" name="submit" class="btn btn-block btn-warning" value="Save changes" /> -->
+                        <button type="submit" name="submit" class="btn btn-success" id="submitForm" value="Save changes">Save Changes</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--/.modal -->
+<div class="total-impact-bar">
+  <canvas id="totalImpactBarChart" ></canvas>
+  <div id="totalBarLegend" class="chart-legend"></div>
+<div>
+
+<script>
+
+$('#edit').on('hidden.bs.modal', function() {
+    location.reload();
+});
+
+/* must apply only after HTML has loaded */
+$(document).ready(function() {
+    $("#updateForm").on("submit", function(e) {
+
+        $(".error").hide();
+        var hasError = false;
+        // var currentpass = $("#current_pass").val();
+        var newpass = $("#new_pass").val();
+        var cnfpass = $("#confirm_pass").val();
+
+        // if (currentpass == '') {
+        //     $("#current_pass").after('<span class="error text-danger"><em>Please  enter your current password.</em></span>');
+            //$('#currentPass-group').addClass('has-error'); // add the error class to show red input
+            // //$('#current_pass').append('<div class="help-block">Please enter your current password.</div>'); // add the actual error message under our input
+            // hasError = true;
+        } else if (newpass == '') {
+            $("#new_pass").after('<span class="error text-danger"><em>Please enter a password.</em></span>');
+            hasError = true;
+        } else if (cnfpass == '') {
+            $("#confirm_pass").after('<span class="error text-danger"><em>Please re-enter your password.</em></span>');
+            hasError = true;
+        } else if (newpass != cnfpass) {
+            $("#confirm_pass").after('<span class="error text-danger"><em>Passwords do not match.</em></span>');
+            hasError = true;
+        }
+
+        if (hasError == true) {
+            return false;
+        }
+        if (hasError == false) {
+
+            var postData = $(this).serializeArray();
+            var formURL = $(this).attr("action");
+            $.ajax({
+                url: formURL,
+                type: "POST",
+                data: postData,
+                success: function(data, textStatus, jqXHR) {
+                    $('#edit .modal-header .modal-title').html("Result");
+                    $('#edit .modal-body').html(data);
+                    $("#submitForm").remove();
+                    //document.location.reload();
+                },
+                error: function(jqXHR, status, error) {
+                    console.log(status + ": " + error);
+                }
+            });
+            e.preventDefault();
+        }
+    });
+
+    $("#submitForm").on('click', function() {
+        $("#updateForm").submit();
+    });
+});
+
+</script>
+
+{% endblock %}

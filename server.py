@@ -474,9 +474,7 @@ def do_referred_payment():
     print "in donated/referred"
     org_id = request.args.get("org_id")
     referrer_id = request.args.get("referrer_id")
-    #FIXME referrer 27 is the anonymous user.
-    if not referrer_id:
-        referrer_id = 27
+
 
     print org_id, "org id from url"
     print referrer_id, "referrer id from url"
@@ -535,14 +533,18 @@ def process_payment_new_user():
         db.session.commit()
     print
     print "user_obj: ", user_obj
+    print "user object transactions"
+    print user_obj.transactions
 
     transaction = create_transaction_object(user_obj.user_id, org_id, float(amount))
-
+    print "did we build a transaction?"
+    print transaction
     #generate the payment object using information from the database
     redirect_url, payment_object = generate_payment_object(user_obj.user_id,
                                                            org_id, transaction)
 
-    import pdb; pdb.set_trace()
+    print "did we get the paypal object back"
+    # import pdb; pdb.set_trace()
     #update transaction object in the database to add paypal's ID
     transaction.payment_id = payment_object.id
     transaction.status = "paypal payment instantiated"
@@ -551,8 +553,8 @@ def process_payment_new_user():
     db.session.commit()
 
     return redirect(redirect_url)
-    flash("you got the donated/register link")
-    return redirect('/')
+    # flash("you got the donated/register link")
+    # return redirect('/')
 
 
 @app.route('/process', methods=['GET'])
@@ -722,13 +724,14 @@ def total_impact_data():
 def create_transaction_object(user_id, org_id, amount=1.0):
     """create Transaction object for both referral and non referral transactions"""
 
+    print "in create transaction object function"
     transaction = Transaction(org_id=org_id,
                               user_id=user_id,
                               payment_id="Unrequested",
                               amount=amount,
                               status="donation attempted"
                               )
-
+    print transaction, "transaction before being added to db"
     db.session.add(transaction)
     db.session.commit()
 

@@ -47,7 +47,7 @@ def create_web_profile(org_obj):
 
     print "webprofile, before creation"
     print web_profile
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
     if web_profile.create():
         print("Web Profile[%s] created successfully" % (web_profile.id))
@@ -57,7 +57,7 @@ def create_web_profile(org_obj):
     print
     print web_profile
     print "web_profile after .create"
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
     return web_profile
 
@@ -76,7 +76,7 @@ def generate_payment_object_referral(anonymous_user_id, org_id, current_transact
 
     web_profile = create_web_profile(org_obj)
     print "back in generate payment fn"
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
     #Generate Payment Object
     payment = Payment({
