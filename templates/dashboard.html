@@ -10,8 +10,8 @@
 <h2>Check out your impact</h2>
 {% if user.user_org %}
 <p>If you want to increase your footprint, tell your friends to click
-  <input type="hidden" value="{{g.user.referral_link()}}" id="referralLink">
-<button onclick="copyReferralLink()">here</button>
+  <input type="text" value="{{g.user.referral_link()}}" id="referralLink" hidden>
+  <span id="referralLink" onclick="copyReferralLink()">here</span>
 to make a $1 donation to {{g.user.get_ranked_orgs()[0].name}} today!</p>
 {% endif %}
 
