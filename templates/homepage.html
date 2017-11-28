@@ -30,7 +30,7 @@
     <tbody>
       {% for org in g.orgs %}
       <tr>
-        <td>{{org.name}}</td>
+        <td><a href="/org/{{org.org_id}}">{{org.name}}</td></a>
         <td>${{org.amount_raised()}}0</td>
         <td>{{org.num_unique_donors()}}</td>
         <td>{{org.num_transactions()}}</td>

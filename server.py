@@ -475,7 +475,6 @@ def do_referred_payment():
     org_id = request.args.get("org_id")
     referrer_id = request.args.get("referrer_id")
 
-
     print org_id, "org id from url"
     print referrer_id, "referrer id from url"
 
@@ -689,6 +688,17 @@ def cancel_payment():
 
     flash('I think I just canceled a payment')
     return redirect('/')
+
+@app.route('/org/<specific_org_id>')
+def display_org_page(specific_org_id):
+    """display page about specific org"""
+
+    specific_org = Organization.query.get(specific_org_id)
+
+    return render_template('org.html', org=specific_org)
+
+
+
 #Routes about Data vis
 ##############################################################################
 @app.route('/stacked-user-impact-bar.json')
