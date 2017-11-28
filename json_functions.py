@@ -2,7 +2,7 @@ from datetime import datetime
 
 from collections import defaultdict
 from flask import Flask, redirect, request, session, jsonify
-from sqlalchemy import func, extract, Date
+from sqlalchemy import func, extract, Date, cast, DATE
 
 from model import (User, Organization, Transaction,
                    UserOrg, State, Referral,
@@ -11,7 +11,7 @@ from model import (User, Organization, Transaction,
 BACKGROUND_COLORS = ["#C72DB3", "#D9A622", "#2CA248", "#6574DA",
                      "#C72D2D", "#2DC7C0", "#FF6384", "#FEFF29", ]
 HOVER_BACKGROUND_COLORS = ["#2DC7C0", "#FF6384", "#FEFF29","#000000",
-                           "#36A2EB", "#FF00FF", "#6574DA", "#C72D2D",  ]
+                           "#36A2EB", "#FF00FF", "#6574DA", "#C72D2D", ]
 
 
 ################################################################################
@@ -201,15 +201,60 @@ def json_total_impact_bar():
 def json_total_donations_line():
     """generate data for line chart of donations over time"""
 
-    # Transactions in order of most recent to oldest
-    # transactions = db.session.query(Transaction).group_by(Transaction.timestamp.day).all()
-    transactions = transactions.reverse()
+    #queries for tuple of ($sum, #donations, date)
+    group_param = cast(Transaction.timestamp, DATE) #can change group param to group query by different things
+    transactions = (db.session.query(func.sum(Transaction.amount),
+                                     func.count(Transaction.amount),
+                                     group_param)
+                              .group_by(group_param)
+                              .order_by(group_param)
+                              .all())
+
+    #queries tuple of($sum, date, org_id, #donations to that org on that date)
+    # transactions = (db.session.query(func.sum(Transaction.amount),
+    #                                  group_param,
+    #                                  Transaction.org_id,
+    #                                  func.count(Transaction.transaction_id))
+    #                           .group_by(group_param,
+    #                                     Transaction.org_id)
+    #                           .order_by(group_param,
+    #                                     Transaction.org_id)
+    #                           .all())
+
+    count = []
+    total = []
+    dates = []
+
+    for data in transactions:
+        total.append(data[0])
+        count.append(data[1])
+        dates.append(data[2])
+
+    #make dates presentable
+    for date in dates:
+        date =  date.strftime("%Y/%m/%d")
+
+    print transactions
+    # import pdb; pdb.set_trace()
 
 
-    transactions = db.session.query(Transaction).group_by(extract('day', Transaction.timestamp)).all()
-                                                      #               ('year', Transaction.timestamp)==year,
-                                                      # extract('month', Transaction.timestamp)==month,
-                                                      # extract('day', Transaction.timestamp)==day).all()
+    data_dict = {
+                "labels": dates,
+                "datasets": [
+                    {   "label": ["Number of Donations"],
+                        "data": count,
+                        # "fillColor": BACKGROUND_COLORS[0],
+                        # "strokeColor": HOVER_BACKGROUND_COLORS[0],
+                                            },]
+            }
+
+    amount_data = { "label": ["Amount Donated"],
+                        "data": total,
+                        "fillColor": BACKGROUND_COLORS[1],
+                        "strokeColor": HOVER_BACKGROUND_COLORS[1],
+                                            },
+
+    # data_dict['datasets'].append(amount_data)
 
     return jsonify(data_dict)
 

@@ -1,7 +1,7 @@
 """Models and database functions for Ratings project."""
 
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func
+from sqlalchemy import func, DATE, cast
 import datetime
 import os
 
@@ -194,6 +194,18 @@ class Organization(db.Model):
         average = '${:,.2f}'.format(average)
         return average
 
+    # #TODO #FIXME
+    # def get_transactions_by_date(self):
+    #     """returns tuple ($ sum of donations, # donations, date)"""
+
+    #     group_param = cast(Transaction.timestamp, DATE) #can change group param to group query by different things
+    #     data = (db.session.query(func.sum(self.transactions.amount),
+    #                             func.count(self.transactions.amount),
+    #                             group_param)
+    #                       .group_by(group_param)
+    #                       .order_by(group_param).all())
+
+    #     return data
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -230,9 +242,18 @@ class Transaction(db.Model):
                           nullable=False,
                           default=datetime.datetime.utcnow)
 
-    def get_transactions_by_org(org_id):
+    # def get_transactions_by_date_by_org(self):
+    #     """returns tuples ($sum, date, org_id, #donations to that org on that date)"""
 
-        pass
+    #     group_param = cast(self.timestamp, DATE)
+    #     transactions = (db.session.query(func.sum(self.amount),
+    #                                      group_param, self.org,
+    #                                      func.count(self.transaction_id))
+    #                               .group_by(group_param, self.org)
+    #                               .order_by(group_param, self.org)
+    #                               .all())
+    #     return transactions
+
 
 
     # # #TODO add this to transactions already in db, figure out logic for how to change transaction if referred makes donation and then signs up

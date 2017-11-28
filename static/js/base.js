@@ -35,3 +35,12 @@ $.getJSON("https://bootswatch.com/api/3.json", function (data) {
     $(".alert").toggleClass("alert-info alert-danger");
     $(".alert h4").text("Failure!");
 });
+
+
+// copy referral link to clipboard
+function copyReferralLink() {
+  var copyText = document.getElementById("referralLink");
+  copyText.select();
+  document.execCommand("Copy");
+  alert("Copied the text: " + copyText.value);
+}

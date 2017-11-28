@@ -70,7 +70,8 @@
             <li><a href="#">Change Favorite Org</a></li>
             <li><a href="#">Change Default Amount</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="{{g.user.referral_link()}}" target="_blank">Amplify your impact</a></li>
+            <li><input type="text" value="{{g.user.referral_link()}}" id="referralLink" hidden>
+          <span id="referralLink" onclick="copyReferralLink()">Amplify Your Impact</span>
             <li role="separator" class="divider"></li>
             <li><a href="/logout">Logout</a></li>
           </ul>
