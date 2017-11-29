@@ -70,8 +70,20 @@
             <li><a href="#">Change Favorite Org</a></li>
             <li><a href="#">Change Default Amount</a></li>
             <li role="separator" class="divider"></li>
-            <li><input type="text" value="{{g.user.referral_link()}}" id="referralLink" hidden>
-          <span id="referralLink" onclick="copyReferralLink()">Amplify Your Impact</span>
+            <input type="text" value="{{g.user.referral_link()}}" id="referralLink" hidden>
+            <li id="referralLink" onclick="copyReferralLink()"><a href="#">Amplify Your Impact</a></li>
+            <li id="social-bar">
+             <!-- Facebook -->
+              <a href="#" target="popup" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=https://www.facebook.com/beccarosemusic&amp;display=popup&amp;ref=plugin&amp;src=like','name','width=600,height=400')" >
+              <img src="https://simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook"> </a>
+
+              <!-- Twitter -->
+               <a href="#" target="popup" onclick="window.open('https://twitter.com/intent/tweet?text=Donate%a%dollar!%%{{g.user.referral_link()}}','name','width=600,height=400')">
+              <img src="https://simplesharebuttons.com/images/somacro/twitter.png" alt="Twitter" />
+              </a>
+
+
+            </li>
             <li role="separator" class="divider"></li>
             <li><a href="/logout">Logout</a></li>
           </ul>
@@ -210,23 +222,30 @@
 
 
 
-
-<!--<script type="text/javascript">   let clipboard = new Clipboard('.copy-button'); </script> -->
+  <!-- Your share button code -->
+  <!-- <div class="fb-share-button"
+    data-href="https://www.your-domain.com/your-page.html"
+    data-layout="button_count">
+  </div> -->
 <!-- Footer -->
-<!-- <div class="navbar container-fluid footer navbar-fixed-bottom">
-<footer class="container-fluid bg-4 text-center">
-  <p>Despair Change is in no way affiliated with PayPal. Though if they want to wave service fees, I would not complain.</p>
-</footer>
-</div> -->
-
 <div class="navbar navbar-default navbar-fixed-bottom">
     <div class="container">
       <p class="navbar-text pull-left">Despair Change is in no way affiliated with PayPal. Though if they want to wave service fees, I would not complain.</p>
-      <span class="glyphicon glyphicon-star"></span>  Subscribe on YouTube</a>
+      <span class="fb-share-button"></span>  Share on Facebook</a>
     </div>
 </div>
 
 
+
+  <!-- Load Facebook SDK for JavaScript -->
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
 
 
 

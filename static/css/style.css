@@ -14,7 +14,7 @@
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 #referralLink {
 
-    color: blue;
+    color: white;
     font-style: underline;
 }
 
@@ -7076,8 +7076,12 @@ input[type="checkbox"] {
 .modal .close {
   color: #222222;
 }
-footer {
-      background-color: #f2f2f2;
-      padding-top: 25px;
-      /*padding-top: 60px;*/
-    }
+
+
+#share-buttons img {
+  width: 35px;
+  padding: 5px;
+  border: 0;
+  box-shadow: 0;
+  display: inline;
+}

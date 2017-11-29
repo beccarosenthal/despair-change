@@ -220,15 +220,10 @@ def json_org_donations_datetime():
     datetime = []
     label_dates = []
     org_data = []
-
-
-    print "data_by_date.items()"
-    print data_by_date.items()
-    # for i in range(len(data_by_date.keys())):
     for date, org_dict in  data_by_date.items():
-        print date
-        print org_dict
-        print
+        # print date
+        # print org_dict
+        # print
         datetime.append(date)
         org_data.append(org_dict)
 

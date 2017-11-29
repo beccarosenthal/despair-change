@@ -2,12 +2,110 @@
 {% block title %} Buttons {% endblock %}
 {% block content %}
 
+<!-- links to popup to my artist page -->
+    <!-- <a href="#" target="popup" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=https://www.facebook.com/beccarosemusic&amp;display=popup&amp;ref=plugin&amp;src=like','name','width=600,height=400')" >
+        <img src="https://simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook"> </a><br> -->
+
+<a href="#" target="popup" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u={{g.user.referral_link()}}&amp;display=popup&amp;ref=plugin&amp;src=like','name','width=600,height=400')" >
+<img src="https://simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook"> </a><br>
+
 <h1>BUTTONS!!!</h1>
+  <!-- Load Facebook SDK for JavaScript -->
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
+  <!-- Your share button code -->
+  <div class="fb-share-button"
+    data-href="https://www.your-domain.com/your-page.html"
+    data-layout="button_count">
+  </div>
+
+    <!-- Facebook -->
+    <a href="#" onclick="window.open(http://www.facebook.com/sharer.php?u=https://localhost5000:/{{g.user.referral_link()}}&amp;display=popup&amp;ref=plugin&amp;src=like','name','width=600,height=400')" target="popup">
+        <img src="https://simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook" />
+    </a>
 
 <iframe src="https://giphy.com/embed/5Zesu5VPNGJlm" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
 
 <iframe src="https://giphy.com/embed/RPhNbtFOGMtkk" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+<div id="share-buttons">
 
+    <!-- Buffer -->
+    <a href="https://bufferapp.com/add?url=https://simplesharebuttons.com&amp;text=Simple Share Buttons" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/buffer.png" alt="Buffer" />
+    </a>
+
+    <!-- Digg -->
+    <a href="http://www.digg.com/submit?url=https://simplesharebuttons.com" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/diggit.png" alt="Digg" />
+    </a>
+
+    <!-- Email -->
+    <a href="mailto:?Subject=Simple Share Buttons&amp;Body=I%20saw%20this%20and%20thought%20of%20you!%20 https://simplesharebuttons.com">
+        <img src="https://simplesharebuttons.com/images/somacro/email.png" alt="Email" />
+    </a>
+
+
+<div id="share-buttons">
+
+    <!-- Buffer -->
+    <a href="https://bufferapp.com/add?url=https://simplesharebuttons.com&amp;text=Simple Share Buttons" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/buffer.png" alt="Buffer" />
+    </a>
+
+    <!-- Digg -->
+    <a href="http://www.digg.com/submit?url=https://simplesharebuttons.com" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/diggit.png" alt="Digg" />
+    </a>
+
+    <!-- Email -->
+    <a href="mailto:?Subject=Simple Share Buttons&amp;Body=I%20saw%20this%20and%20thought%20of%20you!%20 https://simplesharebuttons.com">
+        <img src="https://simplesharebuttons.com/images/somacro/email.png" alt="Email" />
+    </a>
+
+    <!-- Facebook -->
+    <a href="http://www.facebook.com/sharer.php?u=https://{{g.user.referral_link()}}.com" target="popup">
+        <img src="https://simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook" />
+    </a>
+
+    <!-- Facebook -->
+    <a href="#" onclick="window.open(http://www.facebook.com/sharer.php?u=https://{{g.user.referral_link()}})" target="popup">
+        <img src="https://simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook" />
+    </a>
+
+<a href="#" target="popup" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=https://www.facebook.com/stagedork&amp;display=popup&amp;ref=plugin&amp;src=like','name','width=600,height=400')">
+              <i class="fa fa-facebook-f fa-2x"></i></a>
+    <!-- Google+ -->
+    <a href="https://plus.google.com/share?url=https://simplesharebuttons.com" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/google.png" alt="Google" />
+    </a>
+
+    <!-- LinkedIn -->
+    <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https://simplesharebuttons.com" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/linkedin.png" alt="LinkedIn" />
+    </a>
+
+
+    <!-- Reddit -->
+    <a href="http://reddit.com/submit?url=https://simplesharebuttons.com&amp;title=Simple Share Buttons" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/reddit.png" alt="Reddit" />
+    </a>
+
+    <!-- Twitter -->
+    <a href="https://twitter.com/share?url=https://simplesharebuttons.com&amp;text=Simple%20Share%20Buttons&amp;hashtags=simplesharebuttons" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/twitter.png" alt="Twitter" />
+    </a>
+
+
+
+
+</div>
 
 <h2>Here is PayPal's boiler plate form for a donation</h2>
 
