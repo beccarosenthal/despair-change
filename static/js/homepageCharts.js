@@ -1,7 +1,7 @@
 "use strict";
 
 // Chart.defaults.global.defaultFontFamily = "Lato";
-Chart.defaults.global.defaultFontSize = 18;
+// Chart.defaults.global.defaultFontSize = 18;
 var stackedOptions = {
                 responsive: true,
                // barValueSpacing: 2,
@@ -32,10 +32,10 @@ var stackedOptions = {
                       ticks: {
                         autoSkip: true,
                         beginAtZero: true,
-                        callback: function(value, index, values) {
-                          return value.toLocaleString("en-US",{style:"currency",
-                                                              currency:"USD"});
-                            },
+                        // callback: function(value, index, values) {
+                        //   return value.toLocaleString("en-US",{style:"currency",
+                        //                                       currency:"USD"});
+                        //     },
 
                       scaleLabel: {
                         display: true,

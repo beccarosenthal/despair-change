@@ -750,6 +750,7 @@ def timestamp_line_data():
 
     return json_total_donations_line()
 
+
 @app.route('/stacked-org-bar.json')
 def stacked_org_bar_data():
     """Return stacked bar chart data about daily donations by org"""

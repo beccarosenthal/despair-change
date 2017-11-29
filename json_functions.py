@@ -243,30 +243,80 @@ def json_org_donations_datetime():
 #one for the dates (which will b x axis labels), and the rest for the orgs, and the data in order of the x axis
 #THE blocker is figfuring out list unpacking for list of unknown length
 
+####LOOK IN HELPER FUNCTIONS FILE
 ################################################################################
-    dates = []
-    #make date presentation worthy
-    for date in dates:
-        label_dates.append(date.strftime("%m/%d/%y"))
-    # for org, amount in donations_by_org.items():
-    #     orgs.append(org[:30])
-    #     data.append(amount)
+
+##############################################################################
+# Me trying again at 11 PM after my mom has literally sent me to my room to go to bed
+##############################################################################
+###QUESTION: is there a way to say
+
+    datetime = []
+    # dates = []
+    org_data = []
+     #in my ipython, the orgs are coming out in teh same order each time
+
+    print "data_by_date.items()"
+    print data_by_date.items()
+    # for i in range(len(data_by_date.keys())):
+    for date, org_dict in  data_by_date.items():
+        print date
+        print org_dict
+        print
+        datetime.append(date)
+        org_data.append(org_dict)
+
+    data_dict = {
+                "labels": datetime,
+                "datasets": [generate_datasets(org_data)]
+            }
+    ###AT THIS POINT, WE NEED DATA BY ORG LIST THAT UNPACKS THE ORG DATA LIS
+
 
     ###FOR NOW I"M JUST DOING TOTAL $, not num_donations. The nums are there
-    data_dict = {
-                "labels": dates,
-                "datasets": [
-                    {   "label": ["My Donations"],
-                        "data": user_data,
-                        "backgroundColor": BACKGROUND_COLORS[0],
-                        "hoverBackgroundColor": HOVER_BACKGROUND_COLORS[1]
-                    },
-                    ]
-            }
+
+
 
     return jsonify(data_dict)
 
-def generate_dataset():
+def generate_datasets(org_data_dict):
+    """given items date dict, assembles dataset"""
+
+    orgs = Organization.query.all()
+    datasets = []
+    count = 0
+    for org in orgs:
+        num_donations = []
+        total_donated = []
+        backgroundColor = BACKGROUND_COLORS[count]
+        hoverBackgroundColor = HOVER_BACKGROUND_COLORS[count]
+        for item in org_data_dict:
+
+            print item
+            print "item"
+            print
+            label = org.short_name
+            if item[org.name]['num_donations']:
+                num_donations.append(item[org.name]['num_donations'])
+            else:
+                num_donations.append(0)
+            if item[org.name]['total_donated']:
+                total_donated.append(item[org.name]['total_donated'])
+            else:
+                total_donated.append(0)
+
+        data_dict ={  "label": [label],
+                        "data": num_donations,
+                        "backgroundColor": backgroundColor,
+                        "hoverBackgroundColor": hoverBackgroundColor,
+                    },
+        count += 1
+
+        import pdb; pdb.set_trace()
+        datasets += data_dict
+        print data_dict
+    return datasets
+
 
 def json_total_donations_line():
     """generate data for line chart of donations over time"""
