@@ -224,15 +224,15 @@ def json_total_donations_line():
 
     count = []
     total = []
-    num_donors = []
+    # num_donors = []
     dates = []
     label_dates = []
 
     for data in transactions:
         total.append(data[0])
         count.append(data[1])
-        num_donors.append(data[2])
-        dates.append(data[3])
+        # num_donors.append(data[2])
+        dates.append(data[2])
 
     #make dates presentable
     for date in dates:
@@ -256,7 +256,7 @@ def json_total_donations_line():
                                             },
 
                     {   "label": "Amount Donated",
-                        "data": total_donations,
+                        "data": total,
                         "fill": False,
                         "borderColor": BACKGROUND_COLORS[2],
                         "pointBorderColor": BACKGROUND_COLORS[3],
@@ -279,7 +279,7 @@ def json_total_donations_line():
 
     # data_dict['datasets'].extend([amount_data, donor_data])
     print "figure out data_dict[datasets]"
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     return jsonify(data_dict)
 
 
