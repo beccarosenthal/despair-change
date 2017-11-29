@@ -262,7 +262,7 @@ def login_user():
             session['current_user'] = user_object.user_id
 
             #What is the specific user ID
-            return redirect('/donate')
+            return redirect('/dashboard')
 
         else:
             flash("That is an incorrect password")

@@ -49,18 +49,18 @@ var stackedOptions = {
                       gridLines: {
                         color: "grey",
                       },
-                      scaleLabel: {
-                        display: true,
-                        labelString: "Dollars Donated",
-                        fontColor: "black"
-                      },
+                      // scaleLabel: {
+                      //   display: true,
+                      //   labelString: "Dollars Donated",
+                      //   fontColor: "black"
+                      // },
                       ticks: {
                         beginAtZero: true,
                         stepSize: 5,
-                        callback: function(value, index, values) {
-                          return value.toLocaleString("en-US",{style:"currency",
-                                                             currency:"USD"});
-                        }
+                        // callback: function(value, index, values) {
+                        //   return value.toLocaleString("en-US",{style:"currency",
+                        //                                      currency:"USD"});
+                        // }
                     }
                   }],
                 title: {
@@ -156,7 +156,6 @@ $.get('/total-impact-bar.json', function (data) {
 });
 
 
-"use strict";
 var lineOptions = {
                 responsive: true,}
                // barValueSpacing: 2,
@@ -243,16 +242,25 @@ $.get('/donations-over-time-line.json', function (data) {
 
 
 var ctx_org_bar = $("#stackedOrgBarChart").get(0).getContext("2d");
-
 $.get('/stacked-org-bar.json', function (data) {
     console.log(data);
     console.log("stacked org bar function");
+
     var stackedOrgBarChart = new Chart(ctx_org_bar, {
-                                            type: 'horizontalBar',
+                                            type: 'bar',
                                             data: data,
-                                            options: stackedOptions
+                                            options: stackedOptions,
                                           });
     $('#stackedOrgBarLegend').html(stackedOrgBarChart.generateLegend());
 });
 
-
+// for search bars above tables
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    console.log("in searching filter table function");
+    $("#transactionTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    });
+  });
+});

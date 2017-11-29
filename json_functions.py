@@ -268,14 +268,12 @@ def json_org_donations_datetime():
 
     data_dict = {
                 "labels": datetime,
-                "datasets": [generate_datasets(org_data)]
+                "datasets": generate_datasets(org_data)
             }
     ###AT THIS POINT, WE NEED DATA BY ORG LIST THAT UNPACKS THE ORG DATA LIS
 
 
     ###FOR NOW I"M JUST DOING TOTAL $, not num_donations. The nums are there
-
-
 
     return jsonify(data_dict)
 
@@ -292,10 +290,11 @@ def generate_datasets(org_data_dict):
         hoverBackgroundColor = HOVER_BACKGROUND_COLORS[count]
         for item in org_data_dict:
 
-            print item
+            # print item
             print "item"
             print
             label = org.short_name
+            ##Account for null data points
             if item[org.name]['num_donations']:
                 num_donations.append(item[org.name]['num_donations'])
             else:
@@ -305,16 +304,16 @@ def generate_datasets(org_data_dict):
             else:
                 total_donated.append(0)
 
-        data_dict ={  "label": [label],
-                        "data": num_donations,
+        data_dict = {  "label": [label],
+                        "data": total_donated,
                         "backgroundColor": backgroundColor,
                         "hoverBackgroundColor": hoverBackgroundColor,
                     },
-        count += 1
 
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         datasets += data_dict
-        print data_dict
+        # print data_dict
+        count += 1
     return datasets
 
 

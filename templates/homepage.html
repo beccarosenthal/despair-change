@@ -22,7 +22,7 @@
 </div>
 
 <h3>Daily Donations by Organization</h3>
-<div class="stacked-org--bar">
+<div class="stacked-org-bar">
   <canvas id="stackedOrgBarChart" ></canvas>
   <div id="stackedOrgBarLegend" class="chart-legend"></div>
 <div>
@@ -95,15 +95,6 @@
 <iframe src="https://giphy.com/embed/O6VoexTrRs6eQ" width="480" height="332" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><h1></h1><h2></h2>
 
 <script type="text/javascript" src="static/js/homepageCharts.js"> </script>
-<script>
-$(document).ready(function(){
-  $("#myInput").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#transactionTable tr").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
-});
-</script>
+
 
 {% endblock %}
