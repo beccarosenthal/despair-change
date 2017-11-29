@@ -198,6 +198,76 @@ def json_total_impact_bar():
 ##TODO separate out query helper functions into its own file
 #############QUERY HELPER FUNCTION########
 
+def json_org_donations_datetime():
+    """generate data for line chart of donations over time"""
+    # # queries tuple of($sum, date, org_id, #donations to that org on that date)
+    group_param = cast(Transaction.timestamp, DATE) #
+    transactions = (db.session.query(func.sum(Transaction.amount),
+                                     group_param,
+                                     Transaction.org_id,
+                                     func.count(Transaction.transaction_id))
+                              .group_by(group_param,
+                                        Transaction.org_id)
+                              .order_by(group_param,
+                                        Transaction.org_id)
+                              .all())
+
+    # org_ids = [org.org_id for org in Organization.query.all()]
+    orgs = Organization.query.all()
+
+    #make dictionary with dates as keys
+    data_by_date = {}
+    for item in transactions:
+        data_by_date[item[1]] = {}
+    #at each date, make orgs keys with
+    for key in data_by_date.keys():
+        for org in orgs:
+            data_by_date[key][org.name] = {"total_donated": None,
+                                           "num_donations": None,
+                                           "display_name": org.short_name}
+
+    #populate the dictionary with info specific to each org
+    for org in orgs:
+        transactions = Transaction.get_transactions_by_org_date(org.org_id)
+
+        for transaction in transactions:
+            total_donated, num_donations, date  = transaction
+            data_by_date[date][org.name]['total_donated'] = total_donated
+            data_by_date[date][org.name]['num_donations'] = num_donations
+
+##############################################################################
+# #UP TO THIS POINT, data_by_date = {date: {org.name: {total_donated: #,
+#                                                      sum_of_donations: $,
+#                                                      display_name: org.short_name}}}
+# next step is figuring out how to unpack this. what i need are a bunch of lists.
+#one for the dates (which will b x axis labels), and the rest for the orgs, and the data in order of the x axis
+#THE blocker is figfuring out list unpacking for list of unknown length
+
+################################################################################
+    dates = []
+    #make date presentation worthy
+    for date in dates:
+        label_dates.append(date.strftime("%m/%d/%y"))
+    # for org, amount in donations_by_org.items():
+    #     orgs.append(org[:30])
+    #     data.append(amount)
+
+    ###FOR NOW I"M JUST DOING TOTAL $, not num_donations. The nums are there
+    data_dict = {
+                "labels": dates,
+                "datasets": [
+                    {   "label": ["My Donations"],
+                        "data": user_data,
+                        "backgroundColor": BACKGROUND_COLORS[0],
+                        "hoverBackgroundColor": HOVER_BACKGROUND_COLORS[1]
+                    },
+                    ]
+            }
+
+    return jsonify(data_dict)
+
+def generate_dataset():
+
 def json_total_donations_line():
     """generate data for line chart of donations over time"""
 

@@ -22,7 +22,8 @@ from json_functions import (json_user_impact_bar,
                             json_total_impact_bar,
                             json_stacked_user_impact_bar,
                             json_total_donations_line,
-                            get_all_referred_by_user)
+                            json_org_donations_datetime,
+                            get_all_referred_by_user,)
 
 from model import (User, Organization, Transaction,
                    UserOrg, Referral, State,
@@ -67,8 +68,6 @@ def do_this_before_each_request():
     #decide if g.orgs is an else thing or not
     else:
         g.orgs = Organization.query.all()
-
-
 
 
 @app.route('/')
@@ -750,6 +749,13 @@ def timestamp_line_data():
     """return line chart data about times of donations by all users"""
 
     return json_total_donations_line()
+
+@app.route('/stacked-org-bar.json')
+def stacked_org_bar_data():
+    """Return stacked bar chart data about daily donations by org"""
+
+    return json_org_donations_datetime()
+
 
 #HELPER FUNCTIONS
 ############################################################################
