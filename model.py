@@ -194,18 +194,18 @@ class Organization(db.Model):
         average = '${:,.2f}'.format(average)
         return average
 
-    # #TODO #FIXME
-    # def get_transactions_by_date(self):
-    #     """returns tuple ($ sum of donations, # donations, date)"""
+    #TODO #FIXME
+    def get_transactions_by_date(self):
+        """returns tuple ($ sum of donations, # donations, date)"""
 
-    #     group_param = cast(Transaction.timestamp, DATE) #can change group param to group query by different things
-    #     data = (db.session.query(func.sum(self.transactions.amount),
-    #                             func.count(self.transactions.amount),
-    #                             group_param)
-    #                       .group_by(group_param)
-    #                       .order_by(group_param).all())
+        group_param = cast(Transaction.timestamp, DATE) #can change group param to group query by different things
+        data = (db.session.query(func.sum(self.transactions.amount),
+                                func.count(self.transactions.amount),
+                                group_param)
+                          .group_by(group_param)
+                          .order_by(group_param).all())
 
-    #     return data
+        return data
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -305,6 +305,20 @@ class Transaction(db.Model):
                           backref=db.backref("transactions",
                                              order_by=timestamp))
 
+        #TODO #FIXME
+    @classmethod
+    def get_transactions_by_org_date(cls, org_id):
+        """returns tuple ($ sum of donations, # donations, date)"""
+
+        group_param = cast(cls.timestamp, DATE) #can change group param to group query by different things
+        data = (db.session.query(func.sum(cls.amount),
+                                 func.count(cls.amount),
+                                 group_param)
+                          .filter(cls.org_id == org_id)
+                          .group_by(group_param)
+                          .order_by(group_param).all())
+
+        return data
 
     def __repr__(self):
         """Provide helpful representation when printed."""

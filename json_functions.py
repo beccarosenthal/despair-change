@@ -205,12 +205,13 @@ def json_total_donations_line():
     group_param = cast(Transaction.timestamp, DATE) #can change group param to group query by different things
     transactions = (db.session.query(func.sum(Transaction.amount),
                                      func.count(Transaction.amount),
+                                     func.count(Transaction.user_id),
                                      group_param)
                               .group_by(group_param)
                               .order_by(group_param)
                               .all())
 
-    #queries tuple of($sum, date, org_id, #donations to that org on that date)
+    # # queries tuple of($sum, date, org_id, #donations to that org on that date)
     # transactions = (db.session.query(func.sum(Transaction.amount),
     #                                  group_param,
     #                                  Transaction.org_id,
@@ -223,39 +224,62 @@ def json_total_donations_line():
 
     count = []
     total = []
+    num_donors = []
     dates = []
+    label_dates = []
 
     for data in transactions:
         total.append(data[0])
         count.append(data[1])
-        dates.append(data[2])
+        num_donors.append(data[2])
+        dates.append(data[3])
 
     #make dates presentable
     for date in dates:
-        date =  date.strftime("%Y/%m/%d")
+        label_dates.append(date.strftime("%m/%d/%y"))
 
     print transactions
     # import pdb; pdb.set_trace()
 
 
     data_dict = {
-                "labels": dates,
+                "labels": label_dates,
                 "datasets": [
-                    {   "label": ["Number of Donations"],
+                    {   "label": "Number of Donations",
                         "data": count,
-                        # "fillColor": BACKGROUND_COLORS[0],
-                        # "strokeColor": HOVER_BACKGROUND_COLORS[0],
-                                            },]
-            }
-
-    amount_data = { "label": ["Amount Donated"],
-                        "data": total,
-                        "fillColor": BACKGROUND_COLORS[1],
-                        "strokeColor": HOVER_BACKGROUND_COLORS[1],
+                        "fill": False,
+                        "borderColor": BACKGROUND_COLORS[1],
+                        "pointBorderColor": BACKGROUND_COLORS[0],
+                        "strokeColor": HOVER_BACKGROUND_COLORS[0],
+                        "pointHoverBackgroundColor": "yellow",
+                        "lineTension": 0
                                             },
 
-    # data_dict['datasets'].append(amount_data)
+                    {   "label": "Amount Donated",
+                        "data": total,
+                        "fill": False,
+                        "borderColor": BACKGROUND_COLORS[2],
+                        "pointBorderColor": BACKGROUND_COLORS[3],
+                        "strokeColor": HOVER_BACKGROUND_COLORS[4],
+                        "pointHoverBackgroundColor": "blue",
+                        "lineTension": 0
+                                            },
 
+                    {  "label": "Number of Donors",
+                        "data": num_donors,
+                        "fill": False,
+                        "borderColor": BACKGROUND_COLORS[4],
+                        "pointBorderColor": BACKGROUND_COLORS[5],
+                        "strokeColor": HOVER_BACKGROUND_COLORS[6],
+                        "pointHoverBackgroundColor": "red",
+                        "lineTension": 0
+                                            },
+                                            ]
+            }
+
+    # data_dict['datasets'].extend([amount_data, donor_data])
+    print "figure out data_dict[datasets]"
+    import pdb; pdb.set_trace()
     return jsonify(data_dict)
 
 

@@ -52,7 +52,7 @@
               {% endfor %}
             {% else %}
               {% for org in g.orgs %}
-            <li><a href="/org/{{org.org_id}}" target="_blank">{{org.name}}</a></li>
+            <li><a href="/org/{{org.org_id}}">{{org.name}}</a></li>
               {% endfor %}
             {% endif%}
           </ul>

@@ -1,4 +1,8 @@
 "use strict";
+
+// Chart.defaults.global.defaultFontFamily = "Lato";
+Chart.defaults.global.defaultFontSize = 18;
+
 var options = {
                 responsive: true,
                // barValueSpacing: 2,
