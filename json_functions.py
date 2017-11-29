@@ -150,8 +150,6 @@ def json_total_impact_bar():
                                  .group_by(Transaction.org_id)
                                  .all())
 
-
-
     donations_by_org = {Organization.query.get(org_id).name: amount
                         for amount, org_id in all_donations}
 
@@ -239,13 +237,10 @@ def json_org_donations_datetime():
 
     data_dict = {
                 "labels": label_dates,
+                "datasets": generate_datasets(org_data, "num_donations"),
                 # "datasets": generate_datasets(org_data, "num_donations"),
-                "datasets":  generate_datasets(org_data, "total_donated")
+                # "datasets":  generate_datasets(org_data, "total_donated")
             }
-    ###AT THIS POINT, WE NEED DATA BY ORG LIST THAT UNPACKS THE ORG DATA LIS
-
-
-    ###FOR NOW I"M JUST DOING TOTAL $, not num_donations. The nums are there
 
     return jsonify(data_dict)
 
@@ -330,10 +325,6 @@ def json_total_donations_line():
     for date in dates:
         label_dates.append(date.strftime("%m/%d/%y"))
 
-    print transactions
-    # import pdb; pdb.set_trace()
-
-
     data_dict = {
                 "labels": label_dates,
                 "datasets": [
@@ -368,10 +359,6 @@ def json_total_donations_line():
                     #                         },
                                             ]
             }
-
-    # data_dict['datasets'].extend([amount_data, donor_data])
-    print "figure out data_dict[datasets]"
-    # import pdb; pdb.set_trace()
     return jsonify(data_dict)
 
 

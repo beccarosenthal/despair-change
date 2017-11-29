@@ -7,26 +7,31 @@
 <p>Welcome to Despair Change, where we collectively channel our despair into positive actions.</p>
 
 <div class="container">
-<h2>Our Impact</h2>
-<div class="total-impact-bar">
-  <canvas id="totalImpactBarChart" ></canvas>
-  <div id="totalBarLegend" class="chart-legend"></div>
+  <h2>Our Impact</h2>
+  <div class="total-impact-bar">
+    <canvas id="totalImpactBarChart" ></canvas>
+    <div id="totalBarLegend" class="chart-legend"></div>
+  </div>
 </div>
 
 <div class="container">
-<h2>Day by Day Donation Data</h2>
-<p>This chart shows the number of donations and the amount of money donated on each day. </p>
-<div class="datetime-total-line">
-  <canvas id="datetimeTotalLineChart" ></canvas>
+  <h2>Day by Day Donation Data</h2>
+  <p>This chart shows the number of donations and the amount of money donated on each day.</p>
+  <div class="datetime-total-line">
+    <canvas id="datetimeTotalLineChart"></canvas>
   <div id="totalLineLegend" class="chart-legend"></div>
+  </div>
 </div>
 
-<h3>Daily Donations by Organization</h3>
 <div class="stacked-org-bar">
+      <div class="col-md-10"><button type="button" class="btn btn-success btn-md" onclick="toggleChart();">Toggle Chart </button></div>
+<h3>Daily Donations by Organization</h3>
+<p id="num_donations">This chart shows the number of donations made to each organization on a given day</p>
+<p id="total_donated">This chart shows the amount of money donated to each organization on a given day. </p>
   <canvas id="stackedOrgBarChart" ></canvas>
   <div id="stackedOrgBarLegend" class="chart-legend"></div>
-<div>
 
+<div>
 <h3>Impact by Organization</h3>
 <div class="container">
   <h2></h2>
