@@ -205,7 +205,7 @@ def json_total_donations_line():
     group_param = cast(Transaction.timestamp, DATE) #can change group param to group query by different things
     transactions = (db.session.query(func.sum(Transaction.amount),
                                      func.count(Transaction.amount),
-                                     func.count(Transaction.user_id),
+                                     # func.count(Transaction.user_id),
                                      group_param)
                               .group_by(group_param)
                               .order_by(group_param)
@@ -256,7 +256,7 @@ def json_total_donations_line():
                                             },
 
                     {   "label": "Amount Donated",
-                        "data": total,
+                        "data": total_donations,
                         "fill": False,
                         "borderColor": BACKGROUND_COLORS[2],
                         "pointBorderColor": BACKGROUND_COLORS[3],
@@ -265,15 +265,15 @@ def json_total_donations_line():
                         "lineTension": 0
                                             },
 
-                    {  "label": "Number of Donors",
-                        "data": num_donors,
-                        "fill": False,
-                        "borderColor": BACKGROUND_COLORS[4],
-                        "pointBorderColor": BACKGROUND_COLORS[5],
-                        "strokeColor": HOVER_BACKGROUND_COLORS[6],
-                        "pointHoverBackgroundColor": "red",
-                        "lineTension": 0
-                                            },
+                    # {  "label": "Number of Donors",
+                    #     "data": num_donors,
+                    #     "fill": False,
+                    #     "borderColor": BACKGROUND_COLORS[4],
+                    #     "pointBorderColor": BACKGROUND_COLORS[5],
+                    #     "strokeColor": HOVER_BACKGROUND_COLORS[6],
+                    #     "pointHoverBackgroundColor": "red",
+                    #     "lineTension": 0
+                    #                         },
                                             ]
             }
 
