@@ -3,6 +3,8 @@
 var numDonations;
 var totalDonated;
 var stackedBarState = 'totalDonated';
+var currentChart;
+var yAxisLabel = "Amount Donated";
 
 // Chart.defaults.global.defaultFontFamily = "Lato";
 // Chart.defaults.global.defaultFontSize = 18;
@@ -75,7 +77,7 @@ var stackedOptions = {
 
                legend: {
                    display: true,
-                   position: 'top',
+                   position: 'left',
                    labels: {
                         display: true,
                         boxWidth: 80,
@@ -106,7 +108,7 @@ var stackedOptions = {
 
                       scaleLabel: {
                         display: true,
-                        labelString: "Organization",
+                        labelString: "Date",
                         fontColor: "black",
                         // fontSize: 14
                       }
@@ -116,11 +118,11 @@ var stackedOptions = {
                       gridLines: {
                         color: "grey",
                       },
-                      // scaleLabel: {
-                      //   display: true,
-                      //   labelString: "Dollars Donated",
-                      //   fontColor: "black"
-                      // },
+                      scaleLabel: {
+                        display: true,
+                        labelString: yAxisLabel,
+                        fontColor: "black"
+                      },
                       ticks: {
                         beginAtZero: true,
                         stepSize: 5,
@@ -319,6 +321,7 @@ function renderStackedBar(data) {
                                             data: data,
                                             options: stackedOptions,
                                           });
+    currentChart = stackedOrgBarChart;
     $('#stackedOrgBarLegend').html(stackedOrgBarChart.generateLegend());
 }
 
@@ -332,11 +335,18 @@ $.get('/stacked-org-bar.json', function (data) {
 });
 // function to toggle the chart
 function toggleStackedBar() {
-  // //destroy chart:
+  currentChart.destroy()
   if (stackedBarState == 'totalDonated') {
+    $('#num-donations').show();
+    $('#total-donated').hide();
+    yAxisLabel = "Number of Donations";
+
       renderStackedBar(numDonations);
       stackedBarState = 'numDonations';
   } else {
+    $('#total-donated').show();
+    $('#num-donations').hide();
+    yAxisLabel = "Amount Donated";
       renderStackedBar(totalDonated);
       stackedBarState = 'totalDonated';
   }
@@ -345,6 +355,7 @@ function toggleStackedBar() {
 
 // for search bars above tables
 $(document).ready(function(){
+  $('#num-donations').hide();
   $("#myInput").on("keyup", function() {
     var value = $(this).val().toLowerCase();
     console.log("in searching filter table function");

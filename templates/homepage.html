@@ -23,14 +23,21 @@
   </div>
 </div>
 
-<div class="stacked-org-bar">
-      <div class="col-md-10"><button type="button" class="btn btn-success btn-md" onclick="toggleStackedBar();">Toggle Chart </button></div>
-<h3>Daily Donations by Organization</h3>
-<p id="num_donations">This chart shows the number of donations made to each organization on a given day</p>
-<p id="total_donated">This chart shows the amount of money donated to each organization on a given day. </p>
+<div class="stacked-org-bar container">
+      <div><button type="button" class="btn btn-success btn-md" onclick="toggleStackedBar();">Toggle Chart </button></div><br>
+<div id='num-donations'>
+<h3>Total Daily Donations to Organization</h3>
+  <p>This chart shows the number of donations made to each organization on a given day. Toggle the chart to see how much money was generated for each organization from those donations!</p>
+</div>
+
+<div id='total-donated'>
+  <h3>Daily Donations to Organization</h3>
+  <p>This chart shows the amount of money donated to each organization on a given day. </p>
+</div>
+<div id="stackedBarCanvas">
   <canvas id="stackedOrgBarChart" ></canvas>
   <div id="stackedOrgBarLegend" class="chart-legend"></div>
-
+</div>
 <div>
 <h3>Impact by Organization</h3>
 <div class="container">
