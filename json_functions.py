@@ -230,12 +230,18 @@ def json_org_donations_datetime():
     for date in datetime:
         label_dates.append(date.strftime("%m/%d/%y"))
 
-    data_dict = {
+    num_donations = {
                 "labels": label_dates,
+                "datasets": generate_datasets(org_data, "num_donations"),
                 # "datasets": generate_datasets(org_data, "num_donations"),
-                # "datasets": generate_datasets(org_data, "num_donations"),
-                "datasets":  generate_datasets(org_data, "total_donated")
             }
+    total_donated = {
+                "labels": label_dates,
+                "datasets":  generate_datasets(org_data, "total_donated")
+                }
+
+    data_dict = {"num_donations": num_donations,
+                 "total_donated": total_donated}
 
     return jsonify(data_dict)
 

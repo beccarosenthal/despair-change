@@ -1,5 +1,9 @@
 "use strict";
 
+var numDonations;
+var totalDonated;
+var stackedBarState = 'totalDonated';
+
 // Chart.defaults.global.defaultFontFamily = "Lato";
 // Chart.defaults.global.defaultFontSize = 18;
 
@@ -306,9 +310,9 @@ $.get('/donations-over-time-line.json', function (data) {
 
 
 var ctx_org_bar = $("#stackedOrgBarChart").get(0).getContext("2d");
-$.get('/stacked-org-bar.json', function (data) {
+function renderStackedBar(data) {
     console.log(data);
-    console.log("stacked org bar function");
+    console.log("renderStackedBar function");
 
     var stackedOrgBarChart = new Chart(ctx_org_bar, {
                                             type: 'bar',
@@ -316,16 +320,28 @@ $.get('/stacked-org-bar.json', function (data) {
                                             options: stackedOptions,
                                           });
     $('#stackedOrgBarLegend').html(stackedOrgBarChart.generateLegend());
+}
+
+$.get('/stacked-org-bar.json', function (data) {
+    console.log(data);
+
+    totalDonated = data['total_donated'];
+    numDonations = data['num_donations'];
+    renderStackedBar(totalDonated);
+
 });
-// // function to toggle the chart
-// function toggleChart() {
-//   // //destroy chart:
-//   stackedOrgBarChart.destroy();
-//   //change chart type:
-//   this.chartType = (this.chartType == 'horizontalBar') //? 'line' : 'bar';
-//   //restart chart:
-//   init();
-// }
+// function to toggle the chart
+function toggleStackedBar() {
+  // //destroy chart:
+  if (stackedBarState == 'totalDonated') {
+      renderStackedBar(numDonations);
+      stackedBarState = 'numDonations';
+  } else {
+      renderStackedBar(totalDonated);
+      stackedBarState = 'totalDonated';
+  }
+
+}
 
 // for search bars above tables
 $(document).ready(function(){
