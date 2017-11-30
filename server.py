@@ -108,7 +108,7 @@ def index():
 @app.route('/about')
 def show_about_page():
     """renders about Despair Change page"""
-    session['transaction'] = 162
+    # session['transaction'] = 162
     return render_template('about.html')
 
 
@@ -201,7 +201,8 @@ def process_registration():
                            age=age,
                            zipcode=zipcode,
                            state_code=state,
-                           phone=phone)
+                           phone=phone,
+                           set_password=True)
         db.session.add(user_object)
         db.session.commit()
 
@@ -244,11 +245,16 @@ def login_user():
     user_email = request.form.get('email')
 
     #get the user object from the email
-    user_object = User.query.filter(User.user_email == user_email).first()
+    user_object = User.query.filter(User.user_email == user_email).one()
 
     user_password = request.form.get('password')
 
     if user_object:
+        if user_object.set_password == False:
+            if user_object.transactions:
+                session['transaction'] = user_object.transactions[-1].transaction_id
+                return redirect('/welcome')
+
         #check password against email address
         valid_password = bcrypt.check_password_hash(user_object.password, user_password)
         if valid_password:
@@ -535,14 +541,15 @@ def process_payment_new_user():
     if not user_obj:
         fname = "first_name"
         lname = "last_name"
-        password = os.environ.get("DEFAULT_PASSWORD")
+        # password = os.environ.get("DEFAULT_PASSWORD")
         print "what is password"
-        pw_hash = bcrypt.generate_password_hash(password, 10)
+        # pw_hash = bcrypt.generate_password_hash(password, 10)
 
         user_obj = User(user_email=email,
-                        password=pw_hash,
+                        password=None,
                         fname=fname,
-                        lname=lname)
+                        lname=lname,
+                        set_password=False)
 
         db.session.add(user_obj)
         db.session.commit()
@@ -633,11 +640,12 @@ def process_non_user_donation(paypal_payment, transaction):
 
     #Update the information on the new user
     user_id = transaction.user.user_id
-    user_obj = User.query.get(user_id)
+    user_obj = User.query.filter(User.user_email == email).one()
 
     user_obj.fname = fname
     user_obj.lname = lname
-    user_obj.phone = phone
+    if phone:
+        user_obj.phone = phone
 
     db.session.commit()
     print "user_obj after being committed", user_obj
@@ -663,14 +671,15 @@ def process_referral(paypal_payment, transaction):
         fname = payer_info.get('first_name')
         lname = payer_info.get('last_name')
         phone = payer_info.get('phone')
-        user_password = os.environ.get("DEFAULT_PASSWORD")
-        pw_hash = bcrypt.generate_password_hash(user_password, 10)
+        # user_password = os.environ.get("DEFAULT_PASSWORD")
+        # pw_hash = bcrypt.generate_password_hash(user_password, 10)
 
         referred_obj = User(user_email=email,
-                            password=pw_hash,
+                            password=None,
                             fname=fname,
                             lname=lname,
-                            phone=phone)
+                            phone=phone,
+                            set_password=False)
 
         db.session.add(referred_obj)
         db.session.commit()

@@ -54,7 +54,14 @@ class User(db.Model):
 
     #in case I want to reference state data through the User
     state = db.relationship("State", backref="users")
+    set_password = db.Column(db.Boolean,
+                             nullable=True,
+                             default=True)
 
+
+    # via_referral = db.Column(db.Boolean,
+    #                          nullable=True,
+    #                          default=False)
 
     ##########REFERRALS EXPLANATION######################
     #I am User1.  I referred User2 and User3. User3 referred User4.
