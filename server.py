@@ -126,9 +126,10 @@ def show_welcome_page():
     """shows welcome page that donors who are not registered members get redirected to after donations"""
 
     if 'transaction' not in session:
-        #for testing purposes...
-        # session['transaction'] = 176
-        return redirect('/')
+
+    #     #for testing purposes...
+        session['transaction'] = Transaction.query.all()[-1].transaction_id
+    #     return redirect('/')
 
     #get the user who just logged in
     transaction = Transaction.query.get(session['transaction'])
