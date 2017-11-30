@@ -711,6 +711,7 @@ def process_referral(paypal_payment, transaction):
 def cancel_payment():
     """cancels payment"""
 
+#todo find current transaction, change status, update in db
     flash('I think I just canceled a payment')
     return redirect('/')
 

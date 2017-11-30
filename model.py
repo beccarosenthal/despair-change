@@ -175,10 +175,10 @@ class Organization(db.Model):
         return len(self.transactions)
 
     def num_unique_donors(self):
-      """get number of unique donors"""
+        """get number of unique donors"""
 
-      num_users = len(db.session.query(Transaction.user_id).filter(Transaction.org_id == self.org_id).all())
-      return num_users
+        num_users = len(set(db.session.query(Transaction.user_id).filter(Transaction.org_id == self.org_id).all()))
+        return num_users
 
     def unique_donors(self):
         """get details of donations sorted by donors"""
