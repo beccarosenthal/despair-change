@@ -245,7 +245,7 @@ def login_user():
     user_email = request.form.get('email')
 
     #get the user object from the email
-    user_object = User.query.filter(User.user_email == user_email).one()
+    user_object = User.query.filter(User.user_email == user_email).first()
 
     user_password = request.form.get('password')
 
@@ -300,6 +300,9 @@ def setup_password():
     pw_hash = bcrypt.generate_password_hash(password, 10)
 
     email = request.form.get("user_email")
+    print "check what email is, User.query for email"
+    import pdb; pdb.set_trace()
+
     user = User.query.filter(User.user_email == email).one()
     user.password = pw_hash
     db.session.commit()
@@ -555,7 +558,7 @@ def process_payment_new_user():
         db.session.commit()
     print
     print "user_obj: ", user_obj
-    print "user object transactions"
+    print "user object transactions "
     print user_obj.transactions
 
     transaction = create_transaction_object(user_obj.user_id, org_id, float(amount))
@@ -649,6 +652,8 @@ def process_non_user_donation(paypal_payment, transaction):
 
     db.session.commit()
     print "user_obj after being committed", user_obj
+    import pdb; pdb.set_trace()
+    print "see what user_obj is and what user_obj.transactions"
 
 
 def process_referral(paypal_payment, transaction):
@@ -773,6 +778,7 @@ def stacked_org_bar_data():
 def create_transaction_object(user_id, org_id, amount=1.0):
     """create Transaction object for both referral and non referral transactions"""
 
+    import pdb; pdb.set_trace()
     print "in create transaction object function"
     transaction = Transaction(org_id=org_id,
                               user_id=user_id,

@@ -21,6 +21,7 @@ def get_current_transaction(user_obj):
 
 def stacked_bar_data():
 
+
     group_param = cast(Transaction.timestamp, DATE) #
     transactions = (db.session.query(func.sum(Transaction.amount),
                                      group_param,
@@ -37,14 +38,27 @@ def stacked_bar_data():
 
     #make list of dictionaries with dates;
     #FIXME it works, but there's an extra key that's a blank dict
-    data_by_date = []
+
+    ###THIS GETS A LIST OF UNIQUE DATES ON WHICH DONATIONS WERE MADE
+    # AND LIST OF ALL ORG_IDS
+      ##FIGURE out how to append data that exists to the idct in this first loop.
+      ##then i can do a for org id that isn'ta key append
+
+    date_list = []
     dup_check = set()
+    org_ids = set()
     for item in transactions:
         date = {}
         if item[1] not in dup_check:
             date[item[1]] = {}
-            data_by_date.append(date)
+            date_list.append(date)
             dup_check.add(item[1])
+            org_ids.add(item[4])
+            print "get org id"
+            print item
+
+    # for item in transactions:
+
 
     ###################################UP UNTIL THIS POINT, it builds list of
     #dictionaries with date: {} pairs

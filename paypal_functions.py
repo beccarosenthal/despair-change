@@ -72,7 +72,7 @@ def generate_payment_object_referral(anonymous_user_id, org_id, current_transact
     user_obj = User.query.filter(User.user_id == anonymous_user_id).one()
     org_obj = Organization.query.filter(Organization.org_id == org_id).one()
 
-    current_transaction = get_current_transaction(user_obj)
+    # current_transaction = get_current_transaction(user_obj)
 
     web_profile = create_web_profile(org_obj)
     print "back in generate payment fn"
@@ -163,7 +163,7 @@ def generate_payment_object(user_id, org_id, current_transaction):
 
     web_profile = create_web_profile(org_obj)
     print "back in generate payment fn"
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
     #Generate Payment Object
     payment = Payment({

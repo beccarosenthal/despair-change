@@ -228,7 +228,7 @@ $.get('/total-impact-bar.json', function (data) {
                                             data: data,
                                             options: options
                                           });
-    $('#totalBarLegend').html(totalBarChart.generateLegend());
+    // $('#totalBarLegend').html(totalBarChart.generateLegend());
 });
 
 
@@ -313,7 +313,7 @@ $.get('/donations-over-time-line.json', function (data) {
                                             data: data,
                                             options: lineOptions
                                           });
-    $('#totalLineLegend').html(totalLineChart.generateLegend());
+    // $('#totalLineLegend').html(totalLineChart.generateLegend());
 });
 
 
@@ -328,7 +328,7 @@ function renderStackedBar(data) {
                                             options: stackedOptions,
                                           });
     currentChart = stackedOrgBarChart;
-    $('#stackedOrgBarLegend').html(stackedOrgBarChart.generateLegend());
+    // $('#stackedOrgBarLegend').html(stackedOrgBarChart.generateLegend());
 }
 
 $.get('/stacked-org-bar.json', function (data) {

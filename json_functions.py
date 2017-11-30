@@ -195,6 +195,30 @@ def json_org_donations_datetime():
 
     # org_ids = [org.org_id for org in Organization.query.all()]
     orgs = Organization.query.all()
+##########################################################################
+##########################################################################
+##########################################################################
+        ###THIS GETS A LIST OF UNIQUE DATES ON WHICH DONATIONS WERE MADE
+    # AND LIST OF ALL ORG_IDS
+      ##FIGURE out how to append data that exists to the idct in this first loop.
+      ##then i can do a for org id that isn'ta key append
+
+    # date_list = []
+    # dup_check = set()
+    # org_ids = set()
+    # for item in transactions:
+    #     date = {}
+    #     if item[1] not in dup_check:
+    #         date[item[1]] = {}
+    #         date_list.append(date)
+    #         dup_check.add(item[1])
+    #         org_ids.add(item[4])
+    #         print "get org id"
+    #         print item
+
+##########################################################################
+##########################################################################
+##########################################################################
 
     #make dictionary with dates as keys
     data_by_date = {}
@@ -229,6 +253,7 @@ def json_org_donations_datetime():
 
     for date in datetime:
         label_dates.append(date.strftime("%m/%d/%y"))
+
 
     num_donations = {
                 "labels": label_dates,
