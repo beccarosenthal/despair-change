@@ -232,9 +232,9 @@ def json_org_donations_datetime():
 
     data_dict = {
                 "labels": label_dates,
-                "datasets": generate_datasets(org_data, "num_donations"),
                 # "datasets": generate_datasets(org_data, "num_donations"),
-                # "datasets":  generate_datasets(org_data, "total_donated")
+                # "datasets": generate_datasets(org_data, "num_donations"),
+                "datasets":  generate_datasets(org_data, "total_donated")
             }
 
     return jsonify(data_dict)
