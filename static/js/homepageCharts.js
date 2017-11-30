@@ -5,7 +5,11 @@ var totalDonated;
 var stackedBarState = 'totalDonated';
 var currentChart;
 var yAxisLabel = "Amount Donated";
+var dollarSign = function(value, index, values) {
+                          return value.toLocaleString("en-US",{style:"currency",
+                                                              currency:"USD"});
 
+}
 // Chart.defaults.global.defaultFontFamily = "Lato";
 // Chart.defaults.global.defaultFontSize = 18;
 
@@ -104,7 +108,7 @@ var stackedOptions = {
                         // callback: function(value, index, values) {
                         //   return value.toLocaleString("en-US",{style:"currency",
                         //                                       currency:"USD"});
-                        //     },
+                            // },
 
                       scaleLabel: {
                         display: true,
@@ -126,11 +130,12 @@ var stackedOptions = {
                       ticks: {
                         beginAtZero: true,
                         stepSize: 5,
-                        // write conditional to use callback only if data contains something...
-                        callback: function(value, index, values) {
-                          return value.toLocaleString("en-US",{style:"currency",
-                                                             currency:"USD"});
-                        }
+                        // if stackedBarState
+                        callback: dollarSign,
+                        // callback: function(value, index, values) {
+                        //   return value.toLocaleString("en-US",{style:"currency",
+                        //                                      currency:"USD"});
+                        // }
                     }
                   }],
                 title: {
@@ -172,6 +177,7 @@ var options = {
                       ticks: {
                //          autoSkip: true,
                         beginAtZero: true,
+
                           callback: function(value, index, values) {
                           return value.toLocaleString("en-US",{style:"currency",
                                                               currency:"USD"});
@@ -339,14 +345,16 @@ function toggleStackedBar() {
   if (stackedBarState == 'totalDonated') {
     $('#num-donations').show();
     $('#total-donated').hide();
-    yAxisLabel = "Number of Donations";
-
+      stackedOptions.scales.yAxes[0].scaleLabel.labelString = "Number of Donations";
+      delete stackedOptions.scales.yAxes[0].ticks.callback;
       renderStackedBar(numDonations);
       stackedBarState = 'numDonations';
+
   } else {
     $('#total-donated').show();
     $('#num-donations').hide();
-    yAxisLabel = "Amount Donated";
+      stackedOptions.scales.yAxes[0].scaleLabel.labelString = "Amount Donated";
+      stackedOptions.scales.yAxes[0].ticks.callback = dollarSign;
       renderStackedBar(totalDonated);
       stackedBarState = 'totalDonated';
   }
