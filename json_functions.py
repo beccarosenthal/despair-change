@@ -107,6 +107,10 @@ def json_stacked_user_impact_bar(user_object):
 
     return jsonify(data_dict)
 
+def json_org_donation_by_user(org_obj):
+    """returns json data for chart with info about donations to particular org"""
+
+
 def json_user_impact_donut(user_object):
     """returns json data for chart with user donations by org"""
 

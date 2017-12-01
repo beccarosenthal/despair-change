@@ -18,11 +18,13 @@ from sqlalchemy import func, desc
 
 #import from my files
 from helper_functions import get_current_transaction
-from json_functions import (json_user_impact_bar,
-                            json_total_impact_bar,
+from json_functions import (
+                            json_org_donation_by_user,
+                            json_org_donations_datetime,
                             json_stacked_user_impact_bar,
                             json_total_donations_line,
-                            json_org_donations_datetime,
+                            json_total_impact_bar,
+                            json_user_impact_bar,
                             json_user_impact_donut,
                             get_all_referred_by_user,)
 
