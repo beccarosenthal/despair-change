@@ -1,9 +1,29 @@
 "use strict";
 
+var tooltipDollarSignXAxis = {
+                enabled: true,
+                mode: 'single',
+                callbacks: {
+                    label: function(tooltipItems, data) {
+                        return '$' + tooltipItems.xLabel + '.00';
+                    }
+                }
+            };
+
+var tooltipDollarSignYAxis = {
+                enabled: true,
+                mode: 'single',
+                callbacks: {
+                    label: function(tooltipItems, data) {
+                        return '$' + tooltipItems.yLabel + '.00';
+                    }
+                }
+            };
+
 var options = {
                 responsive: true,
                // barValueSpacing: 2,
-
+               tooltips: tooltipDollarSignYAxis,
                legend: {
                    display: true,
                    position: 'top',
@@ -42,24 +62,24 @@ var options = {
                         // fontSize: 14
                       }
                     }}],
-                  //   yAxes: [{
-                  //     gridLines: {
-                  //       color: "grey",
-                  //     },
-                  //     scaleLabel: {
-                  //       display: true,
-                  //       labelString: "Dollars Donated",
-                  //       fontColor: "black"
-                  //     },
-                  //     ticks: {
-                  //       beginAtZero: true,
-                  //       stepSize: 5,
-                  //       // callback: function(value, index, values) {
-                  //       //   return value.toLocaleString("en-US",{style:"currency",
-                  //       //                                      currency:"USD"});
-                  //       }
-                  //   // }
-                  // }],
+                    yAxes: [{
+                      gridLines: {
+                        color: "grey",
+                      },
+                      scaleLabel: {
+                        display: true,
+                        labelString: "Dollars Donated",
+                        fontColor: "black"
+                      },
+                      ticks: {
+                        beginAtZero: true,
+                        stepSize: 5,
+                        callback: function(value, index, values) {
+                          return value.toLocaleString("en-US",{style:"currency",
+                                                             currency:"USD"});
+                        }
+                    }
+                  }],
                 title: {
                     display: true,
                     text: 'My Donations',
@@ -91,7 +111,7 @@ var stackedOptions = {
                    position: 'top',
                    labels: {
                         display: true,
-                        boxWidth: 80,
+                        boxWidth: 40,
                         fontColor: '#000000'
                     }
                   },
@@ -99,7 +119,7 @@ var stackedOptions = {
                 //   display: true,
                 //   text: "Your Impact"
                 // },
-
+                tooltips: tooltipDollarSignXAxis,
                 scales: {
                     xAxes: [{
                       // barThickness: 50,

@@ -72,7 +72,7 @@ def json_stacked_user_impact_bar(user_object):
                     {   "label": ["My Donations"],
                         "data": user_data,
                         "backgroundColor": BACKGROUND_COLORS[0],
-                        "hoverBackgroundColor": HOVER_BACKGROUND_COLORS[1]
+                        "hoverBackgroundColor": HOVER_BACKGROUND_COLORS[0]
                     },
                     ]
             }
@@ -80,7 +80,7 @@ def json_stacked_user_impact_bar(user_object):
     #If person has a footprint, append it to the data_dict
     footprint_dataset = {"label": ["My Footprint"],
                         "data": footprint_data,
-                        "backgroundColor": HOVER_BACKGROUND_COLORS[0],
+                        "backgroundColor": HOVER_BACKGROUND_COLORS[1],
                         "hoverBackgroundColor": BACKGROUND_COLORS[1]
                     },
     # print

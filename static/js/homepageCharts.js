@@ -42,6 +42,7 @@ var stackedOptions = {
                         fontColor: '#000000'
                     }
                   },
+                tooltips: tooltipDollarSignXAxis,
                 // title: {
                 //   display: true,
                 //   text: "Your Impact"
