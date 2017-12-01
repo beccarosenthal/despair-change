@@ -159,7 +159,8 @@ class Organization(db.Model):
         """calculate amount of money raised by particular org"""
         total = 0
         for transaction in self.transactions:
-            total += transaction.amount
+            if transaction.status == 'pending delivery to org':
+              total += transaction.amount
 
         return total
 
@@ -171,8 +172,12 @@ class Organization(db.Model):
         #            .one()[0])
     def num_transactions(self):
         """get number of donations"""
-
-        return len(self.transactions)
+        transactions = self.transactions
+        count = 0
+        for t in transactions:
+          if t.status == "pending delivery to org":
+            count += 1
+        return count
 
     def num_unique_donors(self):
         """get number of unique donors"""

@@ -777,6 +777,13 @@ def total_impact_data():
     return json_total_impact_bar()
 
 
+@app.route('/org-donut-chart.json')
+def org_donut_chart():
+    """get json object showing amount raised per user in donut chart"""
+
+    #the idea is that it shows a lot of donors with small donations making up large donations
+    pass
+
 @app.route('/donations-over-time-line.json')
 def timestamp_line_data():
     """return line chart data about times of donations by all users"""

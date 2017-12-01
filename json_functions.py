@@ -110,6 +110,12 @@ def json_stacked_user_impact_bar(user_object):
 def json_org_donation_by_user(org_obj):
     """returns json data for chart with info about donations to particular org"""
 
+    #org.num_transactions
+    # org.num_unique_donors
+    # org.amount_raised(start_date=None, end_date=None)
+
+    pass
+
 
 def json_user_impact_donut(user_object):
     """returns json data for chart with user donations by org"""

@@ -35,7 +35,7 @@
           <tr>
             <td>{{transaction.org.name}}</td>
             <td>${{transaction.amount}}0</td>
-            <td>{{transaction.user.fname}}</td>
+            <td>{{transaction.user.state_code}}</td>
             <td>{{transaction.timestamp|datetimeformat("%m/%d/%y")}}</td>
           </tr>
           {% endfor %}
