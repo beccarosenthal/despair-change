@@ -101,7 +101,7 @@
           <tr>
             <th>Organization</th>
             <th>Amount</th>
-            <th>Donor</th>
+            <th>Donor Location</th>
             <th>Date</th>
           </tr>
         </thead>
@@ -110,7 +110,11 @@
           <tr>
             <td>{{transaction.org.name}}</td>
             <td>${{transaction.amount}}0</td>
-            <td>{{transaction.user.fname}}</td>
+            {% if transaction.user.state_code%}
+            <td>{{transaction.user.state_code}}</td>
+            {% else %}
+            <td>N/A</td>
+            {% endif %}
             <td>{{transaction.timestamp|datetimeformat("%m/%d/%y")}}</td>
           </tr>
           {% endfor %}

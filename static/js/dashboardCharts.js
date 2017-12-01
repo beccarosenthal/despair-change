@@ -20,6 +20,17 @@ var tooltipDollarSignYAxis = {
                 }
             };
 
+var donutOptions = { responsive: true,
+               legend: {
+                   display: true,
+                   position: 'left',
+                   labels: {
+                        display: true,
+                        boxWidth: 10,
+                        // fontColor: '#000000'
+                    }
+                  },
+                }
 var options = {
                 responsive: true,
                // barValueSpacing: 2,
@@ -100,6 +111,19 @@ $.get('/user-impact-bar.json', function (data) {
                                             options: options
                                           });
     $('#barLegend').html(myBarChart.generateLegend());
+});
+
+var ctx_donut = $("#userImpactDonutChart").get(0).getContext("2d");
+
+$.get('/user-impact-donut.json', function (data) {
+    console.log(data);
+    console.log("user impact donut function");
+    var myDonutChart = new Chart(ctx_donut, {
+                                            type: 'doughnut',
+                                            data: data,
+                                            options: donutOptions
+                                          });
+    $('#donutLegend').html(myDonutChart.generateLegend());
 });
 
 var stackedOptions = {

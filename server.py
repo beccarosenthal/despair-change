@@ -23,6 +23,7 @@ from json_functions import (json_user_impact_bar,
                             json_stacked_user_impact_bar,
                             json_total_donations_line,
                             json_org_donations_datetime,
+                            json_user_impact_donut,
                             get_all_referred_by_user,)
 
 from model import (User, Organization, Transaction,
@@ -747,6 +748,15 @@ def stacked_user_impact_data():
     data_dict = json_stacked_user_impact_bar(user_object)
     return data_dict
 
+
+@app.route('/user-impact-donut.json')
+def user_impact_donut_data():
+    """Return donut chart data about user impact."""
+
+    user_object, current_user_id = get_user_object_and_current_user_id()
+
+    data_dict = json_user_impact_donut(user_object)
+    return data_dict
 
 @app.route('/user-impact-bar.json')
 def user_impact_data():

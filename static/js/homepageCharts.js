@@ -39,7 +39,7 @@ var stackedOptions = {
                    labels: {
                         display: true,
                         boxWidth: 10,
-                        fontColor: '#000000'
+                        // fontColor: '#000000'
                     }
                   },
                 tooltips: tooltipDollarSignXAxis,

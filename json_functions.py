@@ -107,6 +107,37 @@ def json_stacked_user_impact_bar(user_object):
 
     return jsonify(data_dict)
 
+def json_user_impact_donut(user_object):
+    """returns json data for chart with user donations by org"""
+
+    current_user_id = user_object.user_id
+
+    #Create dictionary with key value pairs of {org_id: amt donated by user}
+    donations_by_org = {}
+    for transaction in user_object.transactions:
+        if transaction.status == "pending delivery to org":
+            org_name = Organization.query.get(transaction.org_id).short_name
+            donations_by_org[org_name] = (donations_by_org.get(org_name, 0) + 1)
+
+    orgs = [] #name of org
+    data = [] #number of donations
+
+    for org, count in donations_by_org.items():
+        orgs.append(org)
+        data.append(count)
+
+    data_dict = {
+                "labels": orgs,
+                "datasets": [
+                    {   "label": "My Donations",
+                        "data": data,
+                        "backgroundColor": BACKGROUND_COLORS,
+                        "hoverBackgroundColor": HOVER_BACKGROUND_COLORS
+                    }]
+            }
+
+    return jsonify(data_dict)
+
 
 def json_user_impact_bar(user_object):
     """returns json data for chart with user donations by org"""
