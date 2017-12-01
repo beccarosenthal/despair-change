@@ -470,7 +470,7 @@ def process_donation():
 
     #TODO Use regex to get amount to be a string format that paypal can take
     transaction = create_transaction_object(user_id, org_id, float(amount))
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     print "****transaction object built, added to db"
 
     #generate the payment object using information from the database
@@ -779,7 +779,7 @@ def stacked_org_bar_data():
 def create_transaction_object(user_id, org_id, amount=1.0):
     """create Transaction object for both referral and non referral transactions"""
 
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     print "in create transaction object function"
     transaction = Transaction(org_id=org_id,
                               user_id=user_id,

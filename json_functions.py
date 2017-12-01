@@ -8,10 +8,12 @@ from model import (User, Organization, Transaction,
                    UserOrg, State, Referral,
                    connect_to_db, db)
 
-BACKGROUND_COLORS = ["#C72DB3", "#D9A622", "#2CA248", "#6574DA",
-                     "#C72D2D", "#2DC7C0", "#FF6384", "#FEFF29", ]
-HOVER_BACKGROUND_COLORS = ["#2DC7C0", "#FF6384", "#FEFF29","#000000",
-                           "#36A2EB", "#FF00FF", "#6574DA", "#C72D2D", ]
+
+BACKGROUND_COLORS = ["#d2e5af", "#7bbda7", "#739ba1", "#366c8d",
+                     "#135c78", "#2DC7C0", "#FF6384", "#FEFF29", ]
+HOVER_BACKGROUND_COLORS = ["#9ec752", "#336655", "#d1dee0","#7eafce",
+                           "#65c2e7", "#FF00FF", "#6574DA", "#C72D2D", ]
+
 
 
 def json_stacked_user_impact_bar(user_object):

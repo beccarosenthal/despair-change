@@ -2,120 +2,131 @@
 {% block title %} DESPAIR CHANGE {% endblock %}
 {% block content %}
 
-<div class='container'>
-  <H3>Welcome to Despair Change, where we collectively channel our despair into positive actions.</h3>
-    <p>Our goal is to facilitate microdonations by users who want to make a positive impact during difficult moments. </p>
-
-</div>
-
-<div class="stacked-org-bar container">
-
-    <div id='num-donations'>
-        <h3>Total Daily Donations to Organization</h3>
-        <p>This chart shows the number of donations made to each organization on a given day. Toggle the chart to see how much money was generated for each organization from those donations!</p>
-    </div>
-
-    <div id='total-donated'>
-      <h3>Daily Donations to Organization</h3>
-      <p>This chart shows the amount of money donated to each organization on a given day. </p>
-    </div>
-
-    <div id="stackedBarCanvas">
-      <canvas id="stackedOrgBarChart" ></canvas>
-      <div id="stackedOrgBarLegend" class="chart-legend"></div>
-    </div>
-    <div>
-      <button type="button" class="btn btn-success btn-md" onclick="toggleStackedBar();">Toggle Chart </button>
-    </div>
-</div>
-
-
-
-
 <div class="container">
-  <h3>Impact by Organization</h3>
-  <table class="table table-hover table-responsive table-striped table-bordered">
-    <thead>
-      <tr>
-        <th>Organization</th>
-        <th>Amount Donated</th>
-        <th>Number of Donors</th>
-        <th>Number of Donations</th>
-        <th>Average Donation</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for org in g.orgs %}
-      <tr>
-        <td><a href="/org/{{org.org_id}}">{{org.name}}</td></a>
-        <td>${{org.amount_raised()}}0</td>
-        <td>{{org.num_unique_donors()}}</td>
-        <td>{{org.num_transactions()}}</td>
-        <td>{{org.average_donation()}}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
+  <h3>Welcome to Despair Change, where we collectively channel our despair into positive actions.</h3>
+  <p>Our goal is to facilitate microdonations by users who want to make a positive impact during difficult moments. </p>
 
-<div class="container">
-  <h2>Day by Day Donation Data</h2>
-  <p>This chart shows the number of donations and the amount of money donated on each day.</p>
-  <div class="datetime-total-line">
-    <canvas id="datetimeTotalLineChart"></canvas>
-  <div id="totalLineLegend" class="chart-legend"></div>
+  <div class='row'>
+    <div class='col-xs-12 col-md-6'>
+      <div class="stacked-org-bar">
+
+        <div id='num-donations'>
+            <h3>Total Daily Donations to Organization</h3>
+            <p>This chart shows the number of donations made to each organization on a given day. Toggle the chart to see how much money was generated for each organization from those donations!</p>
+        </div>
+
+        <div id='total-donated'>
+          <h3>Daily Donations to Organization</h3>
+          <p>This chart shows the amount of money donated to each organization on a given day. </p>
+        </div>
+
+        <div id="stackedBarCanvas">
+          <canvas id="stackedOrgBarChart"></canvas>
+          <div id="stackedOrgBarLegend" class="chart-legend"></div>
+        </div>
+        <div>
+          <button type="button" class="btn btn-success btn-md" onclick="toggleStackedBar();">Toggle Chart </button>
+        </div>
+      </div>
+    </div>
+    <div class='col-xs-12 col-md-6'>
+        <div class="total-impact-bar">
+          <h3>Our Impact</h3>
+          <p>Collectively, since the founding of Despair Change, we've raised a bunch of money. </p>
+          <canvas id="totalImpactBarChart" ></canvas>
+          <div id="totalBarLegend" class="chart-legend"></div>
+        </div>
+    </div>
+  </div>
+
+
+
+  <div class='row'>
+    <div class='col-xs-12'>
+      <h3>Impact by Organization</h3>
+      <table class="table table-hover table-responsive table-striped table-bordered">
+        <thead>
+          <tr>
+            <th>Organization</th>
+            <th>Amount Donated</th>
+            <th>Number of Donors</th>
+            <th>Number of Donations</th>
+            <th>Average Donation</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for org in g.orgs %}
+          <tr>
+            <td><a href="/org/{{org.org_id}}">{{org.name}}</td></a>
+            <td>${{org.amount_raised()}}0</td>
+            <td>{{org.num_unique_donors()}}</td>
+            <td>{{org.num_transactions()}}</td>
+            <td>{{org.average_donation()}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
-
-<div class="container">
-  <h2>Our Impact</h2>
-  <div class="total-impact-bar">
-    <canvas id="totalImpactBarChart" ></canvas>
-    <div id="totalBarLegend" class="chart-legend"></div>
+<div class='container'>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <h2>Day by Day Donation Data</h2>
+      <p>This chart shows the number of donations and the amount of money donated on each day.</p>
+      <div class="datetime-total-line">
+        <canvas id="datetimeTotalLineChart"></canvas>
+      <div id="totalLineLegend" class="chart-legend"></div>
+      </div>
+    </div>
   </div>
 </div>
-
-
-<div>
-<p>It's working! Well intending and completely real users just like you have attempted to donate {{amount_attempted}} so far. Seriously. {{amount_attempted}}!! </p>
-</div>
-<div class='container'>
-  <div class="container">
+  <div>
+    <p>It's working! Well intending and completely real users just like you have attempted to donate {{amount_attempted}} so far. Seriously. {{amount_attempted}}!! </p>
+  </div>
+  <div class="row">
     <h2>Filterable Table</h2>
     <p>Type something in the input field to search the table for first names, last names or emails:</p>
     <input class="form-control" id="myInput" type="text" placeholder="Search..">
-
-  <h3>Donations</h3>
-  <div class="container">
-    <table id="transactionTable" class="table table-hover table-responsive table-striped table-bordered table-condensed">
-      <thead>
-        <tr>
-          <th>Organization</th>
-          <th>Amount</th>
-          <th>Donor</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for transaction in transactions%}
-        <tr>
-          <td>{{transaction.org.name}}</td>
-          <td>${{transaction.amount}}0</td>
-          <td>{{transaction.user.fname}}</td>
-          <td>{{transaction.timestamp|datetimeformat("%m/%d/%y")}}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
   </div>
+  <div class="row">
+    <h3>Donations</h3>
+      <table id="transactionTable" class="table table-hover table-responsive table-striped table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th>Organization</th>
+            <th>Amount</th>
+            <th>Donor</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for transaction in transactions%}
+          <tr>
+            <td>{{transaction.org.name}}</td>
+            <td>${{transaction.amount}}0</td>
+            <td>{{transaction.user.fname}}</td>
+            <td>{{transaction.timestamp|datetimeformat("%m/%d/%y")}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  </div>
+
+
+  <div class='row'><iframe src="https://giphy.com/embed/CPlfH4SdK1h04" width="480" height="380" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+  <h3>Relax</h3>
+
+  <iframe src="https://giphy.com/embed/O6VoexTrRs6eQ" width="480" height="332" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><h1></h1>
+  </div>
+
 </div>
-
-<div class='container'><iframe src="https://giphy.com/embed/CPlfH4SdK1h04" width="480" height="380" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div>
-<h3>Relax</h3>
-
-<iframe src="https://giphy.com/embed/O6VoexTrRs6eQ" width="480" height="332" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><h1></h1>
-
+</div>
+</div>
+</div>
 <script type="text/javascript" src="static/js/homepageCharts.js"> </script>
 
-
 {% endblock %}
+
+
+

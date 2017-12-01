@@ -11,7 +11,8 @@ var dollarSign = function(value, index, values) {
 
 }
 // Chart.defaults.global.defaultFontFamily = "Lato";
-// Chart.defaults.global.defaultFontSize = 18;
+// stackedOrgBarChart.canvas.parentnode.style.height = 200
+Chart.defaults.global.defaultFontSize = 10;
 
 // Chart.defaults.global = {
 
@@ -81,10 +82,10 @@ var stackedOptions = {
 
                legend: {
                    display: true,
-                   position: 'left',
+                   position: 'top',
                    labels: {
                         display: true,
-                        boxWidth: 80,
+                        boxWidth: 10,
                         fontColor: '#000000'
                     }
                   },
@@ -129,7 +130,7 @@ var stackedOptions = {
                       },
                       ticks: {
                         beginAtZero: true,
-                        stepSize: 5,
+                        // stepSize: 5,
                         // if stackedBarState
                         callback: dollarSign,
                         // callback: function(value, index, values) {
@@ -152,7 +153,7 @@ var options = {
                // barValueSpacing: 2,
 
                legend: {
-                   display: true,
+                   display: false,
                //     position: 'top',
                    labels: {
                         display: true,
