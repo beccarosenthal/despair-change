@@ -8,74 +8,27 @@ var yAxisLabel = "Amount Donated";
 var dollarSign = function(value, index, values) {
                           return value.toLocaleString("en-US",{style:"currency",
                                                               currency:"USD"});
+                        };
+var tooltipDollarSignXAxis = {
+                enabled: true,
+                mode: 'single',
+                callbacks: {
+                    label: function(tooltipItems, data) {
+                        return '$' + tooltipItems.xLabel + '.00';
+                    }
+                }
+            };
 
-}
-// Chart.defaults.global.defaultFontFamily = "Lato";
-// stackedOrgBarChart.canvas.parentnode.style.height = 200
-Chart.defaults.global.defaultFontSize = 10;
+var tooltipDollarSignYAxis = {
+                enabled: true,
+                mode: 'single',
+                callbacks: {
+                    label: function(tooltipItems, data) {
+                        return '$' + tooltipItems.yLabel + '.00';
+                    }
+                }
+            };
 
-// Chart.defaults.global = {
-
-//     // Boolean - Determines whether to draw tooltips on the canvas or not
-//     showTooltips: true,
-
-//     // Array - Array of string names to attach tooltip events
-//     tooltipEvents: ["mousemove", "touchstart", "touchmove"],
-
-//     // String - Tooltip background colour
-//     tooltipFillColor: "rgba(0,0,0,0.8)",
-
-//     // String - Tooltip label font declaration for the scale label
-//     tooltipFontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-
-//     // Number - Tooltip label font size in pixels
-//     tooltipFontSize: 14,
-
-//     // String - Tooltip font weight style
-//     tooltipFontStyle: "normal",
-
-//     // String - Tooltip label font colour
-//     tooltipFontColor: "#fff",
-
-//     // String - Tooltip title font declaration for the scale label
-//     tooltipTitleFontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-
-//     // Number - Tooltip title font size in pixels
-//     tooltipTitleFontSize: 14,
-
-//     // String - Tooltip title font weight style
-//     tooltipTitleFontStyle: "bold",
-
-//     // String - Tooltip title font colour
-//     tooltipTitleFontColor: "#fff",
-
-//     // Number - pixel width of padding around tooltip text
-//     tooltipYPadding: 6,
-
-//     // Number - pixel width of padding around tooltip text
-//     tooltipXPadding: 6,
-
-//     // Number - Size of the caret on the tooltip
-//     tooltipCaretSize: 8,
-
-//     // Number - Pixel radius of the tooltip border
-//     tooltipCornerRadius: 6,
-
-//     // Number - Pixel offset from point x to tooltip edge
-//     tooltipXOffset: 10,
-
-//     // String - Template string for single tooltips
-//     tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>",
-
-//     // String - Template string for single tooltips
-//     multiTooltipTemplate: "<%= value %>",
-
-//     // // Function - Will fire on animation progression.
-//     // onAnimationProgress: function(){},
-
-//     // // Function - Will fire on animation completion.
-//     // onAnimationComplete: function(){}
-// };
 var stackedOptions = {
                 responsive: true,
                // barValueSpacing: 2,
@@ -93,7 +46,7 @@ var stackedOptions = {
                 //   display: true,
                 //   text: "Your Impact"
                 // },
-
+                tooltips: tooltipDollarSignYAxis,
                 scales: {
                     xAxes: [{
                       // barThickness: 50,
@@ -152,6 +105,7 @@ var options = {
                 responsive: true,
                // barValueSpacing: 2,
 
+               tooltips: tooltipDollarSignXAxis,
                legend: {
                    display: false,
                //     position: 'top',
@@ -348,6 +302,7 @@ function toggleStackedBar() {
     $('#total-donated').hide();
       stackedOptions.scales.yAxes[0].scaleLabel.labelString = "Number of Donations";
       delete stackedOptions.scales.yAxes[0].ticks.callback;
+      delete stackedOptions.tooltips.callbacks;
       renderStackedBar(numDonations);
       stackedBarState = 'numDonations';
 
@@ -356,6 +311,7 @@ function toggleStackedBar() {
     $('#num-donations').hide();
       stackedOptions.scales.yAxes[0].scaleLabel.labelString = "Amount Donated";
       stackedOptions.scales.yAxes[0].ticks.callback = dollarSign;
+      stackedOptions.tooltips = tooltipDollarSignYAxis;
       renderStackedBar(totalDonated);
       stackedBarState = 'totalDonated';
   }
