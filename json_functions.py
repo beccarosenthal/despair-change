@@ -127,14 +127,14 @@ def json_user_impact_donut(user_object):
     for transaction in user_object.transactions:
         if transaction.status == "pending delivery to org":
             org_name = Organization.query.get(transaction.org_id).short_name
-            donations_by_org[org_name] = (donations_by_org.get(org_name, 0) + 1)
+            donations_by_org[org_name] = (donations_by_org.get(org_name, 0) + transaction.amount)
 
     orgs = [] #name of org
     data = [] #number of donations
 
-    for org, count in donations_by_org.items():
+    for org, amount in donations_by_org.items():
         orgs.append(org)
-        data.append(count)
+        data.append(amount)
 
     data_dict = {
                 "labels": orgs,

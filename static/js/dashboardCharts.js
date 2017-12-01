@@ -123,7 +123,7 @@ $.get('/user-impact-donut.json', function (data) {
                                             data: data,
                                             options: donutOptions
                                           });
-    $('#donutLegend').html(myDonutChart.generateLegend());
+    // $('#donutLegend').html(myDonutChart.generateLegend());
 });
 
 var stackedOptions = {

@@ -187,7 +187,35 @@ $.get('/total-impact-bar.json', function (data) {
     // $('#totalBarLegend').html(totalBarChart.generateLegend());
 });
 
+var donutOptions = { responsive: true,
+               legend: {
+                   display: true,
+                   position: 'left',
+                   labels: {
+                        display: true,
+                        boxWidth: 10,
+                        // fontColor: '#000000'
+                    }
+                  },
+                  tooltips: {callbacks: {
+                    labels: function(tooltipItems, data) {
+                        return '$' + tooltipItems.Label + '.00';
+                    }
+                }
+                }}
 
+var ctx_donut = $("#userImpactDonutChart").get(0).getContext("2d");
+if ('current-user')
+$.get('/user-impact-donut.json', function (data) {
+    console.log(data);
+    console.log("user impact donut function");
+    var myDonutChart = new Chart(ctx_donut, {
+                                            type: 'doughnut',
+                                            data: data,
+                                            options: donutOptions
+                                          });
+    // $('#donutLegend').html(myDonutChart.generateLegend());
+});
 var lineOptions = {
                 responsive: true,}
                // barValueSpacing: 2,
