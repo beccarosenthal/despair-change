@@ -61,7 +61,7 @@ def json_stacked_user_impact_bar(user_object):
         if my_donations > 0 or donation_footprint > 0:
             user_data.append(my_donations)
             footprint_data.append(donation_footprint)
-            org_names.append(org.name[:20])
+            org_names.append(org.short_name)
 
     data = []
     datasets = []
@@ -117,7 +117,7 @@ def json_user_impact_bar(user_object):
     donations_by_org = {}
     for transaction in user_object.transactions:
         if transaction.status == "pending delivery to org":
-            org_name = Organization.query.get(transaction.org_id).name
+            org_name = Organization.query.get(transaction.org_id).short_name
             donations_by_org[org_name] = (donations_by_org.get(org_name, 0) +
                                           transaction.amount)
 
@@ -125,7 +125,7 @@ def json_user_impact_bar(user_object):
     data = [] #amount of money
 
     for org, amount in donations_by_org.items():
-        orgs.append(org[:30])
+        orgs.append(org)
         data.append(amount)
 
     data_dict = {
