@@ -42,5 +42,5 @@ function copyReferralLink() {
   var copyText = document.getElementById("referralLink");
   copyText.select();
   document.execCommand("Copy");
-  alert("Copied the text: " + copyText.value);
+  alert("Send the link on your clipboard to a friend so they can give a dollar to amplify your impact." + copyText.value);
 }

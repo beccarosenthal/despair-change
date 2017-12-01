@@ -136,7 +136,12 @@ def show_welcome_page():
     session['transaction'] = transaction.transaction_id
     del session['transaction']
 
-    return render_template('welcome.html', transaction=transaction)
+    transactions = (Transaction.query
+                               .order_by(desc(Transaction.transaction_id))
+                               .all())
+    return render_template('welcome.html',
+                           transaction=transaction,
+                           transactions=transactions)
 
 # Registration and login logic functions
 ###############################################################################

@@ -61,7 +61,7 @@ Tweets by {{org.twitter_url}}
       <tr>
         <td>${{transaction.amount}}0</td>
         <td>{{transaction.user.fname}}</td>
-        <td>{{transaction.timestamp}}</td>
+        <td>{{transaction.timestamp|datetimeformat("%m/%d/%y")}}</td>
       </tr>
       {% endfor %}
     </tbody>
