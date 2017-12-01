@@ -18,6 +18,7 @@
     font-style: underline;
 }
 
+
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
@@ -2500,6 +2501,11 @@ table th[class*="col-"] {
     border-bottom: 0;
   }
 }
+
+.bodycontainer { max-height: 450px; width: 100%; margin: 0; overflow-y: auto; }
+.table-scrollable { margin: 0; padding: 0; }
+
+
 fieldset {
   padding: 0;
   margin: 0;
