@@ -301,7 +301,7 @@ def json_org_donations_datetime():
     num_donations = {
                 "labels": label_dates,
                 "datasets": generate_datasets(org_data, "num_donations"),
-                # "datasets": generate_datasets(org_data, "num_donations"),
+
             }
     total_donated = {
                 "labels": label_dates,

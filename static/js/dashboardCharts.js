@@ -113,6 +113,19 @@ $.get('/user-impact-bar.json', function (data) {
     $('#barLegend').html(myBarChart.generateLegend());
 });
 
+
+var donutOptions = { responsive: true,
+               legend: {
+                   display: true,
+                   position: 'left',
+                   labels: {
+                        display: true,
+                        boxWidth: 10,
+                        // fontColor: '#000000'
+                    }
+                  },
+                }
+
 var ctx_donut = $("#userImpactDonutChart").get(0).getContext("2d");
 
 $.get('/user-impact-donut.json', function (data) {

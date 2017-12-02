@@ -338,7 +338,7 @@ function toggleStackedBar() {
     $('#total-donated').hide();
       stackedOptions.scales.yAxes[0].scaleLabel.labelString = "Number of Donations";
       delete stackedOptions.scales.yAxes[0].ticks.callback;
-      delete stackedOptions.tooltips.callbacks;
+      delete stackedOptions.tooltips;
       renderStackedBar(numDonations);
       stackedBarState = 'numDonations';
 
@@ -351,7 +351,6 @@ function toggleStackedBar() {
       renderStackedBar(totalDonated);
       stackedBarState = 'totalDonated';
   }
-
 }
 
 // for search bars above tables
