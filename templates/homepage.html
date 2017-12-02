@@ -67,31 +67,56 @@
       {% endif %}
     </div> <!-- closes row -->
   </div>
-<div></div>
+<div class='container blank-space .hidden-xs .visible-md-block'></div> <!--break between rows -->
+<div class='container'>
   <div class='row'>
-    <div class='col-xs-12 col-sm-6'>
-      <div class="stacked-org-bar">
+    <div class='col-xs-12 col-sm-6 '>
+      <div class="stacked-org-bar ">
 
         <div id='num-donations'>
-            <h4>Total Daily Donations to Organization
+            <h3>Total Daily Donations to Organization
               <button type="button" class="btn btn-success btn-sm" onclick="toggleStackedBar();">Toggle Chart </button>
             </h3>
             <p>This chart shows the number of donations made to each organization on a given day. Toggle the chart to see how much money was generated for each organization from those donations!</p>
         </div>
 
         <div id='total-donated'>
-          <h4>Daily Donations to Organization
-          <button type="button" class="btn btn-success btn-sm" onclick="toggleStackedBar();">Toggle Chart </button>
-   </h3>
+          <h3>Daily Donations to Organization<button type="button" class="btn btn-success btn-sm" onclick="toggleStackedBar();">Toggle Chart </button></h3>
           <p>This chart shows the amount of money donated to each organization each day. </p>
         </div>
 
-        <div id="stackedBarCanvas">
-          <canvas id="stackedOrgBarChart"></canvas>
-          <div id="stackedOrgBarLegend" class="chart-legend"></div>
+        <div id="stackedBarCanvas" >
+          <canvas id="stackedOrgBarChart" height='300'></canvas>
+          <!-- <div id="stackedOrgBarLegend" class="chart-legend"></div> -->
         </div>
 
       </div>
+    </div>
+      <div class='col-xs-12 col-md-6'>
+      <h3>Impact by Organization</h3>
+        <table class="table table-hover table-responsive table-striped table-bordered">
+          <thead>
+            <tr>
+              <th>Organization</th>
+              <th>Amount Donated</th>
+              <th>Number of Donors</th>
+              <th>Number of Donations</th>
+              <th>Average Donation</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for org in g.orgs %}
+            <tr>
+              <td><a href="/org/{{org.org_id}}">{{org.short_name}}</td></a>
+              <td>${{org.amount_raised()}}0</td>
+              <td>{{org.num_unique_donors()}}</td>
+              <td>{{org.num_transactions()}}</td>
+              <td>{{org.average_donation()}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        </div>
     </div>
 
   </div>
@@ -120,7 +145,7 @@
   </div>
   <div class="row bodycontainer scrollable">
     <h3>Donations</h3>
-      <table id="transactionTable" class="table table-hover table-responsive table-striped table-scrollable table-bordered table-condensed" height="400">
+      <table id="transactionTable" class="table table-hover table-responsive table-striped table-scrollable table-bordered table-condensed bodycontainer scrollable" height="400">
         <thead>
           <tr>
             <th>Organization</th>
@@ -129,7 +154,7 @@
             <th>Date</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody  >
           {% for transaction in transactions%}
           <tr>
             <td>{{transaction.org.name}}</td>

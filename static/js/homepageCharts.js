@@ -31,6 +31,7 @@ var tooltipDollarSignYAxis = {
 
 var stackedOptions = {
                 responsive: true,
+                maintainAspectRatio: false,
                // barValueSpacing: 2,
 
                legend: {
@@ -222,7 +223,8 @@ $.get('/user-impact-donut.json', function (data) {
 });
 }
 var lineOptions = {
-                responsive: true,}
+                responsive: true,
+              maintainAspectRatio: false,}
                // barValueSpacing: 2,
 
                // legend: {
