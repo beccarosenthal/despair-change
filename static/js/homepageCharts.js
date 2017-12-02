@@ -204,8 +204,12 @@ var donutOptions = { responsive: true,
                 }
                 }}
 
+
+var current_user = $('#current-user-in-session').val();
+console.log(current_user);
+
+if (current_user != "false") {
 var ctx_donut = $("#userImpactDonutChart").get(0).getContext("2d");
-if ('current-user')
 $.get('/user-impact-donut.json', function (data) {
     console.log(data);
     console.log("user impact donut function");
@@ -216,6 +220,7 @@ $.get('/user-impact-donut.json', function (data) {
                                           });
     // $('#donutLegend').html(myDonutChart.generateLegend());
 });
+}
 var lineOptions = {
                 responsive: true,}
                // barValueSpacing: 2,

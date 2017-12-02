@@ -10,3 +10,20 @@
     color: white;
     font-style: underline;
 }
+
+.paypal-modal-button {
+
+  position: relative;
+  top: 10px;
+}
+
+img {
+
+  max-width: 100%;
+}
+
+#featured-org {
+
+  border: 3px solid #333;
+  border-radius: 8px;
+}
