@@ -9,7 +9,16 @@
   {% if total_donated == None %}
   <h2>Head on over to the <a href="/donate">donate</a> page to start making an impact!</h2>
   {% else  %}
-
+  <h2>Check out your impact</h2>
+</div>
+<div class='container'>
+  {% if user.user_org %}
+    <p>If you want to increase your footprint, tell your friends to click
+      <input type="text" value="{{g.user.referral_link()}}" id="referralLink" hidden>
+      <span id="referralLink" onclick="copyReferralLink()">here</span>
+    to make a $1 donation to {{g.user.get_ranked_orgs()[0].name}} today!</p>
+{% endif %}
+  </div>
 
 
 
@@ -49,7 +58,7 @@
     <thead>
       <tr>
         <th>Organization</th>
-        <th>Donor</th>
+        <th>Donor Location</th>
         <th>Amount Donated</th>
         <th>Time</th>
       </tr>
@@ -57,8 +66,8 @@
     <tbody>
       {% for transaction in footprint_transactions %}
       <tr>
-        <td>{{transaction.org.name}}</td>
-        <td>{{transaction.user.fname}}</td>
+        <td>{{transaction.org.short_name}}</td>
+        <td>{{transaction.user.state_code}}</td>
         <td>${{transaction.amount}}0</td>
         <td>{{transaction.timestamp|datetimeformat("%m/%d/%y")}}
       </tr>
@@ -73,16 +82,7 @@
 
 
 {% endif%}
-  <h2>Check out your impact</h2>
-</div>
-<div class='container'>
-  {% if user.user_org %}
-    <p>If you want to increase your footprint, tell your friends to click
-      <input type="text" value="{{g.user.referral_link()}}" id="referralLink" hidden>
-      <span id="referralLink" onclick="copyReferralLink()">here</span>
-    to make a $1 donation to {{g.user.get_ranked_orgs()[0].name}} today!</p>
-{% endif %}
-  </div>
+
 
 <a href="/settings">Change your settings</a>
 
