@@ -67,7 +67,9 @@ def do_this_before_each_request():
     if 'current_user' in session:
         user_obj = User.query.get(session['current_user'])
         g.user = user_obj
-        g.orgs = user_obj.get_ranked_orgs()
+        if g.user: #without this, the site errors out in logout route
+            g.orgs = user_obj.get_ranked_orgs()
+        else: g.orgs = Organization.query.all()
     #decide if g.orgs is an else thing or not
     else:
         g.orgs = Organization.query.all()
@@ -310,7 +312,7 @@ def setup_password():
 
     email = request.form.get("user_email")
     print "check what email is, User.query for email"
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
     user = User.query.filter(User.user_email == email).one()
     user.password = pw_hash

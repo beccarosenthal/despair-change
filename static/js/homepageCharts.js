@@ -188,22 +188,28 @@ $.get('/total-impact-bar.json', function (data) {
     // $('#totalBarLegend').html(totalBarChart.generateLegend());
 });
 
+// Try to get $ to show up on tooltip https://codepen.io/mab213/pen/PZOXdE
 var donutOptions = { responsive: true,
+                    tooltipTemplate: "<%= value %>$",
+                    onAnimationComplete: function() {
+                      console.log('animation complete');
+                    this.showTooltip(this.segments, true);
+    },
                legend: {
                    display: true,
-                   position: 'left',
+                   position: 'top',
                    labels: {
                         display: true,
                         boxWidth: 10,
                         // fontColor: '#000000'
                     }
                   },
-                  tooltips: {callbacks: {
-                    labels: function(tooltipItems, data) {
-                        return '$' + tooltipItems.Label + '.00';
-                    }
-                }
-                }}
+                //   tooltips: {callbacks: {
+                //     labels: function(tooltipItems, data) {
+                //         return '$' + tooltipItems.index + '.00';
+                //     }
+                // }
+                };
 
 
 var current_user = $('#current-user-in-session').val();
@@ -219,7 +225,7 @@ $.get('/user-impact-donut.json', function (data) {
                                             data: data,
                                             options: donutOptions
                                           });
-    // $('#donutLegend').html(myDonutChart.generateLegend());
+    $('#donutLegend').html(myDonutChart.generateLegend());
 });
 }
 var lineOptions = {

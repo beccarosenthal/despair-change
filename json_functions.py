@@ -193,7 +193,7 @@ def json_total_impact_bar():
                                  .group_by(Transaction.org_id)
                                  .all())
 
-    donations_by_org = {Organization.query.get(org_id).name: amount
+    donations_by_org = {Organization.query.get(org_id).short_name: amount
                         for amount, org_id in all_donations}
 
     labels = [] #name of org
@@ -237,31 +237,15 @@ def json_org_donations_datetime():
                               .all())
 
     # org_ids = [org.org_id for org in Organization.query.all()]
-    orgs = Organization.query.all()
-##########################################################################
-##########################################################################
-##########################################################################
-        ###THIS GETS A LIST OF UNIQUE DATES ON WHICH DONATIONS WERE MADE
-    # AND LIST OF ALL ORG_IDS
-      ##FIGURE out how to append data that exists to the idct in this first loop.
-      ##then i can do a for org id that isn'ta key append
+    org_ids = set()
+    orgs = []
+    for t in transactions:
+        org_id = t[2]
+        if org_id not in org_ids:
+            org_ids.add(t[2])
+            orgs.append(Organization.query.get(t[2]))
 
-    # date_list = []
-    # dup_check = set()
-    # org_ids = set()
-    # for item in transactions:
-    #     date = {}
-    #     if item[1] not in dup_check:
-    #         date[item[1]] = {}
-    #         date_list.append(date)
-    #         dup_check.add(item[1])
-    #         org_ids.add(item[4])
-    #         print "get org id"
-    #         print item
 
-##########################################################################
-##########################################################################
-##########################################################################
 
     #make dictionary with dates as keys
     data_by_date = {}
@@ -287,7 +271,7 @@ def json_org_donations_datetime():
     datetime = []
     label_dates = []
     org_data = []
-    for date, org_dict in  data_by_date.items():
+    for date, org_dict in sorted(data_by_date.items()):
         # print date
         # print org_dict
         # print
