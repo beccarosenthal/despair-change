@@ -36,11 +36,26 @@ $.getJSON("https://bootswatch.com/api/3.json", function (data) {
     $(".alert h4").text("Failure!");
 });
 
-
-// copy referral link to clipboard
+//version from before to copy referral link to clipboard
 function copyReferralLink() {
   var copyText = document.getElementById("referralLink");
+  console.log("Referral link: " + copyText )
   copyText.select();
   document.execCommand("Copy");
-  alert("Send the link on your clipboard to a friend so they can give a dollar to amplify your impact." + copyText.value);
+alert("Send the link on your clipboard to a friend so they can give a dollar to amplify your impact. " + copyText.value);
 }
+
+// copy referral link to clipboard - my tinkering with it and adding print statements
+// function copyReferralLink() {
+//   var copyText = document.getElementById("referralLink");
+//   copyText.select();
+//   console.log(copyText + " before .value")
+//   copyText = copyText.value
+//   console.log(copyText + " after .value")
+//   console.log(copyText.value)
+//   document.execCommand("Copy", false, copyText.value);
+//   alert("Send the link on your clipboard to a friend so they can give a dollar to amplify your impact. " + copyText.value);
+// }
+
+// check this out https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
+
