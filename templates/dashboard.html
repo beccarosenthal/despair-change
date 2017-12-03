@@ -9,20 +9,17 @@
   {% if total_donated == None %}
   <h2>Head on over to the <a href="/donate">donate</a> page to start making an impact!</h2>
   {% else  %}
-  <h2>Check out your impact</h2>
-</div>
-<div class='container'>
-  {% if user.user_org %}
-    <p>If you want to increase your footprint, tell your friends to click
-      <input type="text" value="{{g.user.referral_link()}}" id="referralLink" hidden>
-      <span id="referralLink" onclick="copyReferralLink()">here</span>
-    to make a $1 donation to {{g.user.get_ranked_orgs()[0].name}} today!</p>
+
+
+
+
+<h2>Your Total Imprint</h2>
+{% if footprint_total > 0 %}
+  <h4>Between your donations and the donations of people you've brought to Despair Change, you have made quite the difference! You have donated ${{total_donated}}0. You have also inspired an additional  ${{footprint_total}}0 worth of donations. Way to turn your despair around!
+  </h4>
+{% else %}
+  <h4>You have donated a total of ${{total_donated}}0 so far. Click the Amplify your Impact button to inspire even more people to turn their despair into positive impact!</h4>
 {% endif %}
-  </div>
-
-
-
-<h3>stacked bar chart</h3>
 <div class='container'>
   <div class='row'>
     <div class='col-xs-12 col-sm-12 col-md-6'>
@@ -76,7 +73,16 @@
 
 
 {% endif%}
-
+  <h2>Check out your impact</h2>
+</div>
+<div class='container'>
+  {% if user.user_org %}
+    <p>If you want to increase your footprint, tell your friends to click
+      <input type="text" value="{{g.user.referral_link()}}" id="referralLink" hidden>
+      <span id="referralLink" onclick="copyReferralLink()">here</span>
+    to make a $1 donation to {{g.user.get_ranked_orgs()[0].name}} today!</p>
+{% endif %}
+  </div>
 
 <a href="/settings">Change your settings</a>
 
