@@ -20,7 +20,7 @@ def load_states():
     #delete rows in state table, because we don't want duplicates
     State.query.delete()
 
-    with open('seed_data/states.txt') as states_file:
+    with open('data/states.txt') as states_file:
         for row in states_file:
             state = row.rstrip()
             code, name = row.split("|")
