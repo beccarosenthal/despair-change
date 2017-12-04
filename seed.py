@@ -1,3 +1,4 @@
+import datetime
 import random
 from faker import Faker
 
@@ -71,17 +72,18 @@ def add_users():
         for row in users_file:
             row = row.rstrip()
             fname, lname, user_email, set_password, password, default_amount, state, zipcode, phone, created_at = row.split("|")
-
+            created_at = datetime.datetime.strptime(created_at, "%Y-%m-%d %H:%M:%S")
             user = User(fname=fname, 
                         lname=lname, 
                         user_email=user_email, 
-                        # set_password=set_password, 
+                        set_password=set_password, 
                         password=password, 
                         default_amount=default_amount,
-                        state=state,
+                        state_code=state,
                         zipcode=zipcode,
-                        phone=phone,
-                        created_at=created_at)
+                        # phone=phone,
+                        created_at=created_at
+                        )
 
             # We need to add to the session or it won't ever be stored
             db.session.add(user)
@@ -109,13 +111,13 @@ def create_transactions():
 
 
 if __name__ == "__main__":
-    # connect_to_db(app)
+    connect_to_db(app)
 
     # In case tables haven't been created, create them
-    # db.create_all()
-    create_users()
-    # add_users() #right now this will error out VERY badly
-    create_transactions()
-    # # Import different types of data
+    db.create_all()
     # load_states()
+    create_users()
+    add_users() #right now this will error out VERY badly
+    # create_transactions()
+    # # Import different types of data
 
