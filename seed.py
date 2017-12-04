@@ -98,7 +98,7 @@ def create_transactions():
     """makes fake transactions between users with ids 1-500 and real fake orgs"""
 
     with open('data/transactions.txt', 'w+') as transactions:
-        for i in range(1000):
+        for i in range(5000):
             rand_num = random.randrange(0, 5)
             #Make sure user_id chosen actually exists
             user_id = random.choice(range(1, 1000))
@@ -121,7 +121,8 @@ def add_transactions():
             row = row.rstrip()
             org_id, user_id, amount, payment_id, timestamp = row.split('|')
             timestamp = datetime.datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S")
-            transaction = Transaction(user_id=user_id,
+            transaction = Transaction(
+                user_id=user_id,
                 org_id=org_id,
                 amount=float(amount),
                 timestamp=timestamp,
