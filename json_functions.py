@@ -271,7 +271,7 @@ def json_org_donations_datetime():
     datetime = []
     label_dates = []
     org_data = []
-    for date, org_dict in sorted(data_by_date.items()):
+    for date, org_dict in sorted(data_by_date.items())[-7:]:
         # print date
         # print org_dict
         # print
