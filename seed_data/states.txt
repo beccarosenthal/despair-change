@@ -1,4 +1,5 @@
 'AK'|'Alaska'
+'AL'|'Alabama'
 'AZ'|'Arizona'
 'AR'|'Arkansas'
 'CA'|'California'
