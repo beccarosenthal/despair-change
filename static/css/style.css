@@ -34,4 +34,7 @@ img {
 
 }
 
-localhost:5000/donated/referred
+#social-bar > a {
+  display: inline-block;
+
+}
