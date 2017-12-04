@@ -9,6 +9,7 @@ from model import (db, connect_to_db, State, User,
 from server import app
 
 fake = Faker()
+ORG_IDS = [8, 9, 13, 15, 16]
 
 
 def load_states():
@@ -42,7 +43,6 @@ def create_users():
     print 'Users'
 
     with open('data/users.txt', 'w+') as users:
-
         for i in range(500):
             users.write('{}|{}|{}|{}|{}|{}|{}|{}|{}|{}\n'.format(fake.first_name(),
                                                                  fake.last_name(),
@@ -54,7 +54,7 @@ def create_users():
                                                                                digits=True,
                                                                                upper_case=True,
                                                                                lower_case=True),
-                                                                 random.choice(range(1, 5)),
+                                                                 random.choice(range(1, 6)),
                                                                  fake.state_abbr(),
                                                                  fake.zipcode(),
                                                                  fake.phone_number(),
@@ -62,7 +62,8 @@ def create_users():
                                                                  ))
 
 
-
+##This is making everything error out right now because set password field isn't in 
+# the DB yet
 def add_users():
     """takes fake users and adds them to database"""
 
@@ -74,7 +75,7 @@ def add_users():
             user = User(fname=fname, 
                         lname=lname, 
                         user_email=user_email, 
-                        set_password=set_password, 
+                        # set_password=set_password, 
                         password=password, 
                         default_amount=default_amount,
                         state=state,
@@ -90,12 +91,31 @@ def add_users():
 
     print "users added to database"
 
+def create_transactions():
+    """makes fake transactions between users with ids 1-500 and real fake orgs"""
+
+    with open('data/transactions.txt', 'w+') as transactions:
+        for i in range(1000):
+            rand_num = random.randrange(0, 5)
+            user_id = random.choice(range(1, 500))
+            transactions.write("{}|{}|{}|{}|{}|\n".format(
+                ORG_IDS[rand_num], #random org ID
+                user_id, #random user
+                User.query.get(user_id).default_amount,
+                "Call this a payment ID",
+                fake.date_time_this_year(before_now=True, after_now=False, tzinfo=None),
+                 )  )
+                                
+
+
 if __name__ == "__main__":
-    connect_to_db(app)
+    # connect_to_db(app)
 
     # In case tables haven't been created, create them
     # db.create_all()
     create_users()
+    # add_users() #right now this will error out VERY badly
+    create_transactions()
     # # Import different types of data
     # load_states()
 
