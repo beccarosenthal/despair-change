@@ -99,13 +99,17 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-
+<div class='container-fluid'>
+  <div class='row'>
     {% for message in get_flashed_messages() %}
-        {{ message }}
-  <hr>
+    {% if 'just_donated' in session%}
+      <div class='alert alert-success'>{{ message }}</div>
+    {% else %}
+    <div class='alert alert-info'>{{ message }}</div>
+    {% endif %}
     {% endfor %}
-
-
+</div>
+</div>
 <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#donationModal" >Make a Donation!</button> -->
 
 <div class="modal fade bs-example-modal-lg" id="donationModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">

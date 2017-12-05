@@ -232,7 +232,7 @@ def process_registration():
     if pw_hash == bcrypt.check_password_hash(user_object.password, user_password):
         session['current_user'] = user_object.user_id
         #They already logged in; send them to the donate page
-        return redirect('/donate')
+        return redirect('/homepage')
 
     # Make user sign in with correct password
     return redirect('/login')
@@ -243,7 +243,7 @@ def show_login_form():
     """render login form"""
 
     if 'current_user' in session:
-        return redirect('/donate')
+        return redirect('/homepage')
 
     return render_template('login.html')
 
@@ -279,7 +279,7 @@ def login_user():
             session['current_user'] = user_object.user_id
 
             #What is the specific user ID
-            return redirect('/dashboard')
+            return redirect('/homepage')
 
         else:
             flash("That is an incorrect password")
@@ -634,6 +634,11 @@ def process_payment():
 
     #if it's not a referral payment, go to the user dashboard
     session['just_donated'] = True
+
+    org = Organization.query.get(transaction.org_id)
+    user = User.query.get(transaction.user_id)
+    flash("Congrats, {}! Your ${}0 donation to {} was successful!").format(
+        user.fname, transaction.amount, org.name)
     if 'referrer_id' not in session:
         if transaction.user.fname == "first_name":
             process_non_user_donation(payment, transaction)
