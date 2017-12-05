@@ -297,8 +297,8 @@ COPY organizations (org_id, name, payee_email, logo_url, mission_statement, webs
 8	Institute of Finishing Projects	beccarosenthal-facilitator@gmail.com	https://media.makeameme.org/created/how-about-getting.jpg	At the Institute of Finishing Projects, we finish proje	http://www.pawneeindiana.com/	f	@unfinishthought	IFP
 9	Rent-A-Swag	beccarosenthal-facilitator-1@gmail.com	https://ih1.redbubble.net/image.294685880.6679/flat,800x800,075,f.jpg	At Rent-A-Swag, we bring you the dopest shirts, the swankiest jackets, the slickest cardigans, the flashiest fedoras, the hottest ties, the snazziest canes and more!	http://parksandrecreation.wikia.com/wiki/Rent-A-Swag	f	@ItsTomHaverford	Rent-A-Swag
 13	Alternative US National Parks Service	altnps@gmail.com	http://bit.ly/2ySo6D7	45 messed with the wrong set of vested park rangers.	https://twitter.com/altnatparkser?lang=en	f	@ALTUSNPS	Alt NPS
-16	Alt ACLU	altaclu@gmail.com	http://bit.ly/2hMlwex	An organization that strives to achieve all of the goals of the ACLU with none of the resources.	http://ortho.ucla.edu/sports-medicine	t	@ACLU	Alt ACLU
 15	The Derek Zoolander Center For Kids Who Can't Read Good And Wanna Learn To Do Other Stuff Good Too	readingcenter@gmail.com	http://bit.ly/2iq2LuI	We teach you that there's more to life than being really, really good looking.	https://dzssite.wordpress.com/	f	@ACenterForAnts	Zoolander Center
+16	Alt ACLU	altaclu@gmail.com	http://bit.ly/2hMlwex	An organization that strives to achieve all of the ACLU's goals with none of their resources.	http://ortho.ucla.edu/sports-medicine	t	@ACLU	Alt ACLU
 \.
 
 
@@ -329,7 +329,7 @@ COPY referrals (ref_id, referrer_id, referred_id) FROM stdin;
 -- Name: referrals_ref_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('referrals_ref_id_seq', 13, true);
+SELECT pg_catalog.setval('referrals_ref_id_seq', 18, true);
 
 
 --
@@ -6452,6 +6452,11 @@ COPY transactions (transaction_id, org_id, user_id, payment_id, amount, "timesta
 6149	13	248	Call this a payment ID	4	2017-02-23 16:37:41	pending delivery to org
 6150	15	300	Call this a payment ID	1	2017-12-03 04:17:28	pending delivery to org
 6151	8	225	Call this a payment ID	2	2017-04-18 11:38:39	pending delivery to org
+6153	13	16	PAY-7GN36405WJ402782WLIS7ZVA	2	2017-12-05 01:56:27.297025	pending delivery to org
+6155	8	33	Unrequested	1	2017-12-05 04:37:01.416015	donation attempted
+6154	8	1095	PAY-2GJ297347S220561RLIS74ZY	1	2017-12-05 02:03:07.173495	pending delivery to org
+6159	16	1095	PAY-7X4150956K217184ALITQ5VA	1	2017-12-05 21:25:38.702334	pending delivery to org
+6161	8	1100	PAY-13487204G3734080FLITRQJI	1	2017-12-05 22:05:21.750355	pending delivery to org
 \.
 
 
@@ -6459,7 +6464,7 @@ COPY transactions (transaction_id, org_id, user_id, payment_id, amount, "timesta
 -- Name: transactions_transaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('transactions_transaction_id_seq', 6152, true);
+SELECT pg_catalog.setval('transactions_transaction_id_seq', 6161, true);
 
 
 --
@@ -7122,11 +7127,11 @@ COPY users (user_id, user_email, password, fname, lname, age, zipcode, state_cod
 17	beccarosenthal-buyer-1@gmail.com	$2b$10$CvvqL8McViaYqBlADuZQ8OSjxbtwqzvCe.8geRLrjiE0YNGMhKXOO	Chinandler	Bong	40	10012	NY	1	4087379192	2017-11-09 23:15:18.597031	2017-11-09 23:15:18.597036	t
 22	hello@itsme.com	$2b$10$zTIk8Lpy7pLk64mOGdJqZ.2kPzgby81Wm0bMxcPhP3fESqV0VJdYy	Adele	Atkins	28	94644	CA	1	8184898484	2017-11-15 00:24:42.617496	2017-11-15 00:24:42.617512	t
 23	beccarosenthal-buyer-2@gmail.com	$2b$10$deWlU8Lx2lkrqNuDsRRwDOble9V/f8NHCuv.XRlaAz8QkO.ZdzdKi	Rebecca	Bunch	29	91723	CA	10	9175225614	2017-11-16 21:53:43.716692	2017-11-16 21:53:43.716705	t
-16	beccarosenthal-buyer@gmail.com	$2b$10$oymYTQqFKfP2OYZaxgPrDOll96E80zQ85miBEKztTrPb44o9etqfm	Glen	Coco	17	94611	CA	2	4087379192	2017-11-09 23:15:18.596606	2017-11-09 23:15:18.596611	t
 20	vomitfreesince93@mosbiusdesign.com	$2b$10$hHTf1ddsD2HxGPyr0r.28OP1tC2V2XW1HvaWZg5ZZw4JGExTkUfau	Ted	Mosby	52	02251	DE	2	6546546541	2017-11-10 03:47:24.575641	2017-11-10 03:47:24.575647	t
 94	brimour0@exblog.jp	$2b$10$deWlU8Lx2lkrqNuDsRRwDOble9V/f8NHCuv.XRlaAz8QkO.ZdzdKi	Bron	Rimour	\N	71213	LA	4	318 774 8184	2017-07-15 04:57:58	2017-12-04 20:34:05.642521	t
 95	mbaitson1@google.fr	$2b$10$deWlU8Lx2lkrqNuDsRRwDOble9V/f8NHCuv.XRlaAz8QkO.ZdzdKi	Magdalen	Baitson	\N	11210	NY	1	347 571 1738	2016-12-24 05:03:09	2017-12-04 20:34:05.644139	f
 96	ewillimot2@merriam-webster.com	$2b$10$deWlU8Lx2lkrqNuDsRRwDOble9V/f8NHCuv.XRlaAz8QkO.ZdzdKi	Elvin	Willimot	\N	20036	DC	3	202 324 4700	2016-12-18 10:52:42	2017-12-04 20:34:05.644621	f
+16	beccarosenthal-buyer@gmail.com	$2b$10$oymYTQqFKfP2OYZaxgPrDOll96E80zQ85miBEKztTrPb44o9etqfm	Glen	Coco	17	94611	CA	2	4087379192	2017-11-09 23:15:18.596606	2017-11-09 23:15:18.596611	t
 97	jroget3@harvard.edu	$2b$10$deWlU8Lx2lkrqNuDsRRwDOble9V/f8NHCuv.XRlaAz8QkO.ZdzdKi	Jaine	Roget	\N	45505	OH	4	937 585 8043	2017-01-27 05:29:21	2017-12-04 20:34:05.645054	f
 98	lgeorgins4@wisc.edu	$2b$10$deWlU8Lx2lkrqNuDsRRwDOble9V/f8NHCuv.XRlaAz8QkO.ZdzdKi	Leonelle	Georgins	\N	66220	KS	2	913 523 8305	2017-01-19 07:15:46	2017-12-04 20:34:05.645636	f
 99	mworlidge5@1688.com	$2b$10$deWlU8Lx2lkrqNuDsRRwDOble9V/f8NHCuv.XRlaAz8QkO.ZdzdKi	Mortimer	Worlidge	\N	20456	DC	3	202 354 1777	2017-08-29 04:00:43	2017-12-04 20:34:05.646112	f
@@ -8129,6 +8134,8 @@ COPY users (user_id, user_email, password, fname, lname, age, zipcode, state_cod
 31	clocks@vivalavida.com	$2b$10$qWTp3eTKYVk1awBumDdJju64wUPSNuDAWbsZd1bYFMaE/hOrYL6rK	Chris	Martin	\N	\N	AL	1	\N	2017-11-21 20:38:36.233909	2017-11-21 20:38:36.233918	t
 32	beccarosenthal-buyer-5@gmail.com	$2b$10$ZKD5d0XYJzcY4VQi9yLLru4xnj85Ti6BZMQsAjYxglIZH/OfhgaFW	Liz	Lemon	\N	\N	AL	1	\N	2017-11-21 22:49:54.010084	2017-11-21 22:49:54.010092	t
 33	beccarosenthal-buyer-3@gmail.com	$2b$10$wyW1ZI5JutELEKK0K5p5r.dUFlykozxHGHFC1pqH3nI.05VTXBAdm	Austin	Powers	\N	\N	AL	1	\N	2017-11-22 04:01:43.166039	2017-11-22 04:01:43.166049	t
+1095	misscongeniality@FBI.gov	\N	first_name	last_name	\N	\N	\N	1	\N	2017-12-05 02:03:07.165325	2017-12-05 02:03:07.165338	f
+1100	dory@justkeepswimming.com	\N	Dory	Forgot	\N	\N	\N	1	\N	2017-12-05 22:05:21.739664	2017-12-05 22:05:21.739673	f
 \.
 
 
@@ -8136,7 +8143,7 @@ COPY users (user_id, user_email, password, fname, lname, age, zipcode, state_cod
 -- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('users_user_id_seq', 1094, true);
+SELECT pg_catalog.setval('users_user_id_seq', 1100, true);
 
 
 --
