@@ -111,7 +111,7 @@
 <div class="modal fade bs-example-modal-lg" id="donationModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="false">
+      <div id="donation-carousel" class="carousel slide" data-ride="carousel" data-interval="false">
         <div class="carousel-inner">
           <div class="item active">
       <!-- <div class="container"> -->
@@ -121,7 +121,9 @@
             </div>
             <div class="modal-body">
                 <a href="{{g.orgs[0].website_url}}" target="_blank">
-                <img alt='' width="300" height="200" src="{{g.orgs[0].logo_url}}" ></a><br>
+            <center><img alt='' width="300" height="200" src="{{g.orgs[0].logo_url}}" ></center>
+                </a>
+                <br>
                 <p><b>Mission: </b>{{g.orgs[0].mission_statement}}</p>
                 <p><a class="twitter-timeline" href="https://twitter.com/{{g.orgs[0].twitter_url}}" data-width="300" data-height="300" target='_blank'> Tweets by {{g.orgs[0].twitter_url}}
                 </a></p>
@@ -169,7 +171,9 @@
         </div>
         <div class="modal-body">
           <a href="{{org.website_url}}" target="_blank">
-          <img alt='' width="300" height="200" src="{{org.logo_url}}" ></a><br>
+            <center><img alt='' width="300" height="200" src="{{org.logo_url}}" ></center>
+          </a>
+          <br>
             <p><b>Mission: </b>{{org.mission_statement}}</p>
 
             <p><a class="twitter-timeline" href="https://twitter.com/{{org.twitter_url}}" data-width="300" data-height="300" target='_blank'> Tweets by {{org.twitter_url}}
@@ -203,8 +207,6 @@
             <input type="image" name="submit" class='paypal-modal-button'
                 src="http://www.amend.org.uk/images/stories/paypal_donate_button.jpg" width="150"
                 alt="Donate to {{org.name}}">
-            <img alt="" width="1" height="1"
-                src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >
 
         </form>
       </center>

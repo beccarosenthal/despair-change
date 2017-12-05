@@ -297,8 +297,8 @@ COPY organizations (org_id, name, payee_email, logo_url, mission_statement, webs
 8	Institute of Finishing Projects	beccarosenthal-facilitator@gmail.com	https://media.makeameme.org/created/how-about-getting.jpg	At the Institute of Finishing Projects, we finish proje	http://www.pawneeindiana.com/	f	@unfinishthought	IFP
 9	Rent-A-Swag	beccarosenthal-facilitator-1@gmail.com	https://ih1.redbubble.net/image.294685880.6679/flat,800x800,075,f.jpg	At Rent-A-Swag, we bring you the dopest shirts, the swankiest jackets, the slickest cardigans, the flashiest fedoras, the hottest ties, the snazziest canes and more!	http://parksandrecreation.wikia.com/wiki/Rent-A-Swag	f	@ItsTomHaverford	Rent-A-Swag
 13	Alternative US National Parks Service	altnps@gmail.com	http://bit.ly/2ySo6D7	45 messed with the wrong set of vested park rangers.	https://twitter.com/altnatparkser?lang=en	f	@ALTUSNPS	Alt NPS
-15	The Derek Zoolander Center For Kids Who Can't Read Good And Wanna Learn To Do Other Stuff Good Too	readingcenter@gmail.com	http://bit.ly/2iq2LuI	We teach you that there's more to life than being really, really good looking	https://dzssite.wordpress.com/	f	@ACenterForAnts	Zoolander Center
 16	Alt ACLU	altaclu@gmail.com	http://bit.ly/2hMlwex	An organization that strives to achieve all of the goals of the ACLU with none of the resources.	http://ortho.ucla.edu/sports-medicine	t	@ACLU	Alt ACLU
+15	The Derek Zoolander Center For Kids Who Can't Read Good And Wanna Learn To Do Other Stuff Good Too	readingcenter@gmail.com	http://bit.ly/2iq2LuI	We teach you that there's more to life than being really, really good looking.	https://dzssite.wordpress.com/	f	@ACenterForAnts	Zoolander Center
 \.
 
 
@@ -6467,14 +6467,12 @@ SELECT pg_catalog.setval('transactions_transaction_id_seq', 6152, true);
 --
 
 COPY user_orgs (user_org_id, user_id, org_id, rank) FROM stdin;
-5	16	9	1
 18	15	15	1
 6	15	16	2
 19	15	13	3
 20	22	15	1
 21	22	9	2
 22	22	8	3
-24	16	16	2
 25	16	13	3
 23	23	16	1
 28	23	9	2
@@ -6488,7 +6486,6 @@ COPY user_orgs (user_org_id, user_id, org_id, rank) FROM stdin;
 36	17	13	1
 37	22	16	1
 38	23	8	1
-39	16	8	1
 40	20	13	1
 42	94	9	1
 43	96	16	1
@@ -6651,6 +6648,8 @@ COPY user_orgs (user_org_id, user_id, org_id, rank) FROM stdin;
 200	332	8	1
 201	333	13	1
 202	334	8	1
+5	16	9	2
+24	16	16	1
 203	337	8	1
 204	338	8	1
 205	339	9	1

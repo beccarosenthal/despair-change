@@ -42,7 +42,7 @@ function copyReferralLink() {
   console.log("Referral link: " + copyText )
   copyText.select();
   document.execCommand("Copy");
-alert("Send the link on your clipboard to a friend so they can give a dollar to amplify your impact. " + copyText.value);
+alert("URL Copied! Send your friend the link to amplify your impact." + copyText.value);
 }
 
 // copy referral link to clipboard - my tinkering with it and adding print statements

@@ -38,3 +38,32 @@ img {
   display: inline-block;
 
 }
+
+#donationModal {
+
+  position: absolute;
+  top: 100px;
+  z-index: 2000;
+}
+
+.carousel-inner {
+  max-width: 70%;
+  position: relative;
+  left: 15%;
+}
+
+.carousel-inner img {
+  text-align: center;
+}
+
+.btn.btn-success.btn-sm {
+    color: #ffffff;
+    background-color: #135c78;
+    border-color: #135c78;
+    border-radius: 3px;
+}
+
+a {
+    color: #366c8d;
+    text-decoration: none;
+}

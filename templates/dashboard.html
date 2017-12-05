@@ -4,12 +4,12 @@
 <div class="container">
   <div class='row'>
     <h1>Welcome, {{ user.fname }}</h1>
-  </div>
-<div class='container'>
+<!--   </div>
+<div class='container'> -->
   {% if total_donated == None %}
   <h2>Head on over to the <a href="/donate">donate</a> page to start making an impact!</h2>
   {% else  %}
-  <h2>Check out your impact</h2>
+<!--   <h2>Check out your impact</h2> -->
 </div>
 
 
@@ -75,7 +75,7 @@
     <p>Thanks to technical difficulties, the reality on the ground is slightly different.</p>
 
 
-{% endif%}
+{% endif %}
 
 
 <a href="/settings">Change your settings</a>
@@ -109,13 +109,4 @@ $(document).ready(function(){
 });
 </script>
 
-<script>
-// function copyReferralLink() {
-//   var copyText = document.getElementById("referralLink");
-//   console.log("Referral link: " + copyText )
-//   copyText.select();
-//   document.execCommand("Copy");
-//   alert("Copied the text: " + copyText.value + "to your clipboard. Send it to a friend so they can make a donation!");
-// }
-</script>
 {% endblock %}

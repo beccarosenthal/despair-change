@@ -633,10 +633,12 @@ def process_payment():
         db.session.commit()
 
     #if it's not a referral payment, go to the user dashboard
+    session['just_donated'] = True
     if 'referrer_id' not in session:
         if transaction.user.fname == "first_name":
             process_non_user_donation(payment, transaction)
             session['transaction'] = transaction.transaction_id
+
             return redirect('/welcome')
         #TODO :write welcome route that is for people who got referred or donated without joining
         return redirect('/') #redirect('/welcome')
