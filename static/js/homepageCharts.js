@@ -69,7 +69,7 @@ var stackedOptions = {
                       scaleLabel: {
                         display: true,
                         labelString: "Date",
-                        fontColor: "black",
+                        // fontColor: "black",
                         // fontSize: 14
                       }
                     }}],
@@ -81,7 +81,7 @@ var stackedOptions = {
                       scaleLabel: {
                         display: true,
                         labelString: yAxisLabel,
-                        fontColor: "black"
+                        // fontColor: "black"
                       },
                       ticks: {
                         beginAtZero: true,
@@ -228,25 +228,7 @@ $.get('/user-impact-donut.json', function (data) {
     $('#donutLegend').html(myDonutChart.generateLegend());
 });
 }
-var lineOptions = {
-                responsive: true,
-              maintainAspectRatio: false,}
-               // barValueSpacing: 2,
 
-
-var ctx = document.getElementById("datetimeTotalLineChart").getContext('2d');
-
-// $.get('/total-impact-bar.json', function (data) {
-$.get('/donations-over-time-line.json', function (data) {
-    console.log(data);
-    console.log("line  function");
-    var totalLineChart = new Chart(ctx, {
-                                            type: 'line',
-                                            data: data,
-                                            options: lineOptions
-                                          });
-    // $('#totalLineLegend').html(totalLineChart.generateLegend());
-});
 
 
 var ctx_org_bar = $("#stackedOrgBarChart").get(0).getContext("2d");
@@ -309,3 +291,24 @@ $(document).ready(function(){
 
 
   });
+
+
+var lineOptions = {
+                responsive: true,
+              maintainAspectRatio: false,}
+               // barValueSpacing: 2,
+
+
+var ctx = document.getElementById("datetimeTotalLineChart").getContext('2d');
+
+// $.get('/total-impact-bar.json', function (data) {
+$.get('/donations-over-time-line.json', function (data) {
+    console.log(data);
+    console.log("line  function");
+    var totalLineChart = new Chart(ctx, {
+                                            type: 'line',
+                                            data: data,
+                                            options: lineOptions
+                                          });
+    // $('#totalLineLegend').html(totalLineChart.generateLegend());
+});

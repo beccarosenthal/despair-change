@@ -151,7 +151,7 @@ var stackedOptions = {
                    labels: {
                         display: true,
                         boxWidth: 40,
-                        fontColor: '#000000'
+                        // fontColor: '#000000'
                     }
                   },
                 // title: {
@@ -179,7 +179,7 @@ var stackedOptions = {
                       scaleLabel: {
                         display: true,
                         labelString: "Organization",
-                        fontColor: "black",
+                        // fontColor: "black",
                         // fontSize: 14
                       }
                     }}],
@@ -190,8 +190,8 @@ var stackedOptions = {
                       },
                       scaleLabel: {
                         display: true,
-                        labelString: "Dollars Donated",
-                        fontColor: "black"
+                        // labelString: "Organization",
+                        // fontColor: "black"
                       },
                       ticks: {
                         beginAtZero: true,

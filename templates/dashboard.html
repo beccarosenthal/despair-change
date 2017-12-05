@@ -16,7 +16,10 @@
             <div>
               <h2>Check Out Your Impact!</h2>
               <h4>
-                Between your donations and the donations of people you've brought to Despair Change, you have made quite the difference! You have donated <b>${{total_donated}}0. </b> You have also inspired an additional <b>  ${{footprint_total}}0 </b>worth of donations. <br><i>Way to turn your despair around!</i>
+                Between your donations and the donations of people you've brought to Despair Change, you have made quite the difference! You have donated <b>${{total_donated}}0. </b> You have also inspired an additional <b>  ${{footprint_total}}0 </b>worth of donations. 
+                <br>
+                <h4><i>Way to turn your despair around!</i><h4>
+                <br>
               </h4>
             </div> <!-- footprint total chart header -->
           {% else %} <!-- if you've made referrals -->
@@ -48,8 +51,8 @@
 <div class="container">
   <div class='row'>
     <div class='panel-header'>
-      <h3>Your Impact by Transaction</h3>
-      <p>Check out all the donations you made and inspires to make!</p>
+      <h3>Donations You Made Happen</h3>
+      <p>Check out the donations that you caused!</p>
       <input class="form-control" id="myInput" type="text" placeholder="Search..">
     </div>
     <div class='panel panel-default' style="height: 200px; overflow-y: scroll !important;">
@@ -59,7 +62,7 @@
             <th>Organization</th>
             <th>Donor Location</th>
             <th>Amount Donated</th>
-            <th>Time</th>
+            <th>Date</th>
           </tr>
         </thead>
         <tbody>
