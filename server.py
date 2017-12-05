@@ -102,11 +102,17 @@ def index():
 
     #Query for all transaction objects
     transactions = Transaction.query.order_by(desc(Transaction.timestamp)).all()
+    #if a user is coming either from referrals or a new donor...
+    if 'transaction' in session:
+        transaction = Transaction.query.get(session['transaction'])
+    else:
+        transaction = None
 
     return render_template('homepage.html',
                            donations_by_org=donations_by_org,
                            total_amount=total_amount,
                            amount_attempted=total_attempted,
+                           transaction=transaction,
                            transactions=transactions)
 
 
@@ -243,7 +249,7 @@ def show_login_form():
     """render login form"""
 
     if 'current_user' in session:
-        return redirect('/homepage')
+        return redirect('/')
 
     return render_template('login.html')
 
@@ -252,6 +258,7 @@ def show_login_form():
 def login_user():
     """process login form, redirect to donor page when it works"""
 
+    # session = {}
     #get form data
     user_email = request.form.get('email')
 
@@ -279,7 +286,7 @@ def login_user():
             session['current_user'] = user_object.user_id
 
             #What is the specific user ID
-            return redirect('/homepage')
+            return redirect('/')
 
         else:
             flash("That is an incorrect password")
