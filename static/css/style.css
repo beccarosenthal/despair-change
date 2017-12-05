@@ -70,3 +70,11 @@ a {
 .glyphicon-chevron-left, .glyphicon-chevron-right {
     z-index: 2000;
 }
+
+.navbar {
+  font-size: 15px;
+}
+
+.navbar-right {
+  margin-right: 10px;
+}
