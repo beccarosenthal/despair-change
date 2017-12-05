@@ -8,25 +8,11 @@
   <div class='row'>
     <div class='col-xs-12'>
       <h1>Welcome to Despair Change</h1>
-
-{% if 'transaction' in session %}
-
-    <h3>You made your first donation already--a ${{transaction.amount}}0 donation to {{transaction.org.name}}. Set up a password to see your impact and to refer your friends to start turning their despair into positive change!</h3>
-    <h4>
-    </h4>
-</div>
-<p data-placement="top" data-toggle="tooltip" title="Edit" data-original-title="Edit">
-    <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" data-backdrop="static" data-keyboard="false">
-        <span class="glyphicon glyphicon-pencil"> Join Us!</span>
-    </button>
-</p>
-{%else%}
-
       <h4>We collectively channel our despair into positive actions.</h4>
       <p>Our goal is to facilitate microdonations by people who want to make a positive impact during difficult moments.</p>
     </div>
   </div>
-{%endif%}
+
   <div class='row'>
     {% if 'current_user' in session %}
       <div class='col-xs-12 col-md-6'>
@@ -205,21 +191,21 @@
 </div>
 </div>
 
-<script type="text/javascript" src="static/js/homepageCharts.js"> </script>
 
 <!-- Make modal pop up on page load -->
 {% if 'just_donated' not in session%}
   <script type="text/javascript">
     $(document).ready(function(){
+      setTimeout(function() { 
       $('#donationModal').modal('show');
   
-    }
-    )
-    );
+    }, 15000);
 
-</script>
+    });
+  </script>
 {% endif%}
 
+<script type="text/javascript" src="static/js/homepageCharts.js"> </script>
 
 {% endblock %}
 

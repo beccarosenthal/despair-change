@@ -43,7 +43,7 @@ img {
 
   position: absolute;
   top: 100px;
-  /*z-index: 2000*/;
+  /*z-index: 2000;*/
 }
 
 .carousel-inner {
@@ -65,4 +65,8 @@ img {
 
 a {
     color: #366c8d;
+}
+
+.glyphicon-chevron-left, .glyphicon-chevron-right {
+    z-index: 2000;
 }

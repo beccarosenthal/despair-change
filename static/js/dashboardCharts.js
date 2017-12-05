@@ -41,7 +41,7 @@ var options = {
                    labels: {
                         display: true,
                         boxWidth: 80,
-                        fontColor: '#000000'
+                        // fontColor: '#000000'
                     }
                   },
                 // title: {
@@ -68,7 +68,7 @@ var options = {
                       scaleLabel: {
                         display: true,
                         labelString: "Organization",
-                        fontColor: "black",
+                        // fontColor: "black",
 
                         // fontSize: 14
                       }
@@ -80,7 +80,7 @@ var options = {
                       scaleLabel: {
                         display: true,
                         labelString: "Dollars Donated",
-                        fontColor: "black"
+                        // fontColor: "black"
                       },
                       ticks: {
                         beginAtZero: true,
@@ -129,7 +129,9 @@ var donutOptions = { responsive: true,
 var ctx_donut = $("#userImpactDonutChart").get(0).getContext("2d");
 
 $.get('/user-impact-donut.json', function (data) {
+    debugger
     console.log(data);
+    console.log(ctx_donut)
     console.log("user impact donut function");
     var myDonutChart = new Chart(ctx_donut, {
                                             type: 'doughnut',

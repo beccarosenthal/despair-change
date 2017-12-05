@@ -99,15 +99,17 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-<div class='container-fluid'>
+<div class='container'>
   <div class='row'>
-    {% for message in get_flashed_messages() %}
+<div class='col-xs-6 col-xs-offset-3'> 
+  {% for message in get_flashed_messages() %}
     {% if 'just_donated' in session%}
       <div class='alert alert-success'>{{ message }}</div>
     {% else %}
     <div class='alert alert-info'>{{ message }}</div>
     {% endif %}
-    {% endfor %}
+  {% endfor %}
+</div>
 </div>
 </div>
 <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#donationModal" >Make a Donation!</button> -->
@@ -220,10 +222,10 @@
     {% endfor %}
   </div>
         <!-- Controls -->
-  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+  <a class="left carousel-control" data-target="#donation-carousel" role="button" data-slide="prev">
     <span class="glyphicon glyphicon-chevron-left"></span>
   </a>
-  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+  <a class="right carousel-control" role="button" data-target="#donation-carousel" data-slide="next">
     <span class="glyphicon glyphicon-chevron-right"></span>
   </a>
 </div>

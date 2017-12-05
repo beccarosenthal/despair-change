@@ -69,10 +69,13 @@ def do_this_before_each_request():
         g.user = user_obj
         if g.user: #without this, the site errors out in logout route
             g.orgs = user_obj.get_ranked_orgs()
-        else: g.orgs = Organization.query.all()
+        else: 
+            g.orgs = sorted(Organization.query.all(), 
+                key=lambda org: org.short_name)
     #decide if g.orgs is an else thing or not
     else:
-        g.orgs = Organization.query.all()
+        g.orgs = sorted(Organization.query.all(), 
+                key=lambda org: org.short_name)
 
 
 @app.route('/')
@@ -309,6 +312,7 @@ def login_with_paypal():
 
     return redirect("/")
 
+
 @app.route('/setup_password', methods=["POST"])
 def setup_password():
     """allow users who have donated via referral or regular non-user donation to set their password"""
@@ -321,12 +325,12 @@ def setup_password():
     print "check what email is, User.query for email"
     # import pdb; pdb.set_trace()
 
-    user = User.query.filter(User.user_email == email).one()
+    user = User.query.filter(User.user_email == email).first()
     user.password = pw_hash
     db.session.commit()
 
     session['current_user'] = user.user_id
-    return redirect("/dashboard")
+    return redirect("/")
 
 
 @app.route('/logout')
@@ -644,20 +648,24 @@ def process_payment():
 
     org = Organization.query.get(transaction.org_id)
     user = User.query.get(transaction.user_id)
-    flash("Congrats, {}! Your ${}0 donation to {} was successful!").format(
-        user.fname, transaction.amount, org.name)
     if 'referrer_id' not in session:
         if transaction.user.fname == "first_name":
-            process_non_user_donation(payment, transaction)
+            user = process_non_user_donation(payment, transaction)
+            flash("Congrats, {}! Your ${}0 donation to {} was successful!".format(
+                user.fname, transaction.amount, org.name))
             session['transaction'] = transaction.transaction_id
-
             return redirect('/welcome')
         #TODO :write welcome route that is for people who got referred or donated without joining
+        flash("Congrats, {}! Your ${}0 donation to {} was successful!".format(
+                user.fname, transaction.amount, org.name))
         return redirect('/') #redirect('/welcome')
 
     else:
-        process_referral(payment, transaction)
+        user = process_referral(payment, transaction)
+        flash("Congrats, {}! Your ${}0 donation to {} was successful!".format(
+            user.fname, transaction.amount, org.name))
         session['transaction'] = transaction.transaction_id
+        session['just_donated'] = True
         return redirect('/welcome')
 
 
@@ -689,6 +697,7 @@ def process_non_user_donation(paypal_payment, transaction):
     print "user_obj after being committed", user_obj
     # import pdb; pdb.set_trace()
     print "see what user_obj is and what user_obj.transactions"
+    return user_obj
 
 
 def process_referral(paypal_payment, transaction):
@@ -706,7 +715,7 @@ def process_referral(paypal_payment, transaction):
     referred_obj = User.query.filter(User.user_email == email).first()
 
     #If no Transactions have been made with that email address, add that user to the DB
-    if not referred_obj or referred_obj.fname == "Anonymous":
+    if not referred_obj or referred_obj.fname == "Anonymous" or referred_obj.fname == "first_name":
 
         fname = payer_info.get('first_name')
         lname = payer_info.get('last_name')
@@ -742,9 +751,7 @@ def process_referral(paypal_payment, transaction):
     db.session.commit()
 
     del session['referrer_id']
-
-    flash("Welcome to Despair Change. Change your password, and you can start making an even bigger impact!")
-    #FIXME this wants to process the paypal url, not the process thing
+    return referred_obj
 
 
 @app.route('/cancel')
@@ -754,6 +761,7 @@ def cancel_payment():
 #todo find current transaction, change status, update in db
     flash('I think I just canceled a payment')
     return redirect('/')
+
 
 @app.route('/org/<specific_org_id>')
 def display_org_page(specific_org_id):

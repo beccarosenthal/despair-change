@@ -1,16 +1,18 @@
 "use strict";
 
+$(document).ready(function() {
 
 // To make the modal window pop up
 
 $('#donationModal').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget) // Button that triggered the modal
-  var recipient = button.data('whatever') // Extract info from data-* attributes
-  console.log(recipient)
+  var button = $(event.relatedTarget); // Button that triggered the modal
+  var recipient = button.data('whatever'); // Extract info from data-* attributes
+  console.log(recipient);
   // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
   // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
   var modal = $(this);
-  console.log("i'm here...")});
+  // console.log("i'm here...");
+});
 
 $.getJSON("https://bootswatch.com/api/3.json", function (data) {
   var themes = data.themes;
@@ -45,6 +47,11 @@ function copyReferralLink() {
 alert("URL Copied! Send your friend the link to amplify your impact." + copyText.value);
 }
 
+$('.glyphicon-chevron-left, .glyphicon-chevron-right').click(function () {
+  console.log('clicked a button...maybe')
+})
+
+});
 // copy referral link to clipboard - my tinkering with it and adding print statements
 // function copyReferralLink() {
 //   var copyText = document.getElementById("referralLink");

@@ -95,13 +95,15 @@ class User(db.Model):
         """get list of users ranked orgs; if not, return list of all orgs"""
 
         ranked_orgs = self.user_org
-        orgs = [user_org.org for user_org in ranked_orgs]
+        ranked_orgs.sort(key=lambda self: self.rank)
+
+        org_ids = [user_org.org_id for user_org in ranked_orgs]
+        ranked_orgs = [user_org.org for user_org in ranked_orgs]
 
         #TODO
         #there is a better way to get the remaining orgs than this. What is it? also, this is where that weird error message is coming from
-        org_ids = [org.org_id for org in orgs]
         other_orgs = Organization.query.filter(~Organization.org_id.in_(org_ids)).all()
-        ranked_orgs = orgs + other_orgs
+        ranked_orgs = ranked_orgs + other_orgs
         return ranked_orgs
 
     def referral_link(self):
@@ -110,7 +112,12 @@ class User(db.Model):
         domain = "localhost:5000"
 
         url_string = "/donated/referred?org_id={org}&referrer_id={user}"
-        org_id = self.get_ranked_orgs()[0].org_id
+
+        org = self.user_org
+        for item in org:
+            if item.rank == 1:
+              org_id = item.org_id 
+        
         return domain + url_string.format(org=org_id, user=self.user_id)
         #TODO Make this work
     def get_referred_chain(self):
@@ -125,9 +132,10 @@ class User(db.Model):
         """
         ##recursive function
         chain = []
+        if not self.referred:    
+            return chain
         for user in self.referred:
-            chain += [user] + self.get_referred_chain()
-        return chain
+            chain += [user] + user.get_referred_chain()
 
     def __repr__(self):
         """Provide helpful representation when printed."""

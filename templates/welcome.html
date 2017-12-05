@@ -4,10 +4,11 @@
 
 
 <div class="container" id="welcome">
+    <div class='row'>
     <h1>Welcome to Despair Change, where we turn collective despair into positive change.</h1>
 </div>
 <div>
-    <h3>You made your first donation already--a ${{transaction.amount}}0 donation to {{transaction.org.name}}. Set up a password to see your impact and to refer your friends to start turning their despair into positive change!</h3>
+    <h3>You made your first donation already--a ${{transaction.amount}}0 donation to {{transaction.org.name}}. Click the button to join in on the action and continue turning your despair into positive change!</h3>
     <h4>
     </h4>
 </div>
@@ -16,39 +17,18 @@
         <span class="glyphicon glyphicon-pencil"> Join Us!</span>
     </button>
 </p>
+</div>
+<div class='row'>
+    <div class='col-xs-offset-3 col-xs-6'>
+        <h3>Our Impact </h3>
+        <div class="total-impact-bar">
+            <canvas id="totalImpactBarChart"></canvas>
+        </div>
+    </div>
+</div>
 
-    <div class="row">
-    <h3>Donation Log</h3>
-    <p>Check out the impact our users are having, one small donation at a time. See that donation on the top--that's you! Search through the table to find out more information about the microdonations made through Despair Change.</p>
-    <input class="form-control" id="myInput" type="text" placeholder="Search...">
-  </div>
-  <div class="row bodycontainer scrollable">
-    <h3>Donations</h3>
-      <table id="transactionTable" class="table table-hover table-responsive table-striped table-scrollable table-bordered table-condensed">
-        <thead>
-          <tr>
-            <th>Organization</th>
-            <th>Amount</th>
-            <th>Donor Location</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for transaction in transactions%}
-          <tr>
-            <td>{{transaction.org.name}}</td>
-            <td>${{transaction.amount}}0</td>
-            {% if transaction.user.state_code%}
-            <td>{{transaction.user.state_code}}</td>
-            {% else %}
-            <td>N/A</td>
-            {% endif %}
-            <td>{{transaction.timestamp|datetimeformat("%m/%d/%y")}}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-  </div>
+
+  
 
 <!-- MODAL STUFF -->
 <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -105,5 +85,5 @@
 
 
 
-<script type="text/javascript" src="static/js/welcome.js"> </script>
+<script type="text/javascript" src="static/js/welcomePageCharts.js"> </script>
 {% endblock %}
