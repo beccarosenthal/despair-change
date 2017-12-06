@@ -34,6 +34,6 @@ The site is also filled with visuals that show how many small donations add up s
 
 Version 2.0 will (hopefully) leave the sandbox and connect donors to real organizations and include more ways for users to customize what kind of data they see about donations made through Despair Change. 
 
-## Author
+## About the Developer
 
-Becca Rosenthal is a software engineer living in Oakland. 
+Becca Rosenthal is a software engineer living in Oakland, CA. She created Despair Change, her first project, during her fellowship at Hackbright Academy. 
