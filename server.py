@@ -451,7 +451,7 @@ def change_user_settings():
     print "new_default_amount:", new_default_amount
 
     print "check datatypes on default amount old and new"
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
     if new_default_amount:
         user_obj.default_amount = int(new_default_amount)
