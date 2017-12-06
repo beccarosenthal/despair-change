@@ -2,6 +2,7 @@
 
 Despair Change is a full stack donation app that integrates PayPal's REST API to streamline the process of making micro-donations. With just a few clicks, people can donate to their favorite organizations, increase the footprint of their impact by referring their friends to do the same, and see stats, charts, and graphs that show their donations as a part of a larger sum of money. Registered users can change their default donation amounts, adjust which organization shows up front and center on the donation page, and see their donation history sorted by organization and date. Non registered users can make donations, through the app either directly or via referral link from a registered user. 
 
+
 ## Technologies Used
 
 * Python
@@ -21,17 +22,10 @@ Despair Change is a full stack donation app that integrates PayPal's REST API to
 
 To install Despair Change on your local machine, pip install -r requirements.txt. In order to make payments/process payments and interact with PayPal's REST API, you must source credentials from PayPal. 
 
+
 ## Usage
 
-TODO: Write usage instructions
-
-## Structure
-
-* server.py Core of the Flask app; all routes
-* model.py All database tables and class methods
-* json_functions.py All queries and formatting of data for charts.js visuals
-* paypal_functions.py All functions that communicate with the PayPal API and make the physical payments happen
-
+There are three different payment routes through Despair Change. Non registered users can land on the homepage, make a donation through PayPal, and register as users if they so choose. Registered users can customize their default donation amount, which organizations show up first on their donate page, and refer their friends to click links that will send them straight to PayPal to make donations to the referrer's favorite organization. Referred users can register after their donation, and as a virtue of having been referred, every donation they make will be saved as a part of their referrer's total donation footprint.
 
 
 ## Next Steps
