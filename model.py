@@ -114,9 +114,11 @@ class User(db.Model):
         url_string = "/donated/referred?org_id={org}&referrer_id={user}"
 
         org = self.user_org
+        org_id = 16
         for item in org:
             if item.rank == 1:
-              org_id = item.org_id 
+                org_id = item.org_id 
+                break
         
         return domain + url_string.format(org=org_id, user=self.user_id)
         #TODO Make this work

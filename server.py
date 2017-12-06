@@ -5,8 +5,6 @@ import os
 import random
 
 #third party things
-#for O Auth
-from auth0.v3.authentication import GetToken
 from flask import (Flask, render_template, redirect, request, flash,
                    session, jsonify, g)
 from flask_bcrypt import Bcrypt
@@ -648,6 +646,9 @@ def process_payment():
 
     org = Organization.query.get(transaction.org_id)
     user = User.query.get(transaction.user_id)
+    print "*******************"
+    print session
+    print "*******************"
     if 'referrer_id' not in session:
         if transaction.user.fname == "first_name":
             user = process_non_user_donation(payment, transaction)
