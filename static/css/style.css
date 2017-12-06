@@ -75,6 +75,6 @@ a {
   font-size: 15px;
 }
 
-.navbar-right {
-  margin-right: 10px;
+.ul.nav.navbar-nav.navbar-right {
+  margin-right: 15px;
 }
