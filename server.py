@@ -46,22 +46,13 @@ client_secret = os.environ.get("PAYPAL_CLIENT_SECRET")
 def datetimeformat(value, format='%H:%M / %d-%m-%Y'):
     """Custom Jinja filter to format dates consistently."""
     return value.strftime(format)
-#Auth0 app keys
-
-# domain = os.environ.get('AUTH0_DOMAIN')
-# non_interactive_client_id = 'exampleid'
-# non_interactive_client_secret = 'examplesecret'
-
-# get_token = GetToken(domain)
-# token = get_token.client_credentials(non_interactive_client_id,
-# non_interactive_client_secret, 'https://myaccount.auth0.com/api/v2/')
-# mgmt_api_token = token['access_token']
 
 # General templates
 ###############################################################################
 #to put object in g
 @app.before_request
 def do_this_before_each_request():
+
     if 'current_user' in session:
         user_obj = User.query.get(session['current_user'])
         g.user = user_obj
@@ -136,12 +127,12 @@ def show_button_options():
 @app.route('/welcome')
 def show_welcome_page():
     """shows welcome page that donors who are not registered members get redirected to after donations"""
-
+    
     if 'transaction' not in session:
 
-    #     #for testing purposes...
-        session['transaction'] = Transaction.query.all()[-1].transaction_id
-    #     return redirect('/')
+    ##for testing purposes, uncomment
+        # session['transaction'] = Transaction.query.all()[-1].transaction_id
+        return redirect('/')
 
     #get the user who just logged in
     transaction = Transaction.query.get(session['transaction'])
@@ -238,8 +229,7 @@ def process_registration():
 
     if pw_hash == bcrypt.check_password_hash(user_object.password, user_password):
         session['current_user'] = user_object.user_id
-        #They already logged in; send them to the donate page
-        return redirect('/homepage')
+        return redirect('/')
 
     # Make user sign in with correct password
     return redirect('/login')
@@ -259,7 +249,6 @@ def show_login_form():
 def login_user():
     """process login form, redirect to donor page when it works"""
 
-    # session = {}
     #get form data
     user_email = request.form.get('email')
 
@@ -286,7 +275,6 @@ def login_user():
             flash("You're logged in. Welcome to Despair Change!!")
             session['current_user'] = user_object.user_id
 
-            #What is the specific user ID
             return redirect('/')
 
         else:
@@ -298,19 +286,6 @@ def login_user():
         return redirect('/register')
 
 
-@app.route('/login/paypal')
-def login_with_paypal():
-    """log users in via paypal oauth"""
-
-    token = request.args.get('code')
-    scope = request.args.get('scope')
-    "dir token"
-    import pdb; pdb.set_trace()
-    # session['current_user'] = 27
-
-    return redirect("/")
-
-
 @app.route('/setup_password', methods=["POST"])
 def setup_password():
     """allow users who have donated via referral or regular non-user donation to set their password"""
@@ -320,15 +295,14 @@ def setup_password():
     pw_hash = bcrypt.generate_password_hash(password, 10)
 
     email = request.form.get("user_email")
-    print "check what email is, User.query for email"
-    # import pdb; pdb.set_trace()
 
+    #They've made donation already, so the user is in the DB
     user = User.query.filter(User.user_email == email).first()
     user.password = pw_hash
     db.session.commit()
 
     session['current_user'] = user.user_id
-    return redirect("/")
+    return redirect("/dashboard")
 
 
 @app.route('/logout')
@@ -424,7 +398,7 @@ def change_user_settings():
     print rank_1, rank_2, rank_3
     print
 
-
+    # Make sure user can only have 3 ranked orgs
     for i in range(1, 4):
 
         if request.args.get("rank_" + str(i)):
@@ -449,16 +423,12 @@ def change_user_settings():
 
     new_default_amount = request.args.get("default_amount")
     print "new_default_amount:", new_default_amount
-
-    print "check datatypes on default amount old and new"
-    # import pdb; pdb.set_trace()
-
+    
+    #update the database with new default amount
     if new_default_amount:
         user_obj.default_amount = int(new_default_amount)
 
     db.session.commit()
-    print "make sure user_org and default amount changed in db"
-    # import pdb; pdb.set_trace()
 
     return redirect("/dashboard")
 
@@ -482,7 +452,7 @@ def donation_page():
 
 @app.route('/donated', methods=['POST'])
 def process_donation():
-    """handle user pressing the donate button"""
+    """handle user pressing a donate button"""
     #TODO change process donation route to account for users logged in or referred
     if "current_user" in session:
         user_id = session['current_user']
@@ -495,11 +465,9 @@ def process_donation():
     if not amount:
         amount = User.query.get(user_id).default_amount
     print "check what amount, orgs are"
-    # import pdb; pdb.set_trace()
 
     #TODO Use regex to get amount to be a string format that paypal can take
     transaction = create_transaction_object(user_id, org_id, float(amount))
-    # import pdb; pdb.set_trace()
     print "****transaction object built, added to db"
 
     #generate the payment object using information from the database
@@ -510,13 +478,10 @@ def process_donation():
     transaction.payment_id = payment_object.id
     transaction.status = "paypal payment instantiated"
 
-    # import pdb; pdb.set_trace()
     db.session.commit()
 
     return redirect(redirect_url)
 
-
-#   Figure this part out
 
 @app.route('/donated/referred', methods=['GET'])
 def do_referred_payment():
@@ -533,6 +498,7 @@ def do_referred_payment():
     print org_id, "org id from url"
     print referrer_id, "referrer id from url"
 
+    #Use the anonymous user ID to do the transaction
     user_id = User.query.filter(User.fname == "Anonymous").one().user_id
     print user_id, "user_id"
 
@@ -548,10 +514,10 @@ def do_referred_payment():
     transaction.payment_id = payment_object.id
     transaction.status = "paypal payment instantiated"
 
-    # import pdb; pdb.set_trace()
     db.session.commit()
 
     return redirect(redirect_url)
+
 
 @app.route('/donated/register', methods=['POST'])
 def process_payment_new_user():
@@ -574,7 +540,6 @@ def process_payment_new_user():
     if not user_obj:
         fname = "first_name"
         lname = "last_name"
-        # password = os.environ.get("DEFAULT_PASSWORD")
         print "what is password"
         # pw_hash = bcrypt.generate_password_hash(password, 10)
 
@@ -599,17 +564,13 @@ def process_payment_new_user():
                                                            org_id, transaction)
 
     print "did we get the paypal object back"
-    # import pdb; pdb.set_trace()
     #update transaction object in the database to add paypal's ID
     transaction.payment_id = payment_object.id
     transaction.status = "paypal payment instantiated"
 
-    # import pdb; pdb.set_trace()
     db.session.commit()
 
     return redirect(redirect_url)
-    # flash("you got the donated/register link")
-    # return redirect('/')
 
 
 @app.route('/process', methods=['GET'])
@@ -656,10 +617,10 @@ def process_payment():
                 user.fname, transaction.amount, org.name))
             session['transaction'] = transaction.transaction_id
             return redirect('/welcome')
-        #TODO :write welcome route that is for people who got referred or donated without joining
+
         flash("Congrats, {}! Your ${}0 donation to {} was successful!".format(
                 user.fname, transaction.amount, org.name))
-        return redirect('/') #redirect('/welcome')
+        return redirect('/') 
 
     else:
         user = process_referral(payment, transaction)
@@ -696,7 +657,6 @@ def process_non_user_donation(paypal_payment, transaction):
 
     db.session.commit()
     print "user_obj after being committed", user_obj
-    # import pdb; pdb.set_trace()
     print "see what user_obj is and what user_obj.transactions"
     return user_obj
 
@@ -838,7 +798,6 @@ def stacked_org_bar_data():
 def create_transaction_object(user_id, org_id, amount=1.0):
     """create Transaction object for both referral and non referral transactions"""
 
-    # import pdb; pdb.set_trace()
     print "in create transaction object function"
     transaction = Transaction(org_id=org_id,
                               user_id=user_id,
@@ -866,9 +825,6 @@ def get_user_object_and_current_user_id():
 
 def query_for_donations_by_org_dict(user_id):
     """return dictionary of org name: amount donated by given user"""
-    #find all donations that were successful
-    #todo fix this query to include Transaction.status = "delivered to org"
-
 
     users_donations = (db.session.query(func.sum(Transaction.amount),
                                                  Transaction.org_id)

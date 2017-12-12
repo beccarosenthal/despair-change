@@ -249,7 +249,15 @@
 </div>
 
 
-
+<script>
+function copyReferralLink() {
+  var copyText = document.getElementById("referralLink");
+  console.log("Referral link: " + copyText )
+  copyText.select();
+  document.execCommand("Copy");
+alert("URL Copied! Send your friend the link to amplify your impact." + copyText.value);
+}
+</script
 
 
 {% if 'current_user' in session %}
