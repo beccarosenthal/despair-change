@@ -44,10 +44,6 @@ var stackedOptions = {
                     }
                   },
                 tooltips: tooltipDollarSignXAxis,
-                // title: {
-                //   display: true,
-                //   text: "Your Impact"
-                // },
                 tooltips: tooltipDollarSignYAxis,
                 scales: {
                     xAxes: [{
@@ -61,16 +57,10 @@ var stackedOptions = {
                       ticks: {
                         autoSkip: true,
                         beginAtZero: true,
-                        // callback: function(value, index, values) {
-                        //   return value.toLocaleString("en-US",{style:"currency",
-                        //                                       currency:"USD"});
-                            // },
 
                       scaleLabel: {
                         display: true,
                         labelString: "Date",
-                        // fontColor: "black",
-                        // fontSize: 14
                       }
                     }}],
                     yAxes: [{
@@ -81,26 +71,13 @@ var stackedOptions = {
                       scaleLabel: {
                         display: true,
                         labelString: yAxisLabel,
-                        // fontColor: "black"
                       },
                       ticks: {
                         beginAtZero: true,
-                        // stepSize: 5,
-                        // if stackedBarState
                         callback: dollarSign,
-                        // callback: function(value, index, values) {
-                        //   return value.toLocaleString("en-US",{style:"currency",
-                        //                                      currency:"USD"});
-                        // }
                     }
                   }],
-                title: {
-                    display: false,
-                    text: 'I\'m the Title',
-                    fontSize: 24,
-                    fontStyle: 'bold',
-
-                       },
+            
 
                 }};
 var options = {
@@ -117,16 +94,10 @@ var options = {
                //          fontColor: '#000080'
                     }
                   },
-               //  // title: {
-               //  //   display: true,
-               //  //   text: "Your Impact"
-               //  // },
 
                 scales: {
                     xAxes: [
                     {
-               //        // barThickness: 50,
-               //        barPercentage: 0.5,
                       gridLines: {
                         display: false,
                         color: "grey"
@@ -140,39 +111,10 @@ var options = {
                                                               currency:"USD"});
                             },
 
-               //        scaleLabel: {
-               //          display: true,
-               //          labelString: "Organization",
-               //          fontColor: "black",
-               //          // padding: 14
                       }
                     }],
-               //      yAxes: [{
-               //        gridLines: {
-               //          color: "grey",
-               //        },
-               //        scaleLabel: {
-               //          display: true,
-               //          labelString: "Dollars Donated",
-               //          fontColor: "black"
-               //        },
-               //        ticks: {
-               //          beginAtZero: true,
-               //          stepSize: 5,
-               //          callback: function(value, index, values) {
-               //            return value.toLocaleString("en-US",{style:"currency",
-               //                                               currency:"USD"});
                         }
-               //      }
-               //    }],
-               //  title: {
-               //      display: true,
-               //      text: 'My Donations',
-               //      fontSize: 24,
-               //      fontStyle: 'bold'
-               //         },
 
-                // }
               };
 
 var ctx_total_bar = $("#totalImpactBarChart").get(0).getContext("2d");
@@ -201,14 +143,9 @@ var donutOptions = { responsive: true,
                    labels: {
                         display: true,
                         boxWidth: 10,
-                        // fontColor: '#000000'
+
                     }
                   },
-                //   tooltips: {callbacks: {
-                //     labels: function(tooltipItems, data) {
-                //         return '$' + tooltipItems.index + '.00';
-                //     }
-                // }
                 };
 
 
