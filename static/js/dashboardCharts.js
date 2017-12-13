@@ -27,13 +27,11 @@ var donutOptions = { responsive: true,
                    labels: {
                         display: true,
                         boxWidth: 10,
-                        // fontColor: '#000000'
                     }
                   },
                 }
 var options = {
                 responsive: true,
-               // barValueSpacing: 2,
                tooltips: tooltipDollarSignYAxis,
                legend: {
                    display: true,
@@ -41,17 +39,11 @@ var options = {
                    labels: {
                         display: true,
                         boxWidth: 80,
-                        // fontColor: '#000000'
                     }
                   },
-                // title: {
-                //   display: true,
-                //   text: "Your Impact"
-                // },
 
                 scales: {
                     xAxes: [{
-                      // barThickness: 50,
                       barPercentage: 0.5,
                       gridLines: {
                         display: false,
@@ -68,9 +60,6 @@ var options = {
                       scaleLabel: {
                         display: true,
                         labelString: "Organization",
-                        // fontColor: "black",
-
-                        // fontSize: 14
                       }
                     }}],
                     yAxes: [{
@@ -80,7 +69,6 @@ var options = {
                       scaleLabel: {
                         display: true,
                         labelString: "Dollars Donated",
-                        // fontColor: "black"
                       },
                       ticks: {
                         beginAtZero: true,
@@ -121,7 +109,6 @@ var donutOptions = { responsive: true,
                    labels: {
                         display: true,
                         boxWidth: 10,
-                        // fontColor: '#000000'
                     }
                   },
                 }
@@ -154,14 +141,9 @@ var stackedOptions = {
                         // fontColor: '#000000'
                     }
                   },
-                // title: {
-                //   display: true,
-                //   text: "Your Impact"
-                // },
                 tooltips: tooltipDollarSignXAxis,
                 scales: {
                     xAxes: [{
-                      // barThickness: 50,
                       stacked: true,
                       barPercentage: 0.5,
                       gridLines: {
@@ -179,8 +161,6 @@ var stackedOptions = {
                       scaleLabel: {
                         display: true,
                         labelString: "Organization",
-                        // fontColor: "black",
-                        // fontSize: 14
                       }
                     }}],
                     yAxes: [{
@@ -190,8 +170,6 @@ var stackedOptions = {
                       },
                       scaleLabel: {
                         display: true,
-                        // labelString: "Organization",
-                        // fontColor: "black"
                       },
                       ticks: {
                         beginAtZero: true,
@@ -202,13 +180,6 @@ var stackedOptions = {
                         }
                     }
                   }],
-                title: {
-                    display: false,
-                    text: 'I\'m the Title',
-                    fontSize: 24,
-                    fontStyle: 'bold',
-
-                       },
 
                 }};
 

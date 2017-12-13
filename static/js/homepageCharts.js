@@ -32,22 +32,18 @@ var tooltipDollarSignYAxis = {
 var stackedOptions = {
                 responsive: true,
                 maintainAspectRatio: false,
-               // barValueSpacing: 2,
-
-               legend: {
-                   display: true,
-                   position: 'top',
-                   labels: {
-                        display: true,
-                        boxWidth: 10,
-                        // fontColor: '#000000'
-                    }
+                legend: {
+                  display: true,
+                  position: 'top',
+                  labels: {
+                      display: true,
+                      boxWidth: 10,
+                          }
                   },
                 tooltips: tooltipDollarSignXAxis,
                 tooltips: tooltipDollarSignYAxis,
                 scales: {
                     xAxes: [{
-                      // barThickness: 50,
                       stacked: true,
                       barPercentage: 0.5,
                       gridLines: {
@@ -81,17 +77,12 @@ var stackedOptions = {
 
                 }};
 var options = {
-                responsive: true,
-               // barValueSpacing: 2,
-
+               responsive: true,
                tooltips: tooltipDollarSignXAxis,
                legend: {
                    display: false,
-               //     position: 'top',
                    labels: {
                         display: true,
-               //          boxWidth: 80,
-               //          fontColor: '#000080'
                     }
                   },
 
@@ -103,7 +94,6 @@ var options = {
                         color: "grey"
                       },
                       ticks: {
-               //          autoSkip: true,
                         beginAtZero: true,
 
                           callback: function(value, index, values) {
