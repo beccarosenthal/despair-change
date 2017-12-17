@@ -59,10 +59,6 @@ class User(db.Model):
                              default=True)
 
 
-    # via_referral = db.Column(db.Boolean,
-    #                          nullable=True,
-    #                          default=False)
-
     ##########REFERRALS EXPLANATION######################
     #I am User1.  I referred User2 and User3. User3 referred User4.
     #User1.referrer is null, because no user referred me.
@@ -84,13 +80,6 @@ class User(db.Model):
                                uselist=False)  #don't wrap this in a list--there will only be one or zero
 
 
-#     def user_orgs()
-
-# #TODO uncomment line below and figure out how to query for list of user's fave orgs
-# #in order
-#     user_orgs = db.relationship("User",
-#     #                             secondary="user_orgs",
-#     #                             primaryjoin="User.user_id==UserOrg.user_id")
     def get_ranked_orgs(self):
         """get list of users ranked orgs; if not, return list of all orgs"""
 
@@ -114,7 +103,6 @@ class User(db.Model):
         url_string = "/donated/referred?org_id={org}&referrer_id={user}"
 
         org = self.user_org
-        org_id = 16
         for item in org:
             if item.rank == 1:
                 org_id = item.org_id 
@@ -174,12 +162,6 @@ class Organization(db.Model):
 
         return total
 
-        #or
-
-        # total = (db.session.query(
-        #     db.func.sum(Transaction.amount)
-        #            .filter(Transaction.org_id == self.org_id))
-        #            .one()[0])
     def num_transactions(self):
         """get number of donations"""
         transactions = self.transactions
@@ -304,17 +286,6 @@ class Transaction(db.Model):
                                name="statuses"),
                                nullable=False)
 
-
-    ##DEFINING RELATIONSHIPS
-
-    # referrer = db.relationship("User",
-    #                        backref=db.backref("referred_transactions",
-    #                                           order_by=timestamp),
-    #                        foreign_keys=[referrer_id])
-
-
-
-    # Define relationship to user (self.user = User object)
     user = db.relationship("User",
                            backref=db.backref("transactions",
                                               order_by=timestamp),
@@ -327,7 +298,6 @@ class Transaction(db.Model):
                           backref=db.backref("transactions",
                                              order_by=timestamp))
 
-        #TODO #FIXME
     @classmethod
     def get_transactions_by_org_date(cls, org_id):
         """returns tuple ($ sum of donations, # donations, date)"""
@@ -350,11 +320,11 @@ class Transaction(db.Model):
                                   org=self.org_id,
                                   timestamp=self.timestamp)
 
-#calling it user_org instead of favorite to make it clear that this
-#table defines the relationship between a user and the orgs to which
-#they donate. It won't be used until phase 2, if I add more organizations as
-#options to which users can donate. This table will allow them to choose
-#their favorites.
+# calling it user_org instead of favorite to make it clear that this
+# table defines the relationship between a user and the orgs to which
+# they donate. It won't be used until phase 2, if I add more organizations as
+# options to which users can donate. This table will allow them to choose
+# their favorites.
 class UserOrg(db.Model):
     """Favorite orgs identified by a user."""
 
@@ -398,16 +368,6 @@ class State(db.Model):
         repr_string ="<State name={name}>"
         return repr_string.format(name=self.name)
 
-##Class for regional chapters if/when I decide to do that in stage 2
-# class Chapters(db.Model):
-#     """Information about local chapters of national organizations"""
-
-#     # chapter_id = primary_key
-#     # org_id = foreign keys
-#     # chapter payee user_email
-    # state
-    # zip code
-    # pass
 
 class Referral(db.Model):
     """Table connecting referred to referring users

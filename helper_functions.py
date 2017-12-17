@@ -19,85 +19,15 @@ def get_current_transaction(user_obj):
 
     return current_transaction
 
-def stacked_bar_data():
-
-
-    group_param = cast(Transaction.timestamp, DATE) #
-    transactions = (db.session.query(func.sum(Transaction.amount),
-                                     group_param,
-                                     Transaction.org_id,
-                                     func.count(Transaction.transaction_id))
-                              .group_by(group_param,
-                                        Transaction.org_id)
-                              .order_by(group_param,
-                                        Transaction.org_id)
-                              .all())
-
-    # org_ids = [org.org_id for org in Organization.query.all()]
-    orgs = Organization.query.all()
-
-    #make list of dictionaries with dates;
-    #FIXME it works, but there's an extra key that's a blank dict
-
-    ###THIS GETS A LIST OF UNIQUE DATES ON WHICH DONATIONS WERE MADE
-    # AND LIST OF ALL ORG_IDS
-      ##FIGURE out how to append data that exists to the idct in this first loop.
-      ##then i can do a for org id that isn'ta key append
-
-    date_list = []
-    dup_check = set()
-    org_ids = set()
-    for item in transactions:
-        date = {}
-        if item[1] not in dup_check:
-            date[item[1]] = {}
-            date_list.append(date)
-            dup_check.add(item[1])
-            org_ids.add(item[4])
-            print "get org id"
-            print item
-
-    # for item in transactions:
-
-
-    ###################################UP UNTIL THIS POINT, it builds list of
-    #dictionaries with date: {} pairs
-
-    for i in range(len(data_by_date)):
-        for org in orgs:
-            data_by_date[i][org.name]
-
-
-    for date_dict in data_by_date:
-        for org in orgs:
-            data_by_date[key][org.name] = {"total_donated": None,
-                                           "num_donations": None,
-                                           "display_name": org.short_name}
-
-    #populate the dictionary with info specific to each org
-    for org in orgs:
-        transactions = Transaction.get_transactions_by_org_date(org.org_id)
-
-        for transaction in transactions:
-            total_donated, num_donations, date  = transaction
-            data_by_date[date][org.name]['total_donated'] = total_donated
-            data_by_date[date][org.name]['num_donations'] = num_donations
-
-
-#####BUILD THIS OUT
-    data_by_date = []
-    dup_check = set()
-    for item in transactions:
-        total_donated, date, org_id, num_donations = item
-        data_by_date = {}
-        if date not in dup_check:
-            date[item[1]] = {}
-            data_by_date.append(date)
-            dup_check.add(item[1])
-
-
-
-
+#function that deletes all records of dory for testing purposes
+def make_dory_forget(dory):
+    if dory.transactions:
+        for item in dory.transactions:
+            db.session.delete(item)
+            db.session.commit()
+    db.session.delete(dory)
+    db.session.commit()    
+    return User.query.filter(User.fname == "Dory").first()
 
 
 
