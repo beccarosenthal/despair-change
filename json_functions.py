@@ -90,22 +90,8 @@ def json_stacked_user_impact_bar(user_object):
     if referred_user_ids:
         data_dict["datasets"] += footprint_dataset
 
-    ##TODO figure out how to make sure that no footprint data shows up if know footprint
-    # if footprint_data:
-    #     data_dict['datasets'].append({   "label": ["My Footprint"],
-    #                     "data": footprint_data,
-    #                     "backgroundColor": HOVER_BACKGROUND_COLORS[0],
-    #                     "hoverBackgroundColor": BACKGROUND_COLORS[1]
-    #                 },)
-
-    # print "footprint data"
-    # print footprint_data
-    # print
-    # print "data_dict after"
-    # print
-    # print data_dict
-
     return jsonify(data_dict)
+
 
 def json_org_donation_by_user(org_obj):
     """returns json data for chart with info about donations to particular org"""
@@ -202,10 +188,6 @@ def json_total_impact_bar():
     for org, amount in donations_by_org.items():
         labels.append(org[:30])
         data.append(amount)
-    #####TODO Add datasets to correspond with the referrals and total donations
-    ###and make those labels different on stacked
-        ### 3 datasets - one for user, one for referrals, one for all users
-        ### so that users can interactively show/get rid of the other info
 
     data_dict = {
                 "labels": labels,
@@ -236,7 +218,6 @@ def json_org_donations_datetime():
                                         Transaction.org_id)
                               .all())
 
-    # org_ids = [org.org_id for org in Organization.query.all()]
     org_ids = set()
     orgs = []
     for t in transactions:
@@ -272,12 +253,8 @@ def json_org_donations_datetime():
     label_dates = []
     org_data = []
     for date, org_dict in sorted(data_by_date.items())[-9:-2]:
-        # print date
-        # print org_dict
-        # print
         datetime.append(date)
         org_data.append(org_dict)
-
     for date in datetime:
         label_dates.append(date.strftime("%m/%d/%y"))
 
@@ -285,7 +262,6 @@ def json_org_donations_datetime():
     num_donations = {
                 "labels": label_dates,
                 "datasets": generate_datasets(org_data, "num_donations"),
-
             }
     total_donated = {
                 "labels": label_dates,
@@ -296,6 +272,7 @@ def json_org_donations_datetime():
                  "total_donated": total_donated}
 
     return jsonify(data_dict)
+
 
 def generate_datasets(org_data_dict, data_key):
     """given items date dict, assembles dataset"""
@@ -331,9 +308,7 @@ def generate_datasets(org_data_dict, data_key):
                         "hoverBackgroundColor": hoverBackgroundColor,
                     },
 
-        # import pdb; pdb.set_trace()
         datasets += data_dict
-        # print data_dict
         count += 1
     return datasets
 
@@ -350,17 +325,6 @@ def json_total_donations_line():
                               .group_by(group_param)
                               .order_by(group_param)
                               .all())
-
-    # # queries tuple of($sum, date, org_id, #donations to that org on that date)
-    # transactions = (db.session.query(func.sum(Transaction.amount),
-    #                                  group_param,
-    #                                  Transaction.org_id,
-    #                                  func.count(Transaction.transaction_id))
-    #                           .group_by(group_param,
-    #                                     Transaction.org_id)
-    #                           .order_by(group_param,
-    #                                     Transaction.org_id)
-    #                           .all())
 
     count = []
     total = []
