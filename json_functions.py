@@ -171,8 +171,6 @@ def json_user_impact_bar(user_object):
 def json_total_impact_bar():
     """generate data_dict with data for the total impact bar chart"""
 
-    ##TODO: Figure out how to make the visual show up as each individual user stacked on top of
-    ##each other
     all_donations = (db.session.query(func.sum(Transaction.amount),
                                                Transaction.org_id)
                                  .filter(Transaction.status == "pending delivery to org")
@@ -206,7 +204,7 @@ def json_total_impact_bar():
 
 def json_org_donations_datetime():
     """generate data for line chart of donations over time"""
-    # # queries tuple of($sum, date, org_id, #donations to that org on that date)
+    # results in tuple of($sum, date, org_id, #donations to that org on that date)
     group_param = cast(Transaction.timestamp, DATE)
     transactions = (db.session.query(func.sum(Transaction.amount),
                                      group_param,
@@ -225,8 +223,6 @@ def json_org_donations_datetime():
         if org_id not in org_ids:
             org_ids.add(t[2])
             orgs.append(Organization.query.get(t[2]))
-
-
 
     #make dictionary with dates as keys
     data_by_date = {}
@@ -248,7 +244,6 @@ def json_org_donations_datetime():
             data_by_date[date][org.name]['total_donated'] = total_donated
             data_by_date[date][org.name]['num_donations'] = num_donations
 
-
     datetime = []
     label_dates = []
     org_data = []
@@ -257,7 +252,6 @@ def json_org_donations_datetime():
         org_data.append(org_dict)
     for date in datetime:
         label_dates.append(date.strftime("%m/%d/%y"))
-
 
     num_donations = {
                 "labels": label_dates,
@@ -328,14 +322,12 @@ def json_total_donations_line():
 
     count = []
     total = []
-    # num_donors = []
     dates = []
     label_dates = []
 
     for data in transactions:
         total.append(data[0])
         count.append(data[1])
-        # num_donors.append(data[2])
         dates.append(data[2])
 
     #make dates presentable
@@ -364,16 +356,6 @@ def json_total_donations_line():
                         "pointHoverBackgroundColor": "blue",
                         "lineTension": 0
                                             },
-
-                    # {  "label": "Number of Donors",
-                    #     "data": num_donors,
-                    #     "fill": False,
-                    #     "borderColor": BACKGROUND_COLORS[4],
-                    #     "pointBorderColor": BACKGROUND_COLORS[5],
-                    #     "strokeColor": HOVER_BACKGROUND_COLORS[6],
-                    #     "pointHoverBackgroundColor": "red",
-                    #     "lineTension": 0
-                    #                         },
                                             ]
             }
     return jsonify(data_dict)
