@@ -36,10 +36,12 @@ from paypal_functions import (generate_payment_object, api, execute_payment,
 app = Flask(__name__)
 app.secret_key = 'werewolf-bar-mitzvah'
 
-#paypal app keys
+# PayPal app keys
 client_id = os.environ.get("PAYPAL_CLIENT_ID")
 client_secret = os.environ.get("PAYPAL_CLIENT_SECRET")
 
+# GoogleMaps Key
+map_key = os.environ.get('GOOGLE_MAPS')
 
 #jinja datetime formatting
 @app.template_filter()
@@ -58,12 +60,12 @@ def do_this_before_each_request():
         g.user = user_obj
         if g.user: #without this, the site errors out in logout route
             g.orgs = user_obj.get_ranked_orgs()
-        else: 
-            g.orgs = sorted(Organization.query.all(), 
+        else:
+            g.orgs = sorted(Organization.query.all(),
                 key=lambda org: org.short_name)
     #decide if g.orgs is an else thing or not
     else:
-        g.orgs = sorted(Organization.query.all(), 
+        g.orgs = sorted(Organization.query.all(),
                 key=lambda org: org.short_name)
 
 
@@ -111,7 +113,7 @@ def index():
 @app.route('/about')
 def show_about_page():
     """renders about Despair Change page"""
-    # session['transaction'] = 162
+
     return render_template('about.html')
 
 
@@ -127,14 +129,11 @@ def show_button_options():
 @app.route('/welcome')
 def show_welcome_page():
     """shows welcome page that donors who are not registered members get redirected to after donations"""
-    
-    if 'transaction' not in session:
 
-    ##for testing purposes, uncomment
-        # session['transaction'] = Transaction.query.all()[-1].transaction_id
+    if 'transaction' not in session:
         return redirect('/')
 
-    #get the user who just logged in
+    # Get the user who just logged in
     transaction = Transaction.query.get(session['transaction'])
     session['transaction'] = transaction.transaction_id
     del session['transaction']
@@ -152,10 +151,10 @@ def show_welcome_page():
 def show_registration_form():
     """render registration form"""
 
-    #make sure that logged in user cannot see reg page
+    # Make sure that logged in user cannot see reg page
     if 'current_user' in session:
         return redirect('/')
-    #Get all orgs and all states from DB to put on reg form
+    # Get all orgs and all states from DB to put on reg form
     orgs = Organization.query.all()
     states = State.query.all()
 
@@ -167,22 +166,19 @@ def process_registration():
     """extract data from reg form, add user to database, redirect
     to donate page with login added to session"""
 
-    # *****TODO fix server.py logic so that user registering with
-    # wrong password redirects them to login page
     if 'current_user' in session:
-        print "***current user in session"
         return redirect('/')
 
     user_email = request.form.get('email')
 
-    #run logic of encrypting password
+    # Run logic of encrypting password
     user_password = request.form.get('password')
     pw_hash = bcrypt.generate_password_hash(user_password, 10)
 
     fname = request.form.get('fname')
     lname = request.form.get('lname')
 
-    # set nullable things to db to None if not in user submit form
+    # Set nullable things to db to None if not in user submit form
     age = request.form.get('age')
     if not age:
         age = None
@@ -201,7 +197,7 @@ def process_registration():
 
     user_object = User.query.filter(User.user_email == user_email).first()
 
-    #If user object with email address provided doesn't exist, add to db...
+    # If user object with email address provided doesn't exist, add to db...
     if not user_object :
         user_object = User(user_email=user_email,
                            password=pw_hash,
@@ -215,7 +211,7 @@ def process_registration():
         db.session.add(user_object)
         db.session.commit()
 
-        #now that there's a user obj, fill out their first favorite
+        # Now that there's a user obj, fill out their first favorite
         org_id = request.form.get('rank_1')
         if org_id:
             user_id = User.query.filter(User.user_email == user_email).first()
@@ -225,7 +221,7 @@ def process_registration():
             db.session.add(new_user_org)
             db.session.commit()
 
-    #if user email existed in db and password is right, log them in
+    # If user email existed in db and password is right, log them in
 
     if pw_hash == bcrypt.check_password_hash(user_object.password, user_password):
         session['current_user'] = user_object.user_id
@@ -249,10 +245,10 @@ def show_login_form():
 def login_user():
     """process login form, redirect to donor page when it works"""
 
-    #get form data
+    # Get form data
     user_email = request.form.get('email')
 
-    #get the user object from the email
+    # Get the user object from the email
     user_object = User.query.filter(User.user_email == user_email).first()
 
     user_password = request.form.get('password')
@@ -263,7 +259,7 @@ def login_user():
                 session['transaction'] = user_object.transactions[-1].transaction_id
                 return redirect('/welcome')
 
-        #check password against email address
+        # Check password against email address
         valid_password = bcrypt.check_password_hash(user_object.password, user_password)
         if valid_password:
 
@@ -296,7 +292,7 @@ def setup_password():
 
     email = request.form.get("user_email")
 
-    #They've made donation already, so the user is in the DB
+    # They've made donation already, so the user is in the DB
     user = User.query.filter(User.user_email == email).first()
     user.password = pw_hash
     db.session.commit()
@@ -320,22 +316,22 @@ def show_user_dashboard():
 
     user_obj, current_user_id = get_user_object_and_current_user_id()
 
-    #get total amount of money user has attempted to donate
+    # Get total amount of money user has attempted to donate
     total_donated = (db.session.query(func.sum(Transaction.amount))
                                .filter(Transaction.user_id == current_user_id)
                                .first())
 
-    #Create dictionary with key value pairs of {org: amt donated by user}
+    # Create dictionary with key value pairs of {org: amt donated by user}
     donations_by_org = query_for_donations_by_org_dict(current_user_id)
 
-    #Get info about user_org with rank #1 to generate referral url
+    # Get info about user_org with rank #1 to generate referral url
     fave_orgs = user_obj.get_ranked_orgs()
     print "fave_orgs in show user dashboard fn ", fave_orgs
     if fave_orgs:
         print "inside the if statement"
         fave_org = fave_orgs[0]
 
-    #if they don't have a #1, random org
+    # If they don't have a #1, random org
     else:
         fave_org = random.choice(Organization.query.all())
 
@@ -371,10 +367,8 @@ def show_user_settings():
 
     all_orgs = Organization.query.all()
 
-    ##Get current favorite org for user
+    # Get current favorite org for user
     current_faves = user_obj.get_ranked_orgs()
-
-    ##If you have a current #1, it is ___. Would you like to change it? What would you like to be your 2 /3 spots
 
     print all_orgs
     return render_template("settings.html",
@@ -389,7 +383,7 @@ def change_user_settings():
 
     user_id = session['current_user']
     user_obj = User.query.get(user_id)
-    ##Get the info for what org_id users designated for which rank
+    # Get the info for what org_id users designated for which rank
     rank_1 = request.args.get("rank_1")
     rank_2 = request.args.get("rank_2")
     rank_3 = request.args.get("rank_3")
@@ -404,12 +398,12 @@ def change_user_settings():
         if request.args.get("rank_" + str(i)):
             rank = request.args.get("rank_" + str(i))
 
-            #do they already have a rank 1? if so, make it None, because it's getting replaced
+            # Do they already have a rank 1? if so, make it None, because it's getting replaced
             rank_at_i = (UserOrg.query.filter(UserOrg.user_id == user_id, UserOrg.rank == i).first())
 
             if rank_at_i:
                 rank_at_i.rank = None
-            #do they already have a relationship between themselves and that org
+            # Do they already have a relationship between themselves and that org
             old_relationship = (UserOrg.query
                 .filter(UserOrg.user_id == user_id, UserOrg.org_id == rank)
                 .first())
@@ -423,8 +417,8 @@ def change_user_settings():
 
     new_default_amount = request.args.get("default_amount")
     print "new_default_amount:", new_default_amount
-    
-    #update the database with new default amount
+
+    # Update the database with new default amount
     if new_default_amount:
         user_obj.default_amount = int(new_default_amount)
 
@@ -433,7 +427,7 @@ def change_user_settings():
     return redirect("/dashboard")
 
 
-#routes about paypal/payment things
+# Routes about paypal/payment things
 ###############################################################################
 @app.route('/donate')
 def donation_page():
@@ -441,7 +435,7 @@ def donation_page():
 
     if 'current_user' in session:
         user_id = session['current_user']
-    #get all org objects that user has designated as a favorite at any point
+    # Get all org objects that user has designated as a favorite at any point
         orgs = User.query.get(user_id).get_ranked_orgs()
 
     else:
@@ -460,21 +454,16 @@ def process_donation():
     org_id = request.form.get('org')
     amount = request.form.get('donation_amount')
 
-    print "user_id=", user_id
-    print "org_id=", org_id
     if not amount:
         amount = User.query.get(user_id).default_amount
-    print "check what amount, orgs are"
 
-    #TODO Use regex to get amount to be a string format that paypal can take
     transaction = create_transaction_object(user_id, org_id, float(amount))
-    print "****transaction object built, added to db"
 
-    #generate the payment object using information from the database
+    # Generate the payment object using information from the database
     redirect_url, payment_object = generate_payment_object(user_id,
                                                            org_id, transaction)
 
-    #update transaction object in the database to add paypal's ID
+    # Update transaction object in the database to add paypal's ID
     transaction.payment_id = payment_object.id
     transaction.status = "paypal payment instantiated"
 
@@ -495,22 +484,18 @@ def do_referred_payment():
     org_id = request.args.get("org_id")
     referrer_id = request.args.get("referrer_id")
 
-    print org_id, "org id from url"
-    print referrer_id, "referrer id from url"
-
-    #Use the anonymous user ID to do the transaction
+    # Use the anonymous user ID to do the transaction
     user_id = User.query.filter(User.fname == "Anonymous").one().user_id
-    print user_id, "user_id"
 
     #add referrer_id to the session so we can add the Referral
     session['referrer_id'] = int(referrer_id)
 
     transaction = create_transaction_object(user_id, org_id)
 
-    #generate the payment object using information from the database
+    # Generate the payment object using information from the database
     redirect_url, payment_object = generate_payment_object_referral(user_id,
                                                                     org_id, transaction)
-    #update transaction object in the database to add paypal's ID
+    # Update transaction object in the database to add paypal's ID
     transaction.payment_id = payment_object.id
     transaction.status = "paypal payment instantiated"
 
@@ -521,12 +506,7 @@ def do_referred_payment():
 
 @app.route('/donated/register', methods=['POST'])
 def process_payment_new_user():
-    """handle payment for visitor to the site without referral or account"""
-
-    print "***********"
-    print "in donated/register"
-    print "************"
-    print
+    """ Handle payment for visitor to the site without referral or account"""
 
     email = request.form.get('email')
     org_id = request.form.get('org')
@@ -534,14 +514,12 @@ def process_payment_new_user():
     if not amount:
         amount = 1.0
 
-    #If that person is already
+    # Check if that person has already made a donation
     user_obj = User.query.filter(User.user_email == email).first()
 
     if not user_obj:
         fname = "first_name"
         lname = "last_name"
-        print "what is password"
-        # pw_hash = bcrypt.generate_password_hash(password, 10)
 
         user_obj = User(user_email=email,
                         password=None,
@@ -551,20 +529,16 @@ def process_payment_new_user():
 
         db.session.add(user_obj)
         db.session.commit()
-    print
-    print "user_obj: ", user_obj
-    print "user object transactions "
-    print user_obj.transactions
 
-    transaction = create_transaction_object(user_obj.user_id, org_id, float(amount))
-    print "did we build a transaction?"
-    print transaction
-    #generate the payment object using information from the database
+    transaction = create_transaction_object(user_obj.user_id,
+                                            org_id,
+                                            float(amount))
+
+    # Generate the payment object using information from the database
     redirect_url, payment_object = generate_payment_object(user_obj.user_id,
                                                            org_id, transaction)
 
-    print "did we get the paypal object back"
-    #update transaction object in the database to add paypal's ID
+    # Update transaction object in the database to add paypal's ID
     transaction.payment_id = payment_object.id
     transaction.status = "paypal payment instantiated"
 
@@ -579,37 +553,31 @@ def process_payment():
 
     paypal_id = request.args.get('paymentId')
 
-    #Get specific transaction out of DB
+    # Get specific transaction out of DB
     transaction = (Transaction.query
                               .filter(Transaction.payment_id == paypal_id)
                               .first())
 
-    print transaction.status
 
-    print "check dashboard to see progress of payment to figure out how to update status"
-
-    #payer ID paypal uses to physically execute the payment
+    # Payer ID is what PayPal uses to physically execute the payment
     payer_id = request.args.get('PayerID')
 
-    #Find the payment object from the paypal id
+    # Get the payment object from the PayPal id
     payment = Payment.find(paypal_id)
 
     execute_payment(payer_id, payment, transaction)
 
-    #If it's made it this far, the payment went through.
+    # If it's made it this far, the payment went through.
     if transaction.status == "payment succeeded":
-        print "Money is in my hands, ready to be delivered to the org"
         transaction.status = "pending delivery to org"
         db.session.commit()
 
-    #if it's not a referral payment, go to the user dashboard
+    # If it's not a referral payment, go to the user dashboard
     session['just_donated'] = True
 
     org = Organization.query.get(transaction.org_id)
     user = User.query.get(transaction.user_id)
-    print "*******************"
-    print session
-    print "*******************"
+
     if 'referrer_id' not in session:
         if transaction.user.fname == "first_name":
             user = process_non_user_donation(payment, transaction)
@@ -620,7 +588,7 @@ def process_payment():
 
         flash("Congrats, {}! Your ${}0 donation to {} was successful!".format(
                 user.fname, transaction.amount, org.name))
-        return redirect('/') 
+        return redirect('/')
 
     else:
         user = process_referral(payment, transaction)
@@ -632,9 +600,7 @@ def process_payment():
 
 
 def process_non_user_donation(paypal_payment, transaction):
-    """process donation from non-user, change db accordingly"""
-
-    print "in process non user donation"
+    """ Process donation from non-user, change db accordingly"""
 
     payment_dict = paypal_payment.to_dict()
 
@@ -656,15 +622,12 @@ def process_non_user_donation(paypal_payment, transaction):
         user_obj.phone = phone
 
     db.session.commit()
-    print "user_obj after being committed", user_obj
-    print "see what user_obj is and what user_obj.transactions"
+
     return user_obj
 
 
 def process_referral(paypal_payment, transaction):
-    """process referral payment and change database accordingly"""
-
-    print "in process referral"
+    """ Process referral payment and change database accordingly"""
 
     payment_dict = paypal_payment.to_dict()
 
@@ -672,17 +635,15 @@ def process_referral(paypal_payment, transaction):
 
     email = payer_info.get('email')
 
-    #Get the user object for the user who made the payment (whether they knowingly signed up or not)
+    # Get the user object for the user who made the payment (whether they knowingly signed up or not)
     referred_obj = User.query.filter(User.user_email == email).first()
 
-    #If no Transactions have been made with that email address, add that user to the DB
+    # If no Transactions have been made with that email address, add that user to the DB
     if not referred_obj or referred_obj.fname == "Anonymous" or referred_obj.fname == "first_name":
 
         fname = payer_info.get('first_name')
         lname = payer_info.get('last_name')
         phone = payer_info.get('phone')
-        # user_password = os.environ.get("DEFAULT_PASSWORD")
-        # pw_hash = bcrypt.generate_password_hash(user_password, 10)
 
         referred_obj = User(user_email=email,
                             password=None,
@@ -698,7 +659,7 @@ def process_referral(paypal_payment, transaction):
     referrer_id = int(session['referrer_id'])
     referrals = Referral.query.all()
 
-    #If the referred user doesn't already have a referrer in the database, add it
+    # If the referred user doesn't already have a referrer in the database, add it
     if not referred_obj.referrer:
 
         referral = Referral(referrer_id=referrer_id,
@@ -707,7 +668,7 @@ def process_referral(paypal_payment, transaction):
         db.session.add(referral)
         db.session.commit()
 
-    #change the transaction's user_id so that it belongs to the person who made it
+    # Change the transaction's user_id so that it belongs to the person who made it
     transaction.user_id = referred_obj.user_id
     db.session.commit()
 
@@ -719,7 +680,6 @@ def process_referral(paypal_payment, transaction):
 def cancel_payment():
     """cancels payment"""
 
-#todo find current transaction, change status, update in db
     flash('I think I just canceled a payment')
     return redirect('/')
 
@@ -798,18 +758,15 @@ def stacked_org_bar_data():
 def create_transaction_object(user_id, org_id, amount=1.0):
     """create Transaction object for both referral and non referral transactions"""
 
-    print "in create transaction object function"
     transaction = Transaction(org_id=org_id,
                               user_id=user_id,
                               payment_id="Unrequested",
                               amount=amount,
                               status="donation attempted"
                               )
-    print transaction, "transaction before being added to db"
     db.session.add(transaction)
     db.session.commit()
 
-    print "Transaction added to db"
     return transaction
 #Helper Functions with queries
 ##############################################################################
@@ -840,9 +797,9 @@ def query_for_donations_by_org_dict(user_id):
     return donations_by_org
 
 
-#not sure if this works or not...
 def show_all_user_donations(user_id):
-    """find all donations attempted by the user logged into the session"""
+    """ Find all donations attempted by the user logged into the session"""
+
     total_donated = (db.session.query(func.sum(Transaction.amount))
                                .filter(Transaction.user_id == current_user_id,
                                        Transaction.status == "pending delivery to org")
@@ -852,15 +809,12 @@ def show_all_user_donations(user_id):
 
 
 def get_current_faves(user_obj):
-    """takes user_id, returns list of users favorite orgs ordered by rank"""
+    """Takes user_id, returns list of users favorite orgs ordered by rank"""
 
-    print user_obj
     current_faves = (UserOrg.query
                             .filter(UserOrg.user_id == user_obj.user_id)
                             .order_by(UserOrg.rank)
                             .all())
-    print "current faves in get current faves function"
-    print current_faves
     return current_faves
 
 
