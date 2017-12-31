@@ -129,7 +129,7 @@
 
 <div class="container">
   <div class="row">
-    
+
       <div class='panel-header'>
         <h3>Donation Log</h3>
           <p>Check out the impact our users are having, one small donation at a time. Search through the table to find out more information about the microdonations made through Despair Change.</p>
@@ -167,7 +167,7 @@
 </div>
 
 
-{% if 'version_2' in session %}
+<!-- {% if 'version_2' in session %} -->
   <div class='row'><iframe src="https://giphy.com/embed/CPlfH4SdK1h04" width="480" height="380" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
   <h3>Relax</h3>
 
@@ -190,15 +190,15 @@
 </div>
 </div>
 </div>
-{% endif %}
+<!-- {% endif %} -->
 
 <!-- Make modal pop up on page load -->
 {% if 'just_donated' not in session%}
   <script type="text/javascript">
     $(document).ready(function(){
-      setTimeout(function() { 
+      setTimeout(function() {
       $('#donationModal').modal('show');
-  
+
     }, 15000);
 
     });

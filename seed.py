@@ -1,16 +1,13 @@
 import datetime
 import random
-from faker import Faker
-
+# from faker import Faker
 
 from model import (db, connect_to_db, State, User,
                    Organization, Transaction, Referral, UserOrg)
 
-
 from server import app
 
-fake = Faker()
-ORG_IDS = [8, 9, 13, 15, 16]
+ORG_IDS = [1, 2, 3, 4, 5]
 USER_IDS = [27, 15, 17, 22, 23, 16, 30, 20, 31, 32, 33]
 
 
@@ -39,32 +36,8 @@ def load_states():
     print "States Loaded"
 
 
-# def create_users():
-#     """Creates users data from Faker."""
 
-#     print 'Users'
-
-#     with open('data/users.txt', 'w+') as users:
-#         for i in range(500):
-#             users.write('{}|{}|{}|{}|{}|{}|{}|{}|{}|{}\n'.format(fake.first_name(),
-#                                                                  fake.last_name(),
-#                                                                  fake.free_email(),
-#                                                                  fake.boolean(
-#                                                                      chance_of_getting_true=75),
-#                                                                  fake.password(length=10,
-#                                                                                special_chars=True,
-#                                                                                digits=True,
-#                                                                                upper_case=True,
-#                                                                                lower_case=True),
-#                                                                  random.choice(range(1, 6)),
-#                                                                  fake.state_abbr(),
-#                                                                  fake.zipcode(),
-#                                                                  fake.phone_number(),
-#                                                                  fake.date_time_this_year(before_now=True, after_now=False, tzinfo=None),
-#                                                                  ))
-
-
-##This is making everything error out right now because set password field isn't in 
+##This is making everything error out right now because set password field isn't in
 # the DB yet
 def add_users():
     """takes fake users and adds them to database"""
@@ -74,11 +47,11 @@ def add_users():
             row = row.rstrip()
             fname, lname, user_email, password, default_amount, state, zipcode, phone, created_at, set_password  = row.split(",")
             created_at = datetime.datetime.strptime(created_at, "%Y-%m-%d %H:%M:%S")
-            user = User(fname=fname, 
-                        lname=lname, 
-                        user_email=user_email, 
-                        set_password=set_password, 
-                        password=password, 
+            user = User(fname=fname,
+                        lname=lname,
+                        user_email=user_email,
+                        set_password=set_password,
+                        password=password,
                         default_amount=float(default_amount),
                         state_code=state,
                         zipcode=str(zipcode),
@@ -112,7 +85,7 @@ def create_transactions():
                 "Call this a payment ID",
                 fake.date_time_this_year(before_now=True, after_now=False, tzinfo=None),
                  )  )
-                                
+
 def add_transactions():
     """add fake transactions to db"""
 
@@ -139,9 +112,9 @@ if __name__ == "__main__":
 
     # In case tables haven't been created, create them
     db.create_all()
-    # load_states()
+    load_states()
     # create_users()
-    # add_users()
+    add_users()
     create_transactions()
     add_transactions()
     # # Import different types of data

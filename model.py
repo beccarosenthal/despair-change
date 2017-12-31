@@ -60,15 +60,15 @@ class User(db.Model):
 
 
     ##########REFERRALS EXPLANATION######################
-    #I am User1.  I referred User2 and User3. User3 referred User4.
-    #User1.referrer is null, because no user referred me.
-    #User2.referrer == User1
-    #User1.referred == [User2, User3]
-    #User2.referrer == User1
-    #User2.referred == null
-    #User3.referrer == User1
-    #User3.referred == User4
-    #User1's total donation impact amount includes User2, User3, AND User4
+    # I am User1.  I referred User2 and User3. User3 referred User4.
+    # User1.referrer is null, because no user referred me.
+    # User2.referrer == User1
+    # User1.referred == [User2, User3]
+    # User2.referrer == User1
+    # User2.referred == null
+    # User3.referrer == User1
+    # User3.referred == User4
+    # User1's total donation impact amount includes User2, User3, AND User4
     referred = db.relationship("User",
                                secondary="referrals",
                                primaryjoin="User.user_id==Referral.referrer_id",
@@ -105,24 +105,24 @@ class User(db.Model):
         org = self.user_org
         for item in org:
             if item.rank == 1:
-                org_id = item.org_id 
+                org_id = item.org_id
                 break
-        
+
         return domain + url_string.format(org=org_id, user=self.user_id)
         #TODO Make this work
     def get_referred_chain(self):
         """returns list of referred users and all people who have been referred by those users
          from self
 
-        #HYPOTHETICAL EXAMPLE:
-        #User1 referred User2 and User3. User3 referred User4.
+        # HYPOTHETICAL EXAMPLE:
+        # User1 referred User2 and User3. User3 referred User4.
 
-        >>>get_all_referred_by_user(User1)
-        >>>[User2, User3, User4]
+        >>> get_all_referred_by_user(User1)
+        [User2, User3, User4]
         """
-        ##recursive function
+        ## recursive function
         chain = []
-        if not self.referred:    
+        if not self.referred:
             return chain
         for user in self.referred:
             chain += [user] + user.get_referred_chain()
@@ -154,7 +154,7 @@ class Organization(db.Model):
 
     #todo write way to query with timestamp included
     def amount_raised(self, start_date=None, end_date=None):
-        """calculate amount of money raised by particular org"""
+        """ Calculate amount of money raised by particular org """
         total = 0
         for transaction in self.transactions:
             if transaction.status == 'pending delivery to org':
@@ -163,7 +163,7 @@ class Organization(db.Model):
         return total
 
     def num_transactions(self):
-        """get number of donations"""
+        """ Get number of donations. """
         transactions = self.transactions
         count = 0
         for t in transactions:
@@ -204,8 +204,8 @@ class Organization(db.Model):
 
         group_param = cast(Transaction.timestamp, DATE) #can change group param to group query by different things
         data = (db.session.query(func.sum(self.transactions.amount),
-                                func.count(self.transactions.amount),
-                                group_param)
+                                 func.count(self.transactions.amount),
+                                 group_param)
                           .group_by(group_param)
                           .order_by(group_param).all())
 
@@ -227,8 +227,8 @@ class Transaction(db.Model):
     transaction_id = db.Column(db.Integer,
                                autoincrement=True,
                                primary_key=True)
-    #define user_id and org_id as foreign keys from the Primary keys of
-    #Org and User - may turn into origin and destination
+    # define user_id and org_id as foreign keys from the Primary keys of
+    # Org and User - may turn into origin and destination
     org_id = db.Column(db.Integer,
                        db.ForeignKey('organizations.org_id'),
                        nullable=False)
@@ -236,12 +236,9 @@ class Transaction(db.Model):
                         db.ForeignKey('users.user_id'),
                         nullable=False)
 
-    #payment_id generated from paypal payment
-    #TODO Change name to paypal ID
+    # payment_id generated from paypal payment
     payment_id = db.Column(db.String(40), nullable=False)
-
     amount = db.Column(db.Float, nullable=False)
-
     timestamp = db.Column(db.DateTime,
                           nullable=False,
                           default=datetime.datetime.utcnow)
@@ -257,23 +254,6 @@ class Transaction(db.Model):
     #                               .order_by(group_param, self.org)
     #                               .all())
     #     return transactions
-
-
-
-    # # #TODO add this to transactions already in db, figure out logic for how to change transaction if referred makes donation and then signs up
-    # referrer_id = db.Column(db.Integer,
-    #                         db.ForeignKey('users.user_id'),
-    #                         nullable=True)
-
-    # via_referral = db.Column(db.Boolean,
-    #                          nullable=True,
-    #                          default=False)
-    #TODO figure out if I can make
-    # referrer_email = db.Column(db.String,
-    #                      db.ForeignKey('users.user_email'),
-    #                      nullable=True)
-
-    ##TODO: Change status of all pending delivery to org transactions to delivered to org
 
     status = db.Column(db.Enum("donation attempted",
                                "payment object built",
@@ -341,7 +321,6 @@ class UserOrg(db.Model):
                         nullable=False)
 
     rank = db.Column(db.Integer, nullable=True)
-
     org = db.relationship("Organization", backref="user_org")
     user = db.relationship("User", backref="user_org")
 
@@ -395,7 +374,6 @@ class Referral(db.Model):
                         db.ForeignKey('users.user_id'),
                         nullable=False)
 
-
     def __repr__(self):
         """Provide helpful representation when printed."""
 
@@ -428,19 +406,16 @@ def create_example_data():
     db.session.add_all([pink, glen, chinandler, org1, org2, org3, org4, org5])
     db.session.commit()
 
-    # import pdb; pdb.set_trace()
-
     transaction = example_transaction()
-
-    # import pdb; pdb.set_trace()
-
     user_org = example_user_org()
 
-    referral1, referral2, referral3 = example_referral()
+    # referral1, referral2, referral3 = example_referral()
 
 
     #add transaction after users/org has been created for referential integrity
-    db.session.add_all([transaction, user_org, referral1, referral2, referral3])
+    db.session.add_all([transaction, user_org,
+                       # referral1, referral2, referral3
+                       ])
     db.session.commit()
 
 
@@ -498,24 +473,24 @@ def example_orgs():
     logo_url2 = "https://ih1.redbubble.net/image.294685880.6679/flat,800x800,075,f.jpg"
     mission2 = "At Rent-A-Swag, we bring you the dopest shirts, the swankiest jackets, the slickest cardigans, the flashiest fedoras, the hottest ties, the snazziest canes and more!"
     org2 = Organization(
-                       name="Rent-A-Swag",
-                       payee_email=RENT_A_SWAG,
-                       logo_url=logo_url2,
-                       mission_statement=mission2,
-                       website_url="http://www.pawneeindiana.com/",
-                       has_chapters=False
-                       )
+                        name="Rent-A-Swag",
+                        payee_email=RENT_A_SWAG,
+                        logo_url=logo_url2,
+                        mission_statement=mission2,
+                        website_url="http://www.pawneeindiana.com/",
+                        has_chapters=False
+                        )
 
     logo_url3 = "https://pbs.twimg.com/profile_images/887766984745775104/_YfeP9WT_400x400.jpg"
     mission3 = "45 messed with the wrong set of vested park rangers."
 
     org3 = Organization(
-                       name="Alternative US National Parks Service",
-                       payee_email=ALT_NPS_EMAIL,
-                       logo_url=logo_url3,
-                       mission_statement=mission3,
-                       website_url="https://twitter.com/altnatparkser?lang=en",
-                       has_chapters=False
+                        name="Alternative US National Parks Service",
+                        payee_email=ALT_NPS_EMAIL,
+                        logo_url=logo_url3,
+                        mission_statement=mission3,
+                        website_url="https://twitter.com/altnatparkser?lang=en",
+                        has_chapters=False
                        )
 
     logo_url4 = "http://cdn.hexjam.com/editorial_service/bases/images/000/009/138/xlarge/zoolander-for-blog.jpg?1427992126"
@@ -536,8 +511,8 @@ def example_orgs():
                         logo_url=logo_url5,
                         mission_statement=mission5,
                         website_url="https://www.aclu.org/about-aclu",
-                        has_chapters=True)
-
+                        has_chapters=True
+                        )
 
     return org, org2, org3, org4, org5
 
@@ -554,7 +529,8 @@ def example_transaction():
                               user_id=user.user_id,
                               payment_id='insert valid payment_id here',
                               amount=1.00,
-                              status='pending delivery to org')
+                              status='pending delivery to org',
+                              )
 
     return transaction
 
@@ -573,14 +549,14 @@ def example_user_org():
 
     return user_org
 
-def example_referral():
-    """create sample referrals"""
+# def example_referral():
+#     """create sample referrals"""
 
-    referral1 = Referral(referrer_id=16, referred_id=17)
-    referral2 = Referral(referrer_id=16, referred_id=22)
-    referral3 = Referral(referrer_id=22, referred_id=15)
+#     referral1 = Referral(referrer_id=16, referred_id=17)
+#     referral2 = Referral(referrer_id=16, referred_id=22)
+#     referral3 = Referral(referrer_id=22, referred_id=15)
 
-    return referral1, referral2, referral3
+#     return referral1, referral2, referral3
 
 
 def set_val_table_id():
@@ -636,7 +612,7 @@ if __name__ == "__main__":
     from flask_bcrypt import Bcrypt
     connect_to_db(app)
     bcrypt = Bcrypt(app)
-    # db.create_all()
+    db.create_all()
     # create_example_data()
 
     #When you're ready to start auto-incrementing for real, uncomment this
