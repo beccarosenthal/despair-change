@@ -29,6 +29,7 @@ There are three different payment routes through Despair Change. Non registered 
 
 The site is also filled with visuals that show how many small donations add up so that people donating just a dollar or two feel good about having a tangible impact instead of feeling inadequate for not donating the suggested amount of money on an organization's website.
 
+![See Organizations](static/img/see_orgs.gif "Choose an Organization")
 
 ## Next Steps
 
