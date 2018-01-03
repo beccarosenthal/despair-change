@@ -31,6 +31,10 @@ The site is also filled with visuals that show how many small donations add up s
 
 ![See Organizations](static/img/see_orgs.gif "Choose an Organization")
 
+![Referral Payments](static/img/referral_process.gif "The Referral Process")
+
+
+
 ## Next Steps
 
 Version 2.0 will (hopefully) leave the sandbox and connect donors to real organizations and include more ways for users to customize what kind of data they see about donations made through Despair Change.
