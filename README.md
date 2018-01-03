@@ -29,7 +29,11 @@ There are three different payment routes through Despair Change. Non registered 
 
 The site is also filled with visuals that show how many small donations add up so that people donating just a dollar or two feel good about having a tangible impact instead of feeling inadequate for not donating the suggested amount of money on an organization's website.
 
-![See Organizations](static/img/see_orgs.gif "Choose an Organization") ![Referral Payments](static/img/referral_process.gif "The Referral Process")
+![See Organizations](static/img/see_orgs.gif "Choose an Organization")
+![Referral Payments](static/img/referral_process.gif "The Referral Process")
+![Homepage Charts](static/img/homepage1.png "Homepage")
+![Homepage Charts](static/img/homepage2.png "Homepage")
+![Homepage Charts](static/img/homepage_logged_in.png "Homepage Logged In")
 
 
 
