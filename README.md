@@ -38,7 +38,7 @@ When a user is logged in, they see their impact on the homepage.
 ![Homepage Charts](static/img/homepage_logged_in.png "Homepage Logged In")
 
 A user can see information about all donations made regardless of whether or not she is logged in.
-![Homepage Charts](static/img/homepage2.png "Homepage")
+![Homepage Charts](static/img/toggle_dashboard.gif "Homepage")
 
 If users want to make donations, they can click the donate button and see which organizations are available for donations.
 
@@ -46,6 +46,9 @@ If users want to make donations, they can click the donate button and see which 
 
 This is what happens when a person types a referral link into their browser.
 ![Referral Payments](static/img/referral_process.gif "The Referral Process")
+
+And once they've made referrals, the impact of those donations (and future donations made by referred users is recorded).
+![Referral Payments Data](static/img/glens_impact.png "The Referral Process")
 
 
 
