@@ -41,6 +41,7 @@ A user can see information about all donations made regardless of whether or not
 ![Homepage Charts](static/img/homepage2.png "Homepage")
 
 If users want to make donations, they can click the donate button and see which organizations are available for donations.
+
 ![See Organizations](static/img/see_orgs.gif "Choose an Organization")
 
 This is what happens when a person types a referral link into their browser.
