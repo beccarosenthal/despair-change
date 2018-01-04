@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block head %}
+
+    <style>
+        body {
+            background: url(/static/img/bear.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            height: 800px;
+        }
+    </style>
+
+{% endblock %}
+{% block body %}
+
+  <!-- Nav to Bear map -->
+
+    <div class="row">
+
+        <div class="col-sm-4">
+            <div id="bearlink"><a href="/bears">TRACKING POLAR BEARS</a></div>
+        </div>
+
+
+        <!-- Empty -->
+
+        <div class="col-sm-8">
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+<!--
+<script async defer
+       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJiXJOhpPD2-41U9CfvMM7TOUqql-TOS8&callback=initMap">
+</script>
+ -->
+<script src="mapDemo.js"></script>
+<script src="/static/mapstyles.js"></script>
+

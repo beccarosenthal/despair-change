@@ -753,6 +753,17 @@ def stacked_org_bar_data():
     return json_org_donations_datetime()
 
 
+
+# POST HACKBRIGHT PLAYING WITH STUFF
+############################################################################
+
+@app.route('/map')
+def show_map_demo():
+    """show demo google map"""
+
+    return render_template('map.html')
+
+
 #HELPER FUNCTIONS
 ############################################################################
 def create_transaction_object(user_id, org_id, amount=1.0):
