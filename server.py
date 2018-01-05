@@ -12,6 +12,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from jinja2 import StrictUndefined
 from paypalrestsdk import Payment, configure, WebProfile
 from sqlalchemy import func, desc
+from uszipcode import ZipcodeSearchEngine
 
 
 #import from my files
@@ -762,6 +763,35 @@ def show_map_demo():
     """show demo google map"""
 
     return render_template('map.html')
+
+
+@app.route('/get_lat_long.json')
+def zip_to_lat_long_json():
+    """ given zipcode, return jsonified lat/long for googlemaps """
+
+    # Get current user's zipcode
+    if "current_user" in session:
+        user_id = session['current_user']
+        user = User.query.get(user_id)
+
+        zipcode_string = user.zipcode
+
+    # If no zipcode, marker will appear in Disneyland
+    else:
+        zipcode_string = '92802'
+
+    # Changing type of zipcode string from unicode to string
+    zipcode_string = str(zipcode_string)
+
+    search = ZipcodeSearchEngine()
+    zipcode_dict = search.by_zipcode(zipcode_string)
+
+    lat = int(zipcode_dict['Latitude'])
+    lng = int(zipcode_dict['Longitude'])
+    lat_lon_dict = {'lat': lat, 'lng': lng}
+
+    return jsonify(lat_lon_dict)
+
 
 
 #HELPER FUNCTIONS
