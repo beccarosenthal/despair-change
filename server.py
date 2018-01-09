@@ -783,12 +783,52 @@ def zip_to_lat_long_json():
     # Changing type of zipcode string from unicode to string
     zipcode_string = str(zipcode_string)
 
-    zipcode_string = {'address': zipcode_string}
+    search = ZipcodeSearchEngine()
+    zipcode_dict = search.by_zipcode(zipcode_string)
+
+    lat = int(zipcode_dict['Latitude'])
+    lng = int(zipcode_dict['Longitude'])
+
+    lat_lon_dict = {'lat': lat, 'lng': lng}
 
 
-    return jsonify(zipcode_string)
+    return jsonify(lat_lon_dict)
 
 
+@app.route('/get_referral_zips.json')
+def get_referral_zips():
+    """ Get a list with all zip codes of all people in a user's referral chain
+    """
+    if "current_user" in session:
+        user_id = session['current_user']
+        user = User.query.get(user_id)
+
+    referral_transactions = get_all_referred_by_user(user)
+    zipcodes = set()
+    lat_longs = {}
+
+    for item in referral_transactions:
+        print "item", item
+        print "lat_longs", lat_longs
+        print 'zipcodes', zipcodes
+        if not item.zipcode:
+            continue
+        else:
+            zipcode = item.zipcode
+
+            search = ZipcodeSearchEngine()
+            #dictionary of informatino pertaining to that zipcode, including lat/long
+            zc_dict = search.by_zipcode(zipcode)
+
+            if zipcode not in zipcodes:
+
+                zipcodes.add(zc_dict['Zipcode'])
+                lat = zc_dict['Latitude']
+                lng = zc_dict['Longitude']
+                lat_longs[zipcode] = {'lat': lat, 'lng': lng}
+
+    print lat_longs
+    return jsonify(lat_longs)
 
 #HELPER FUNCTIONS
 ############################################################################
