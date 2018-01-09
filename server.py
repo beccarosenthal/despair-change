@@ -783,14 +783,10 @@ def zip_to_lat_long_json():
     # Changing type of zipcode string from unicode to string
     zipcode_string = str(zipcode_string)
 
-    search = ZipcodeSearchEngine()
-    zipcode_dict = search.by_zipcode(zipcode_string)
+    zipcode_string = {'address': zipcode_string}
 
-    lat = int(zipcode_dict['Latitude'])
-    lng = int(zipcode_dict['Longitude'])
-    lat_lon_dict = {'lat': lat, 'lng': lng}
 
-    return jsonify(lat_lon_dict)
+    return jsonify(zipcode_string)
 
 
 
