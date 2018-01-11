@@ -12,6 +12,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from jinja2 import StrictUndefined
 from paypalrestsdk import Payment, configure, WebProfile
 from sqlalchemy import func, desc
+from twilio.rest import Client
 from uszipcode import ZipcodeSearchEngine
 
 
@@ -30,6 +31,7 @@ from json_functions import (
 from model import (User, Organization, Transaction,
                    UserOrg, Referral, State,
                    connect_to_db, db)
+
 from paypal_functions import (generate_payment_object, api, execute_payment,
                               generate_payment_object_referral)
 
@@ -43,6 +45,10 @@ client_secret = os.environ.get("PAYPAL_CLIENT_SECRET")
 
 # GoogleMaps Key
 map_key = os.environ.get('GOOGLE_MAPS')
+
+# Twilio Keys
+account_sid = os.environ.get('TWILLIO_ACCOUNT_SIT')
+auth_token = os.environ.get('TWILLIO_AUTH_TOKEN')
 
 #jinja datetime formatting
 @app.template_filter()
@@ -755,7 +761,7 @@ def stacked_org_bar_data():
 
 
 
-# POST HACKBRIGHT PLAYING WITH STUFF
+# POST HACKBRIGHT PLAYING WITH GOOGLEMAPS STUFF
 ############################################################################
 
 @app.route('/map')
@@ -804,31 +810,48 @@ def get_referral_zips():
         user = User.query.get(user_id)
 
     referral_transactions = get_all_referred_by_user(user)
-    zipcodes = set()
-    lat_longs = {}
 
-    for item in referral_transactions:
-        print "item", item
-        print "lat_longs", lat_longs
-        print 'zipcodes', zipcodes
-        if not item.zipcode:
-            continue
-        else:
-            zipcode = item.zipcode
+    zipcodes = {
+        user.user_id: {'user_zipcode': user.zipcode}
+        for user in referral_transactions
+    }
 
-            search = ZipcodeSearchEngine()
 
-            #dictionary of information pertaining to that zipcode, including lat/long
-            zc_dict = search.by_zipcode(zipcode)
 
-            if zipcode not in zipcodes:
+    # for item in referral_transactions:
+    #     print "item", item
+    #     print "lat_longs", lat_longs
+    #     print 'zipcodes', zipcodes
+    #     if not item.zipcode:
+    #         continue
+    #     else:
+    #         zipcode = item.zipcode
 
-                zipcodes.add(zc_dict['Zipcode'])
-                lat = zc_dict['Latitude']
-                lng = zc_dict['Longitude']
-                lat_longs[zipcode] = {'lat': lat, 'lng': lng}
+    #         search = ZipcodeSearchEngine()
 
-    return jsonify(lat_longs)
+    #         #dictionary of information pertaining to that zipcode, including lat/long
+    #         zc_dict = search.by_zipcode(zipcode)
+
+    #         if zipcode not in zipcodes:
+
+    #             zipcodes.add(zc_dict['Zipcode'])
+    #             lat = zc_dict['Latitude']
+    #             lng = zc_dict['Longitude']
+    #             lat_longs[zipcode] = {'lat': lat, 'lng': lng}
+
+    return jsonify(zipcodes)
+
+
+# POST HACKBRIGHT PLAYING WITH TWILIO STUFF
+@app.route('/send_text_test')
+def sms_test_message():
+    """ Sends text message to Becca's phone from Twilio """
+    client = Client(account_sid, auth_token)
+
+    client.api.account.messages.create(
+        to="+12316851234",
+        from_="+15555555555",
+        body="Hello there!")
 
 #HELPER FUNCTIONS
 ############################################################################

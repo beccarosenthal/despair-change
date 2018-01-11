@@ -25,38 +25,75 @@
           disableDefaultUI: true,
         });
 
+        $.get('/get_referral_zips.json', function(zipcodeMarkers) {
 
-        let latLon = $.get('/get_lat_long.json', function (data) {
-            console.log(data);
-            console.log('here i am')
 
+    for (let key in zipcodeMarkers) {
+
+         let zipcode = zipcodeMarkers[key]['user_zipcode'];
+         console.log(zipcode)
+
+
+         if (zipcode == null) {
+          continue
+         };
+
+         let geocode_generator = new google.maps.Geocoder();
+         let postal_code =  zipcode;
+
+         geocode_generator.geocode({'address': postal_code}, function(results, status) {
+          if (status === google.maps.GeocoderStatus.OK) {
+            map.setCenter(unitedStates);
+            console.log('geocoder status ok?')
+            console.log(zipcode)
+            let marker = new google.maps.Marker({
+
+              map: map,
+              place: {
+                location: results[0].geometry.location,
+                query: "user_id"
+              },
+              icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 10,
+                fillColor: '#ff0000',
+                fillOpacity: 1,
+                strokeColor: '',
+                // strokeWeight: 0
+              }
             });
-        console.log(latLon)
-        let lat = latLon['lat'];
-        let lng = latLon['lng']
-        console.log(lat)
-        console.log(lng)
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+      });
+    }
+  });
+}
+
+
 
         let zipcodesList = $.get('/get_referral_zips.json', function (data) {
             console.log(data);
 
         });
-        console.log(zipcodesList)
+        console.log("zipcodesList", zipcodesList);
 
+        console.log(zipcodesList)
         for (let zipcode in zipcodesList) {
 
             console.log(zipcode)
+
         }
 
 
 
 
-        let marker = new google.maps.Marker({
-          position: latLon,
-          map: map
-        });
+        // let marker = new google.maps.Marker({
+        //   position: latLon,
+        //   map: map
+        // });
 
-      }
+      // }
 
 
 
