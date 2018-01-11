@@ -4,7 +4,7 @@ console.log('in register.js')
 function validateForm() {
 
     console.log("in validate form!");
-
+    return true;
     let email = document.querySelector("#email").value;
     if (email === "") {
         alert("Email must be filled out.");

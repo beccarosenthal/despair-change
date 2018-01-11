@@ -101,7 +101,7 @@
 </nav>
 <div class='container'>
   <div class='row'>
-<div class='col-xs-6 col-xs-offset-3'> 
+<div class='col-xs-6 col-xs-offset-3'>
   {% for message in get_flashed_messages() %}
     {% if 'just_donated' in session%}
       <div class='alert alert-success'>{{ message }}</div>
@@ -160,8 +160,6 @@
             <input type="image" name="submit" class='paypal-modal-button'
                 src="http://www.amend.org.uk/images/stories/paypal_donate_button.jpg" width="150"
                 alt="Donate to {{g.orgs[0].name}}">
-<!--             <img alt="" width="1" height="1"
-                src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" > -->
         </form></center>
       </div>
     </div>
@@ -257,7 +255,7 @@ function copyReferralLink() {
   document.execCommand("Copy");
 alert("URL Copied! Send your friend the link to amplify your impact." + copyText.value);
 }
-</script
+</script>
 
 
 {% if 'current_user' in session %}
