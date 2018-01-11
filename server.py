@@ -786,11 +786,11 @@ def zip_to_lat_long_json():
     search = ZipcodeSearchEngine()
     zipcode_dict = search.by_zipcode(zipcode_string)
 
-    lat = int(zipcode_dict['Latitude'])
-    lng = int(zipcode_dict['Longitude'])
-
-    lat_lon_dict = {'lat': lat, 'lng': lng}
-
+    lat = zipcode_dict['Latitude']
+    lng = zipcode_dict['Longitude']
+    lat_lon_dict = {
+            zipcode: {'lat': lat, 'lng': lng}
+                }
 
     return jsonify(lat_lon_dict)
 
@@ -817,7 +817,8 @@ def get_referral_zips():
             zipcode = item.zipcode
 
             search = ZipcodeSearchEngine()
-            #dictionary of informatino pertaining to that zipcode, including lat/long
+
+            #dictionary of information pertaining to that zipcode, including lat/long
             zc_dict = search.by_zipcode(zipcode)
 
             if zipcode not in zipcodes:
@@ -827,7 +828,6 @@ def get_referral_zips():
                 lng = zc_dict['Longitude']
                 lat_longs[zipcode] = {'lat': lat, 'lng': lng}
 
-    print lat_longs
     return jsonify(lat_longs)
 
 #HELPER FUNCTIONS

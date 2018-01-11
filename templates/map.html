@@ -29,7 +29,7 @@
         let latLon = $.get('/get_lat_long.json', function (data) {
             console.log(data);
             console.log('here i am')
-            console.log(latLon)
+
             });
         console.log(latLon)
         let lat = latLon['lat'];
@@ -39,7 +39,15 @@
 
         let zipcodesList = $.get('/get_referral_zips.json', function (data) {
             console.log(data);
-        })
+
+        });
+        console.log(zipcodesList)
+
+        for (let zipcode in zipcodesList) {
+
+            console.log(zipcode)
+        }
+
 
 
 
